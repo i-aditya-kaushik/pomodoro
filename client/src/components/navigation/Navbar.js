@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import ReactDOM from "react-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import { GlobalState } from "../../GlobalState";
+import axios from "axios";
 
 import { Grid, Button, AppBar, Toolbar, Typography, MenuItem, Menu, Avatar} from "@material-ui/core"
 import Logo from '../../static/images/Logo.png'
@@ -53,6 +55,19 @@ const useStyles = makeStyles((theme) => ({
 }));
   
 export default function Navbar(){
+    const state = useContext(GlobalState);
+    const [isLogged] = state.userAPI.isLogged;
+    const [isAdmin] = state.userAPI.isAdmin;
+    const [cart] = state.userAPI.cart;
+
+    const logoutUser = async () => {
+      await axios.get("/user/logout");
+
+      localStorage.removeItem("firstLogin");
+      window.location.href = "/";
+
+      window.location.href = "/";
+    };
     const classes = useStyles();
     // state={
     //     anchorEl:null
@@ -79,7 +94,11 @@ export default function Navbar(){
                   <Grid className={classes.right}>
                     <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Discover</Button>
                     <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
-                    <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login</Button>
+                    {isLogged ? (
+                      <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                    ) : (
+                      <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                    )}
                   </Grid>
                 </Toolbar>
             </AppBar>
