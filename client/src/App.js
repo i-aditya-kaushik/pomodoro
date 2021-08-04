@@ -9,17 +9,20 @@ import SignIn from './components/auth/SingIn';
 import SignUp from './components/auth/SignUp';
 import Navbar from './components/navigation/Navbar';
 import Home from './components/mainpages/Home';
+import { DataProvider } from "./GlobalState";
 
 export default function App() {
   return (
-    <Router>
-        <div>
-            <Switch>
-                <Route path="/" exact component={Home}/>
-                <Route path="/login" component={SignIn}/>
-                <Route path="/register" component={SignUp}/>
-            </Switch>
-        </div>
-    </Router>
+    <DataProvider>
+      <Router>
+          <div>
+              <Switch>
+                  <Route path="/" exact component={Home}/>
+                  <Route path="/login" component={SignIn}/>
+                  <Route path="/register" component={SignUp}/>
+              </Switch>
+          </div>
+      </Router>
+    </DataProvider>
   );
 }
