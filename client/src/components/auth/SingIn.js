@@ -106,11 +106,9 @@ export default function SignIn() {
   const loginSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post("/login", { ...user });
+      await axios.post("/user/login", { ...user });
       console.log("done");
-
       localStorage.setItem("firstLogin", true);
-
       window.location.href = "/";
     } catch (err) {
       alert(err.response.data.msg);
@@ -165,7 +163,6 @@ export default function SignIn() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={() => { alert('clicked') }}
             >
               Sign In
             </Button>
