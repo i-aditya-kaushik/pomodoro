@@ -1,0 +1,33 @@
+{
+  "name": "pomodoro",
+  "version": "1.0.0",
+  "description": "Magical Pomodoro",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-aditya-kaushik/pomodoro.git"
+  },
+  "author": "Aditya Kaushik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/i-aditya-kaushik/pomodoro/issues"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.25.1",
+    "concurrently": "^6.1.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-jsonwebtoken": "^1.0.7",
+    "mongoose": "^5.12.9",
+    "nodemon": "^2.0.7"
+  },
+  "homepage": "https://github.com/i-aditya-kaushik/pomodoro#readme"
+}
