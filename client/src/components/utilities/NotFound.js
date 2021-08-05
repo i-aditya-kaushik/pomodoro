@@ -25,7 +25,7 @@ function NotFound() {
       direction="column"
       alignItems="center"
       justify="center"
-      style={{ minHeight: '100vh' }}
+      style={{ minHeight: '80vh' }}
     >
       <Grid item xs={3} variant="outline" className={classes.logo}></Grid>  
 
