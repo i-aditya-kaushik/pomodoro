@@ -103,7 +103,7 @@ export default function Navbar(){
     const logoutUser = async () => {
       await axios.get("/user/logout");
 
-      localStorage.removeItem("firstLogin");
+      localStorage.clear();
       window.location.href = "/";
 
       window.location.href = "/";
@@ -112,10 +112,10 @@ export default function Navbar(){
     
         return(
           <div className={classes.root}>
-            <AppBar position="static" color="default" className={[classes.AppBar,classes.grow]}>
+            <AppBar position="static" color="default" className={classes.AppBar}>
                 <Toolbar>
                   <Grid className={classes.grow}>
-                    <Button className={[classes.mainLogo]}>
+                    <Button className={classes.mainLogo}>
                       <Avatar src={Logo} className={classes.avatar} />
                     </Button>
                   </Grid>
