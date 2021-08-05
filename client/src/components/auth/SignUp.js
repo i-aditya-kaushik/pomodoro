@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import '../../static/fonts/HarryP.TTF'; 
 import axios from "axios";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import Logo from '../../static/images/Logo.png'
 import CardMedia from '@material-ui/core/CardMedia';
@@ -100,12 +102,21 @@ export default function SignUp() {
   });
   const [open, setOpen] = React.useState(false);
   const [error, seterror] = React.useState("Some Kind of error occured!");
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
+    setOpen(false);
+  };
   const onChangeInput = e => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
-
+  const erroroccur = (err) => {
+    setOpen(true);
+    seterror(err);
+  };
   const registerSubmit = async e => {
     e.preventDefault();
     try {
@@ -116,7 +127,7 @@ export default function SignUp() {
 
       window.location.href = "/";
     } catch (err) {
-      alert(err.response.data.msg);
+      erroroccur(err.response.data.msg)
     }
   };
 
@@ -126,6 +137,11 @@ export default function SignUp() {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
+          <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Alert onClose={handleClose} severity="error">
+              {error}
+            </Alert>
+          </Snackbar>
           <Grid variant="outline" className={classes.logo}>
           </Grid>
           <Box mt={1}>
