@@ -12,6 +12,8 @@ import ListOutlinedIcon from '@material-ui/icons/ListOutlined';
 
 import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
 import Logo from '../../static/images/Logo.png'
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const StyledMenu = withStyles({
   paper: {
@@ -41,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize:"15px",
       color:"black",
     },
-  
+    buttonPc: {
+      margin: theme.spacing(1),
+    },
     AppBar:{
       backgroundColor:"#fff",
       backgroundSize:"cover"
@@ -92,10 +96,16 @@ export default function Navbar(){
     const [isLogged] = state.userAPI.isLogged;
     const [isAdmin] = state.userAPI.isAdmin;
     const [cart] = state.userAPI.cart;
+    const [open, setOpen] = React.useState(false);
+    const [error, seterror] = React.useState("Some Kind of error occured!");
     const matches = useMediaQuery('(max-width:768px)');
     const [anchorEl, setAnchorEl] = useState(null);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
+    };
+    const erroroccur = (err) => {
+      setOpen(true);
+      seterror(err);
     };
     const handleClose = () => {
       setAnchorEl(null);
@@ -109,10 +119,20 @@ export default function Navbar(){
       window.location.href = "/";
     };
     const classes = useStyles();
-    
+    const handleClose1 = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpen(false);
+    };
         return(
           <div className={classes.root}>
             <AppBar position="static" color="default" className={classes.AppBar}>
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose1} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+              <Alert variant="filled" onClose={handleClose1} severity="info">
+                {error}
+              </Alert>
+            </Snackbar>
                 <Toolbar>
                   <Grid className={classes.grow}>
                     <Button component={RouterLink} to="/" className={classes.mainLogo}>
@@ -120,31 +140,51 @@ export default function Navbar(){
                     </Button>
                   </Grid>
                   <Box component={Grid} display={matches ? "none" : "block"} className={classes.right}>
-                    <Button component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
-                    <Button component={RouterLink} to="/profile" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
                     {isLogged ? (
-                      <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
-                    ) : (
-                      <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                      <div>
+                      <Button component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                      <Button component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                      <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                      </div>
+                      ) : (
+                        <div>
+                      <Button onClick={() => erroroccur("Login to change your House")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                      <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                      <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                        </div>
                     )}
                   </Box>
                   <Box component={Grid} display={matches ? "block" : "none"} className={classes.right}>
                   <Button aria-controls="customized-menu" aria-haspopup="true" variant="contained" color="primary" className={[classes.buttonFontSize,classes.menubutton,classes.harryfont]} 
                   onClick={handleClick}><ListOutlinedIcon/></Button>
                     <StyledMenu id="customized-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}  >
-                      <MenuItem>
-                        <Button component={RouterLink} to="/" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
-                      </MenuItem>
-                      <MenuItem>
-                        <Button component={RouterLink} to="/" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
-                      </MenuItem>
-                      <MenuItem>
+                      
                       {isLogged ? (
-                        <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                        <div>
+                          <MenuItem component={RouterLink} to="/changehouse">
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                          </MenuItem>
+                          <MenuItem component={RouterLink} to="/profile">
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                          </MenuItem>
+                          <MenuItem>
+                            <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                          </MenuItem>
+                        </div>
                       ) : (
-                        <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                        <div>
+                          <MenuItem onClick={() => erroroccur("Login to change your House")}>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                          </MenuItem>
+                          <MenuItem onClick={() => erroroccur("Login to view your Profile")}>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                          </MenuItem>
+                          <MenuItem>
+                            <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                          </MenuItem>
+                        </div>
                       )}
-                      </MenuItem>
+                      
                     </StyledMenu>
                   </Box>
                 </Toolbar>
