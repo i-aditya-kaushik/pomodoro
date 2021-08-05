@@ -145,8 +145,9 @@ export default function SignIn() {
             {error}
           </Alert>
         </Snackbar>
-          <Grid variant="outline" className={classes.logo}>
-          </Grid>
+          <Link component={RouterLink} variant="body1" to='/'>
+            <Grid variant="outline" className={classes.logo}></Grid>
+          </Link>
           <Box mt={1}>
             <Typography component="h1" variant="h5" className={classes.harryfont}>
               SIGN IN TO MAGICAL POMODORO
