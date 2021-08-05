@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
       color:"black",
     },
     buttonPc: {
+      fontSize:"20px",
       margin: theme.spacing(1),
     },
     AppBar:{
@@ -61,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     avatar:{
       height:"100%",
       borderRadius:0,
-  
     },
   
     loginButton:{
