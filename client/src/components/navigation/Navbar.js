@@ -120,8 +120,8 @@ export default function Navbar(){
                     </Button>
                   </Grid>
                   <Box component={Grid} display={matches ? "none" : "block"} className={classes.right}>
-                    <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Discover</Button>
-                    <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                    <Button component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                    <Button component={RouterLink} to="/profile" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
                     {isLogged ? (
                       <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
                     ) : (
@@ -133,10 +133,10 @@ export default function Navbar(){
                   onClick={handleClick}><ListOutlinedIcon/></Button>
                     <StyledMenu id="customized-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}  >
                       <MenuItem>
-                        <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Discover</Button>
+                        <Button component={RouterLink} to="/" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
                       </MenuItem>
                       <MenuItem>
-                        <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                        <Button component={RouterLink} to="/" color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
                       </MenuItem>
                       <MenuItem>
                       {isLogged ? (
@@ -146,13 +146,6 @@ export default function Navbar(){
                       )}
                       </MenuItem>
                     </StyledMenu>
-                    {/* <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Discover</Button>
-                    <Button color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
-                    {isLogged ? (
-                      <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
-                    ) : (
-                      <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
-                    )} */}
                   </Box>
                 </Toolbar>
             </AppBar>

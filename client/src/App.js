@@ -7,9 +7,9 @@ import ProTip from './ProTip';
 import { BrowserRouter as Router,Switch, Route, Link as RouterLink } from "react-router-dom";
 import SignIn from './components/auth/SingIn';
 import SignUp from './components/auth/SignUp';
-import Navbar from './components/navigation/Navbar';
 import Home from './components/mainpages/Home';
 import { DataProvider } from "./GlobalState";
+import NotFound from './components/utilities/NotFound'
 
 export default function App() {
   return (
@@ -20,6 +20,7 @@ export default function App() {
                   <Route path="/" exact component={Home}/>
                   <Route path="/login" component={SignIn}/>
                   <Route path="/register" component={SignUp}/>
+                  <Route path="*" exact component={NotFound} />
               </Switch>
           </div>
       </Router>
