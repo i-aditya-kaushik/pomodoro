@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Navbar from "../navigation/Navbar";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import { GlobalState } from "../../GlobalState";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -17,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Sortinghat() {
   const classes = useStyles();
+  const state = useContext(GlobalState);
+  const [sortingdone] = state.userAPI.sortingdone;
+  console.log(sortingdone)
   return <div>
     <Grid
       container

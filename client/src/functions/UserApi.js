@@ -5,7 +5,7 @@ function UserApi(token) {
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [cart, setCart] = useState([]);
-
+  const [sortingdone, setSorting] = useState(false);
   useEffect(() => {
     if (token) {
       const getUser = async () => {
@@ -16,6 +16,7 @@ function UserApi(token) {
           console.log(res)
           setIsLogged(true);
           res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
+          res.data.num_login > 1 ? setSorting(true) : setSorting(false)
         } catch (err) {
           alert(err.response.data.msg);
         }
@@ -51,6 +52,7 @@ function UserApi(token) {
     isLogged: [isLogged, setIsLogged],
     isAdmin: [isAdmin, setIsAdmin],
     cart: [cart, setCart],
+    sortingdone: [sortingdone, setSorting],
     addCart: addCart,
   };
 }
