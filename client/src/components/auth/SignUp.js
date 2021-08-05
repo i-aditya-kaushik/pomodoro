@@ -139,7 +139,6 @@ export default function SignUp() {
               label="Enter Your Name"
               name="name"
               autoComplete="name"
-              autoFocus
             />
             <TextField
               variant="outlined"

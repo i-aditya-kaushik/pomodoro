@@ -163,7 +163,6 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
               onChange={onChangeInput}
             />
             <TextField
