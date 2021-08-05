@@ -201,7 +201,7 @@ export default function SignIn() {
               <Box>
                   <Link component={RouterLink} variant="body1" to='/register'
                     className={classes.harryfont}>
-                    {"DON'T HAVE AN ACCOUNT? SIGNUP"}
+                    {" DON'T HAVE AN ACCOUNT?! SIGNUP!"}
                   </Link>
               </Box>
             </Grid>
