@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import '../../static/fonts/HarryP.TTF'; 
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import Logo from '../../static/images/Logo.png'
 import CardMedia from '@material-ui/core/CardMedia';
@@ -97,12 +99,22 @@ export default function SignIn() {
     email: "",
     password: "",
   });
-
+  const [open, setOpen] = React.useState(false);
+  const [error, seterror] = React.useState("Some Kind of error occured!");
   const onChangeInput = e => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
-
+  const erroroccur = (err) => {
+    setOpen(true);
+    if(err=="User does not exist."){
+      err= "The Email is not registered. Register and try again."
+    }
+    if(err=="Incorrect password."){
+      err="The Password is incorrect. Try again or Click on Forgot password."
+    }
+    seterror(err);
+  };
   const loginSubmit = async e => {
     e.preventDefault();
     try {
@@ -111,8 +123,15 @@ export default function SignIn() {
       localStorage.setItem("firstLogin", true);
       window.location.href = "/";
     } catch (err) {
-      alert(err.response.data.msg);
+      erroroccur(err.response.data.msg)
     }
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -121,6 +140,11 @@ export default function SignIn() {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert onClose={handleClose} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
           <Grid variant="outline" className={classes.logo}>
           </Grid>
           <Box mt={1}>
