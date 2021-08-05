@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       color:"black",
     },
     buttonPc: {
-      fontSize:"20px",
+      fontSize:"18px",
       margin: theme.spacing(1),
     },
     AppBar:{
