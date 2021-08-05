@@ -33,7 +33,11 @@ const userSchema = new mongoose.Schema(
     }],
     tags: [{
       type: mongoose.Schema.Types.ObjectId, ref: "Tags",
-    }]
+    }],
+    num_login: {
+      type:Number,
+      default: 1
+    }
   },
   {
     timestamps: true,

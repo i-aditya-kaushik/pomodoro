@@ -55,6 +55,12 @@ const userController = {
 
       const accesstoken = createAccessToken({ id: user._id });
       const refreshtoken = createRefreshToken({ id: user._id });
+      await Users.findOneAndUpdate(
+        { _id: user._id },
+        {
+          num_login: user.num_login+1,
+        }
+      );
       if(remem){
         m_age = 12 * 24 * 60 * 60 * 1000
       }
@@ -68,6 +74,7 @@ const userController = {
       });
 
       res.json({ accesstoken });
+      
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
