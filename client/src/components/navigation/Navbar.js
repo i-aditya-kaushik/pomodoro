@@ -115,7 +115,7 @@ export default function Navbar(){
             <AppBar position="static" color="default" className={classes.AppBar}>
                 <Toolbar>
                   <Grid className={classes.grow}>
-                    <Button className={classes.mainLogo}>
+                    <Button component={RouterLink} to="/" className={classes.mainLogo}>
                       <Avatar src={Logo} className={classes.avatar} />
                     </Button>
                   </Grid>
