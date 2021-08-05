@@ -99,28 +99,28 @@ export default function SignIn() {
     email: "",
     password: "",
   });
+  const [remem, setRemem] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [error, seterror] = React.useState("Some Kind of error occured!");
+  const rememberme_change = (event) => {
+    setRemem( event.target.checked );
+  };
   const onChangeInput = e => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
   const erroroccur = (err) => {
     setOpen(true);
-    if(err=="User does not exist."){
-      err= "The Email is not registered. Register and try again."
-    }
-    if(err=="Incorrect password."){
-      err="The Password is incorrect. Try again or Click on Forgot password."
-    }
     seterror(err);
   };
   const loginSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post("/user/login", { ...user });
-      console.log("done");
+      await axios.post("/user/login", { ...user , remem});
       localStorage.setItem("firstLogin", true);
+      if(remem){
+        localStorage.setItem("remember_me",true)
+      }
       window.location.href = "/";
     } catch (err) {
       erroroccur(err.response.data.msg)
@@ -140,7 +140,7 @@ export default function SignIn() {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
           <Alert onClose={handleClose} severity="error">
             {error}
           </Alert>
@@ -178,7 +178,7 @@ export default function SignIn() {
               onChange={onChangeInput}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox color="primary" checked={remem.value} onChange={rememberme_change} name="remem" />}
               label="Remember me"
             />
             <Button

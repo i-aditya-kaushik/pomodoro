@@ -9,7 +9,7 @@ const userController = {
 
       const user = await Users.findOne({ email });
       if (user)
-        return res.status(400).json({ msg: "The email already exists." });
+        return res.status(400).json({ msg: "The email already exists. Try logging in." });
 
       if (password.length < 8)
         return res
@@ -34,7 +34,7 @@ const userController = {
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
         path: "/user/refresh_token",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+        maxAge: 2 * 24 * 60 * 60 * 1000, // 2d
       });
 
       res.json({ accesstoken });
@@ -45,21 +45,25 @@ const userController = {
 
   login: async (req, res) => {
     try {
-      const { email, password } = req.body;
-
+      const { email, password,remem } = req.body;
       const user = await Users.findOne({ email });
-      if (!user) return res.status(400).json({ msg: "User does not exist." });
+      if (!user) return res.status(400).json({ msg: "The Email is not registered. Register and try again." });
 
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ msg: "Incorrect password." });
+      if (!isMatch) return res.status(400).json({ msg: "The Password is incorrect. Try again or Click on Forgot password." });
 
       const accesstoken = createAccessToken({ id: user._id });
       const refreshtoken = createRefreshToken({ id: user._id });
-
+      if(remem){
+        m_age = 12 * 24 * 60 * 60 * 1000
+      }
+      else{
+        m_age = 1 * 24 * 60 * 60 * 1000
+      }
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
         path: "/user/refresh_token",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+        maxAge: m_age, // 7d
       });
 
       res.json({ accesstoken });
