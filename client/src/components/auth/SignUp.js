@@ -49,6 +49,15 @@ function getRandomPicture(){
   return links[Math.floor(Math.random()*links.length)];
 }
 
+function getRandomHouse(){
+  var houses = Array('Gryffindor',
+                    'Slytherin',
+                    'Hufflepuff',
+                    'Ravenclaw'
+  )
+    return houses[Math.floor(Math.random()*houses.length)];
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
@@ -121,14 +130,18 @@ export default function SignUp() {
     e.preventDefault();
     try {
       if(password2.value!=password.value) {alert('Passwords do not match');return}
-      await axios.post("/user/register", { ...user });
+      var houseval = getRandomHouse()
+      console.log(houseval)
+      await axios.post("/user/register", { ...user , house: houseval});
 
       localStorage.setItem("firstLogin", true);
 
-      window.location.href = "/";
+      window.location.href = "/sortinghat";
     } catch (err) {
-      erroroccur(err.response.data.msg)
-    }
+      try{
+        erroroccur(err.response.data.msg)}catch (err) {
+          erroroccur("Some Kind of Error Occured. Try Again.")
+    }}
   };
 
   return (

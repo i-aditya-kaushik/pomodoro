@@ -13,6 +13,7 @@ function UserApi(token) {
           const res = await axios.get("/user/info", {
             headers: { Authorization: token },
           });
+          console.log(res)
           setIsLogged(true);
           res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
         } catch (err) {
