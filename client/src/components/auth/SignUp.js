@@ -96,7 +96,10 @@ export default function SignUp() {
     name: "",
     email: "",
     password: "",
+    password2:""
   });
+  const [open, setOpen] = React.useState(false);
+  const [error, seterror] = React.useState("Some Kind of error occured!");
 
   const onChangeInput = e => {
     const { name, value } = e.target;
@@ -106,7 +109,8 @@ export default function SignUp() {
   const registerSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post("/register", { ...user });
+      if(password2.value!=password.value) {alert('Passwords do not match');return}
+      await axios.post("/user/register", { ...user });
 
       localStorage.setItem("firstLogin", true);
 
@@ -129,7 +133,7 @@ export default function SignUp() {
               WELCOME TO MAGICAL POMODORO
             </Typography>
             </Box>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={registerSubmit}>
           <TextField
               variant="outlined"
               margin="normal"
@@ -139,6 +143,7 @@ export default function SignUp() {
               label="Enter Your Name"
               name="name"
               autoComplete="name"
+              onChange={onChangeInput}
             />
             <TextField
               variant="outlined"
@@ -149,6 +154,7 @@ export default function SignUp() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={onChangeInput}
             />
             <TextField
               variant="outlined"
@@ -160,17 +166,19 @@ export default function SignUp() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={onChangeInput}
             />
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="password2"
               label="Re-Enter Password"
               type="password"
               id="password2"
               autoComplete="current-password"
+              onChange={onChangeInput}
             />
             <Button
               type="submit"
@@ -178,7 +186,6 @@ export default function SignUp() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={() => { alert('clicked') }}
             >
               Sign Up
             </Button>
