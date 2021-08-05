@@ -32,7 +32,6 @@ const taskController = {
         try {
           const user = await Users.findById(req.user.id);
           if (!user) return res.status(400).json({ msg: "User does not exist." });
-          console.log(req.body)
           await Users.findOneAndUpdate(
             { _id: req.user.id },
             {
