@@ -8,6 +8,7 @@ import { BrowserRouter as Router,Switch, Route, Link as RouterLink } from "react
 import SignIn from './components/auth/SingIn';
 import SignUp from './components/auth/SignUp';
 import Home from './components/mainpages/Home';
+import Sortinghat from './components/mainpages/Sortinghat';
 import { DataProvider } from "./GlobalState";
 import NotFound from './components/utilities/NotFound'
 
@@ -20,6 +21,7 @@ export default function App() {
                   <Route path="/" exact component={Home}/>
                   <Route path="/login" component={SignIn}/>
                   <Route path="/register" component={SignUp}/>
+                  <Route path="/sortinghat" component={Sortinghat}/>
                   <Route path="*" exact component={NotFound} />
               </Switch>
           </div>
