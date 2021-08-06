@@ -193,14 +193,14 @@ export default function SignIn() {
             <Grid container>
               <Box flexGrow={1}>
               
-                <Typography variant="body1" className={classes.harryfont}>
+                <Typography variant="body1" className={classes.harryfont} style={{fontSize: "18px"}}>
                   {"FORGOT PASSWORD? UN-OBLIVIATE."}
                 </Typography>
               
               </Box>
               <Box>
                   <Link component={RouterLink} variant="body1" to='/register'
-                    className={classes.harryfont}>
+                    className={classes.harryfont} style={{fontSize: "18px"}}>
                     {" DON'T HAVE AN ACCOUNT?! SIGNUP!"}
                   </Link>
               </Box>

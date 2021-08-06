@@ -155,8 +155,10 @@ export default function SignUp() {
               {error}
             </Alert>
           </Snackbar>
-          <Grid variant="outline" className={classes.logo}>
-          </Grid>
+          <Link component={RouterLink} variant="body1" to='/'>
+            <Grid variant="outline" className={classes.logo}>
+            </Grid>
+          </Link>
           <Box mt={1}>
             <Typography component="h1" variant="h5" className={classes.harryfont}>
               WELCOME TO MAGICAL POMODORO
@@ -221,7 +223,7 @@ export default function SignUp() {
             <Grid container>
               <Grid container justifyContent="flex-end">
                   <Link component= {RouterLink} variant="body1" to='/login'
-                    className={classes.harryfont}>
+                    className={classes.harryfont} style={{fontSize: "18px"}}>
                       {"ALREADY HAVE AN ACCOUNT? SIGNIN"}
                   </Link>
               </Grid>
