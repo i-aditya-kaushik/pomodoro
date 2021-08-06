@@ -19,7 +19,7 @@ function UserApi(token) {
           setHouse(res.data.house)
           res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
           res.data.num_login > 1 ? setSorting(true) : setSorting(false)
-          if(res.data.house=="Gryffindor") setCharacteristics(...characteristics, ["COURAGE","CLEVERNESS","DETERMINATION"])
+          if(res.data.house=="Gryffindor") setCharacteristics(...characteristics, ["DETERMINATION","CLEVERNESS","COURAGE"])
           if(res.data.house=="Slytherin") setCharacteristics(...characteristics, ["DETERMINATION","INTELLECT","AMBITION"])
           if(res.data.house=="Ravenclaw") setCharacteristics(...characteristics, ["WIT","DEDICATION","WISDOM"])
           if(res.data.house=="Hufflepuff") setCharacteristics(...characteristics, ["LOYALTY","CHIVALRY","PATIENCE"])
