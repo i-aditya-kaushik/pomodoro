@@ -6,23 +6,81 @@ import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box} from "@material
 import { Link as RouterLink } from 'react-router-dom';
 import { Shake } from 'reshake'
 import '../../static/fonts/HarryP.TTF'; 
-import Typewriter from "typewriter-effect";
+import ReactTypingEffect from 'react-typing-effect';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Paper from '@material-ui/core/Paper';
+
+
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
     fontFamily: 'Harry P',
     fontSize: "40px",
-    color: "white"
+    color: "black",
+  },
+  harryfont2:{
+    fontFamily: 'Harry P',
+    fontSize: "50px",
+    color: "black",
   },
   logo: {
       backgroundImage: `url(https://res.cloudinary.com/adityakaushik/image/upload/v1628144994/Hp/sorting_hat_twrqbs.png)`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      minHeight:254,
-      minWidth: 290
-    }
+    },
+    image: {
+      backgroundImage: 'url(https://res.cloudinary.com/adityakaushik/image/upload/v1628144994/Hp/sorting_hat_twrqbs.png)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    },
 }));
+
+
+const Loader = props => {
+  
+  const { characteristics , house } = props;
+  const classes = useStyles();
+  const [messageIndex, setMessageIndex] = React.useState(0);
+  var finalmessage = React.useState("")
+  React.useEffect(() => {
+    let timeout;
+    console.log(messageIndex)
+    if (messageIndex>=0) {
+      timeout = setTimeout(() => setMessageIndex(messageIndex + 1), 3500);
+      if(messageIndex>=5){
+        finalmessage=String(house)
+      }
+    }
+  }, [characteristics, messageIndex]);
+  if(messageIndex==0){
+    finalmessage = "I see "+characteristics[messageIndex]
+  }
+  if(messageIndex==1){
+    finalmessage = "But there is "+characteristics[messageIndex]
+  }
+  if(messageIndex==2){
+    finalmessage = characteristics[messageIndex] + "... It's decisive "
+  }
+  if(messageIndex==0)
+  {return (<Grid container spacing={0} direction="column" alignItems="center" justify="center">
+  <ReactTypingEffect
+    text={[finalmessage]} className={classes.harryfont2} speed= "100" eraseSpeed="100" eraseDelay= "100"  typingDelay="100" cursor=" "
+  /></Grid>);}
+  if(messageIndex==1)
+  {return (<Grid container spacing={0} direction="column" alignItems="center" justify="center">
+  <ReactTypingEffect
+    text={[finalmessage]} className={classes.harryfont} speed= "100" eraseSpeed="100" eraseDelay= "100" typingDelay="100" cursor=" "
+  /></Grid>);}
+  else{
+  return (<Grid container  spacing={0} direction="column" alignItems="center" justify="center">
+  <ReactTypingEffect
+    text={[finalmessage]} className={classes.harryfont2} speed= "100" eraseSpeed="100" eraseDelay= "100"  typingDelay="100"cursor=" "
+  /></Grid>);
+  }
+};
+
   
 
 function Sortinghat() {
@@ -30,12 +88,24 @@ function Sortinghat() {
   const state = useContext(GlobalState);
   const [sortingdone] = state.userAPI.sortingdone;
   const [house] = state.userAPI.house;
-  const [trait1,setTrait1] = state.userAPI.trait1;
-  const [trait2,setTrait2] = state.userAPI.trait2;
-  const [trait3,setTrait3] = state.userAPI.trait3;
+  const [characteristics] = state.userAPI.characteristics;
   return <div>
-    <Navbar />
-    <Grid
+    <Grid container component="main" className={classes.root}>
+      
+      <Grid item xs={false} sm={4} md={7} >
+        <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className= {classes.image}
+        style={{ minHeight: '100vh' , backgroundColor: "#795c34"}}
+      > </Grid></Grid>
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Loader characteristics={characteristics} house={house} />
+        </Grid></Grid>
+    {/* <Grid
       container
       spacing={0}
       direction="column"
@@ -43,24 +113,8 @@ function Sortinghat() {
       justify="center"
       style={{ minHeight: '100vh' , backgroundColor: "#795c34"}}
     >
-      <Grid container className={classes.harryfont} spacing={0} direction="column" alignItems="center" justify="center" style={{ minHeight: '20vh' , backgroundColor: "#795c34"}}>
-      {trait1}{trait2}{trait3}
-      <Typewriter
-      onInit={(typewriter)=> {
-      typewriter
-      .typeString("I SEE "+ {trait1} +"!")
-      .pauseFor(1000)
-      .deleteAll()
-      .typeString("OOO BUT I SEE "+ {trait2} +" AS WELL")
-      .deleteAll()
-      .typeString("THIS CAN'T BE A COINCIDENCE. PLENTY OF "+ {trait3} +"!")
-      .deleteAll()
-      .typeString("BETTER BE...... ")
-      .deleteAll()
-      .typeString({house}+"!!!!")
-      .start();
-      }}
-      /></Grid>
+      <Loader characteristics={characteristics} house={house} />
+      
       <Shake 
         h={7}
         v={9}
@@ -69,11 +123,11 @@ function Sortinghat() {
         int={53}
         max={100}
         fixed={true}
-        fixedStop={false}
-        freez={false}>
+        fixedStop={true}
+        freez={true}>
         <Grid item xs={3} variant="outline" className={classes.logo}></Grid>  
       </Shake>
-    </Grid> 
+    </Grid>  */}
     </div>;
 }
 
