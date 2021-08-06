@@ -14,6 +14,7 @@ import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box} from "@material
 import Logo from '../../static/images/Logo.png'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import Paper from '@material-ui/core/Paper';
 
 const StyledMenu = withStyles({
   paper: {
@@ -127,7 +128,7 @@ export default function Navbar(){
     };
         return(
           <div className={classes.root}>
-            <AppBar position="static" color="default" className={classes.AppBar}>
+            <AppBar component={Paper} elevation={6} square position="static" color="default" className={classes.AppBar}>
             <Snackbar open={open} autoHideDuration={4000} onClose={handleClose1} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
               <Alert variant="filled" onClose={handleClose1} severity="info">
                 {error}
