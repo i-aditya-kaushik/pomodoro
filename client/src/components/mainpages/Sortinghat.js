@@ -38,24 +38,28 @@ function Sortinghat() {
   const [characteristics] = state.userAPI.characteristics;
   const [isLogged] = state.userAPI.isLogged;
   const matches = useMediaQuery('(max-width:768px)');
-  setHouse("Ravenclaw")
   var col = "white"
   var fontcol = "black"
+  var altcol = "#9c9264"
   if(house=="Gryffindor"){
     col = "#7f0909"
     fontcol="#ffc500"
+    altcol = "#eeba30"
   }
   if(house=="Slytherin"){
     col = "#2a623d"
     fontcol="#aaaaaa"
+    altcol = "#5d5d5d"
   }
   if(house=="Ravenclaw"){
-    col="#000a90"
+    col="#222f5b"
     fontcol="#946b2d"
+    altcol = "#5d5d5d"
   }
   if(house=="Hufflepuff"){
     col="#fff4b1"
     fontcol="#000000"
+    altcol = "#726255"
   }
   return <div> {isLogged ? (
       <div>
@@ -71,19 +75,19 @@ function Sortinghat() {
           justify="center"
           
           className= {classes.image}
-          style={{ minHeight: '91vh',backgroundColor: "#9c9264" }}
+          style={{ minHeight: '91vh',backgroundColor: altcol }}
         > </Grid></Grid>
         <Grid item xs={12} sm={12} md={5} component={Paper} elevation={4} style={{backgroundColor:col}} square>
         <Grid container spacing={0} direction="column" alignItems="center"  justify="center" className={classes.padding1} >
           {matches ? (
             <ReactTypingEffect 
-            text={["I can see some " + characteristics[0] + ". But there is "+characteristics[1] 
-            + ".. Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
+            text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+            + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
             cursor=" "/>
           ):(
             <ReactTypingEffect 
-            text={["I can see some " + characteristics[0] + ". But there is "+characteristics[1] 
-            + ".. Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
+            text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+            + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
             cursor=" "/>
           )}
           </Grid>

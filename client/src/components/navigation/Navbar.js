@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     loginButton:{
       background:"black",
       color:'white',
-      borderRadius:"25px",
+      borderRadius:"10px",
       padding:"0px 25px",
   
       '&:hover':{
@@ -171,7 +171,8 @@ export default function Navbar(){
                         <div>
                       <Button onClick={() => erroroccur("Login to change your House")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                       <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
-                      <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login/Register</Button>
+                      <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
+                      <Button component={RouterLink} to="/register" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Register</Button>
                         </div>
                     )}
                   </Box>
@@ -201,7 +202,10 @@ export default function Navbar(){
                             <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                           </MenuItem>
                           <MenuItem>
-                            <Button component={RouterLink} to="/login" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login/Register</Button>
+                            <Button component={RouterLink} to="/login" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
+                          </MenuItem>
+                          <MenuItem>
+                            <Button component={RouterLink} to="/register" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Register</Button>
                           </MenuItem>
                         </div>
                       )}
