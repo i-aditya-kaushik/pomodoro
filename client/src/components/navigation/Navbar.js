@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
     mainLogo:{
       color: "#a1a1a1",
+      justifyContent: "center",
       '&:hover':{
         background:"transparent"
       },
@@ -101,6 +102,9 @@ export default function Navbar(){
     const [error, seterror] = React.useState("Some Kind of error occured!");
     const matches = useMediaQuery('(max-width:768px)');
     const [anchorEl, setAnchorEl] = useState(null);
+    const [house,setHouse] = state.userAPI.house;
+    var col="white";
+    var fontcol="black";
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -119,6 +123,22 @@ export default function Navbar(){
 
       window.location.href = "/";
     };
+    if(house=="Gryffindor"){
+      col = "#d3a625"
+      fontcol="#ae0001"
+    }
+    if(house=="Slytherin"){
+      col = "#aaaaaa"
+      fontcol="#2a623d"
+    }
+    if(house=="Ravenclaw"){
+      col="#946b2d"
+      fontcol="#222f5b"
+    }
+    if(house=="Hufflepuff"){
+      col="#ffdb00"
+      fontcol="#000000"
+    }
     const classes = useStyles();
     const handleClose1 = (event, reason) => {
       if (reason === 'clickaway') {
@@ -127,14 +147,14 @@ export default function Navbar(){
       setOpen(false);
     };
         return(
-          <div className={classes.root}>
+          <div className={classes.root} style={{border: "10px"}}>
             <AppBar component={Paper} elevation={6} square position="static" color="default" className={classes.AppBar}>
             <Snackbar open={open} autoHideDuration={4000} onClose={handleClose1} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
               <Alert variant="filled" onClose={handleClose1} severity="info">
                 {error}
               </Alert>
             </Snackbar>
-                <Toolbar>
+                <Toolbar style= {{backgroundColor:col	}}>
                   <Grid className={classes.grow}>
                     <Button component={RouterLink} to="/" className={classes.mainLogo}>
                       <Avatar src={Logo} className={classes.avatar} />
@@ -143,15 +163,15 @@ export default function Navbar(){
                   <Box component={Grid} display={matches ? "none" : "block"} className={classes.right}>
                     {isLogged ? (
                       <div>
-                      <Button component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Change House</Button>
-                      <Button component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Profile</Button>
-                      <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                      <Button component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
+                      <Button component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
+                      <Button component={RouterLink} to="/" onClick={logoutUser} className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Logout</Button>
                       </div>
                       ) : (
                         <div>
-                      <Button onClick={() => erroroccur("Login to change your House")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Change House</Button>
-                      <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]}>Profile</Button>
-                      <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                      <Button onClick={() => erroroccur("Login to change your House")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
+                      <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
+                      <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login/Register</Button>
                         </div>
                     )}
                   </Box>
@@ -163,25 +183,25 @@ export default function Navbar(){
                       {isLogged ? (
                         <div>
                           <MenuItem component={RouterLink} to="/changehouse">
-                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                           </MenuItem>
                           <MenuItem component={RouterLink} to="/profile">
-                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                           </MenuItem>
                           <MenuItem>
-                            <Button component={RouterLink} to="/" onClick={logoutUser} color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Logout</Button>
+                            <Button component={RouterLink} to="/" onClick={logoutUser} className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Logout</Button>
                           </MenuItem>
                         </div>
                       ) : (
                         <div>
                           <MenuItem onClick={() => erroroccur("Login to change your House")}>
-                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Change House</Button>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                           </MenuItem>
                           <MenuItem onClick={() => erroroccur("Login to view your Profile")}>
-                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]}>Profile</Button>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                           </MenuItem>
                           <MenuItem>
-                            <Button component={RouterLink} to="/login" color="inherit" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]}>Login/Register</Button>
+                            <Button component={RouterLink} to="/login" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login/Register</Button>
                           </MenuItem>
                         </div>
                       )}

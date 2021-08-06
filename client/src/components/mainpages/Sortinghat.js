@@ -38,6 +38,7 @@ function Sortinghat() {
   const [characteristics] = state.userAPI.characteristics;
   const [isLogged] = state.userAPI.isLogged;
   const matches = useMediaQuery('(max-width:768px)');
+  setHouse("Ravenclaw")
   var col = "white"
   var fontcol = "black"
   if(house=="Gryffindor"){
@@ -45,7 +46,7 @@ function Sortinghat() {
     fontcol="#ffc500"
   }
   if(house=="Slytherin"){
-    col = "#0d6217"
+    col = "#2a623d"
     fontcol="#aaaaaa"
   }
   if(house=="Ravenclaw"){
@@ -53,7 +54,7 @@ function Sortinghat() {
     fontcol="#946b2d"
   }
   if(house=="Hufflepuff"){
-    col="#eee117"
+    col="#fff4b1"
     fontcol="#000000"
   }
   return <div> {isLogged ? (
