@@ -123,21 +123,26 @@ export default function Navbar(){
 
       window.location.href = "/";
     };
+    var altcol = "white"
     if(house=="Gryffindor"){
       col = "#d3a625"
       fontcol="#ae0001"
+      altcol = "#eeba30"
     }
     if(house=="Slytherin"){
       col = "#aaaaaa"
       fontcol="#2a623d"
+      altcol = "#5d5d5d"
     }
     if(house=="Ravenclaw"){
       col="#946b2d"
       fontcol="#222f5b"
+      altcol = "#5d5d5d"
     }
     if(house=="Hufflepuff"){
       col="#ffdb00"
       fontcol="#000000"
+      altcol = "#726255"
     }
     const classes = useStyles();
     const handleClose1 = (event, reason) => {
