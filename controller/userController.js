@@ -118,6 +118,24 @@ const userController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  sethouse: async (req, res) => {
+    try {
+      const user = await Users.findById(req.user.id);
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+
+      await Users.findOneAndUpdate(
+        { _id: req.user.id },
+        {
+          house: req.body.house,
+        }
+      );
+
+      return res.json({ msg: "The house has been updated" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 };
 
 const createAccessToken = user => {
