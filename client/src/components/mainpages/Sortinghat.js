@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import NotFound from "../utilities/NotFound";
+import Loading from "../utilities/Loading";
 
 
 
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 function Sortinghat() {
   const classes = useStyles();
   const state = useContext(GlobalState);
+  const [isloading,setisloading] = state.userAPI.isloading
   const [sortingdone] = state.userAPI.sortingdone;
   const [house,setHouse] = state.userAPI.house;
   const [characteristics] = state.userAPI.characteristics;
@@ -65,43 +67,49 @@ function Sortinghat() {
     fontcol="#000000"
     altcol = "#726255"
   }
-  return <div> {isLogged ? (
-      <div>
-      <Navbar/>
-      <Grid container component="main" className={classes.root}>
-        
-        <Grid item xs={false} sm={false} md={7} >
-          <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justify="center"
-          
-          className= {classes.image}
-          style={{ minHeight: '91vh',backgroundColor: altcol }}
-        > </Grid></Grid>
-        <Grid item xs={12} sm={12} md={5} component={Paper} elevation={4} style={{backgroundColor:col}} square>
-        <Grid container spacing={0} direction="column" alignItems="center"  justify="center" className={classes.padding1} >
-          {matches ? (
-            <ReactTypingEffect 
-            text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
-            + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
-            cursor=" "/>
-          ):(
-            <ReactTypingEffect 
-            text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
-            + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
-            cursor=" "/>
-          )}
-          </Grid>
-          </Grid></Grid>
-      </div>
-    ) : (
-      <NotFound/>
+  return <div>
+    {!isloading ? (
+        <div> {isLogged ? (
+          <div>
+          <Navbar/>
+          <Grid container component="main" className={classes.root}>
+            
+            <Grid item xs={false} sm={false} md={7} >
+              <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justify="center"
+              
+              className= {classes.image}
+              style={{ minHeight: '91vh',backgroundColor: altcol }}
+            > </Grid></Grid>
+            <Grid item xs={12} sm={12} md={5} component={Paper} elevation={4} style={{backgroundColor:col}} square>
+            <Grid container spacing={0} direction="column" alignItems="center"  justify="center" className={classes.padding1} >
+              {matches ? (
+                <ReactTypingEffect 
+                text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+                + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
+                cursor=" "/>
+              ):(
+                <ReactTypingEffect 
+                text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+                + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
+                cursor=" "/>
+              )}
+              </Grid>
+              </Grid></Grid>
+          </div>
+        ) : (
+          <NotFound/>
+        )}
+        </div>
+      ) : (
+      <Loading/>
     )}
     </div>
-    ;
+    
 }
 
 export default Sortinghat;

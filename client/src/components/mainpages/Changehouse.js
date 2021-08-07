@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Loading from "../utilities/Loading";
 const useStyles = makeStyles((theme) => ({
     root:{
         height: '91vh',
@@ -38,6 +39,7 @@ export default function ChangeHouse(){
     const classes = useStyles();
     const state = useContext(GlobalState);
     const [isLogged] = state.userAPI.isLogged;
+    const [isloading,setisloading] = state.userAPI.isloading
     const [house,setHouse] = state.userAPI.house;
     const [token] = state.token;
     const [open, setOpen] = React.useState(false);
@@ -93,257 +95,264 @@ export default function ChangeHouse(){
     }
     return(
         <div>
-            <Navbar/>
-            
-                {matches ? (
-                    <div>
-                        <Grid container component="main" className={classes.root}>
-                            <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#7f0909",color: "#ffc500"}}>
-                                        <CardActionArea>
-                                            <CardMedia
+            {!isloading ? (
+                <div>
+                <Navbar/>
+                
+                    {matches ? (
+                        <div>
+                            <Grid container component="main" className={classes.root}>
+                                <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
+                                    <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#7f0909",color: "#ffc500"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg"
+                                                    title="Gryffindor"
+                                                    style={{borderColor:"#ffc500",border:"10"}}
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    GRYFFINDOR
+                                                </Typography>
+                                                    <Button
+                                                        onClick={()=>{changehouseto("Gryffindor");}}
+                                                        fullWidth
+                                                        variant="contained"
+                                                        style={{backgroundColor:"#ffc500", color:"#7f0909"}}
+                                                        >
+                                                        Choose
+                                                    </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa"}}>
+                                            <CardActionArea>
+                                                <CardMedia
                                                 className={classes.media}
-                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg"
-                                                title="Gryffindor"
-                                                style={{borderColor:"#ffc500",border:"10"}}
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                GRYFFINDOR
-                                            </Typography>
+                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/slytherin_vb1xzz.jpg"
+                                                title="Slytherin"
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    SLYTHERIN
+                                                </Typography>
                                                 <Button
-                                                    onClick={()=>{changehouseto("Gryffindor");}}
+                                                    onClick={()=>{changehouseto("Slytherin");}}
                                                     fullWidth
                                                     variant="contained"
-                                                    style={{backgroundColor:"#ffc500", color:"#7f0909"}}
+                                                    color="primary"
+                                                    style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
                                                     >
                                                     Choose
                                                 </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
                                     </Grid>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                            className={classes.media}
-                                            image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/slytherin_vb1xzz.jpg"
-                                            title="Slytherin"
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                SLYTHERIN
-                                            </Typography>
-                                            <Button
-                                                onClick={()=>{changehouseto("Slytherin");}}
-                                                fullWidth
-                                                variant="contained"
-                                                color="primary"
-                                                style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
-                                                >
-                                                Choose
-                                            </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                                <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#222f5b",color: "#946b2d"}}>
-                                        <CardActionArea>
-                                            <CardMedia
+                                    <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#222f5b",color: "#946b2d"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/ravenclaw3_pmr0wh.jpg"
+                                                    title="Ravenclaw"
+                                                    style={{borderColor:"#ffc500",border:"10"}}
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    RAVENCLAW
+                                                </Typography>
+                                                    <Button
+                                                        onClick={()=>{changehouseto("Ravenclaw");}}
+                                                        fullWidth
+                                                        variant="contained"
+                                                        style={{backgroundColor:"#946b2d", color:"#222f5b"}}
+                                                        >
+                                                        Choose
+                                                    </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#ffdb00",color: "#000000"}}>
+                                            <CardActionArea>
+                                                <CardMedia
                                                 className={classes.media}
-                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/ravenclaw3_pmr0wh.jpg"
-                                                title="Ravenclaw"
-                                                style={{borderColor:"#ffc500",border:"10"}}
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                RAVENCLAW
-                                            </Typography>
+                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663805/Hp/hufflepuff2_g1ldfl.jpg"
+                                                title="Hufflepuff"
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    HUFFLEPUFF
+                                                </Typography>
                                                 <Button
-                                                    onClick={()=>{changehouseto("Ravenclaw");}}
+                                                    onClick={()=>{changehouseto("Hufflepuff");}}
                                                     fullWidth
                                                     variant="contained"
-                                                    style={{backgroundColor:"#946b2d", color:"#222f5b"}}
+                                                    color="primary"
+                                                    style={{backgroundColor:"#000000", color:"#ffdb00"}}
                                                     >
                                                     Choose
                                                 </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
                                     </Grid>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#ffdb00",color: "#000000"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                            className={classes.media}
-                                            image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663805/Hp/hufflepuff2_g1ldfl.jpg"
-                                            title="Hufflepuff"
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                HUFFLEPUFF
-                                            </Typography>
-                                            <Button
-                                                onClick={()=>{changehouseto("Hufflepuff");}}
-                                                fullWidth
-                                                variant="contained"
-                                                color="primary"
-                                                style={{backgroundColor:"#000000", color:"#ffdb00"}}
-                                                >
-                                                Choose
-                                            </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
+                                    <Grid container xs={false} sm={4} md={4} style={{backgroundColor: "#9c9264"}} className= {classes.shat}></Grid>
                                 </Grid>
-                                <Grid container xs={false} sm={4} md={4} style={{backgroundColor: "#9c9264"}} className= {classes.shat}></Grid>
                             </Grid>
-                        </Grid>
-                    </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <Grid container component="main" className={classes.root}>
+                                <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                                    <Grid container component={Paper} xs={8} sm={10} md={11} lg={11} xl={11} style={{backgroundColor: "#f9f7f5"}}>
+                                    <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#7f0909",color: "#ffc500",minWidth:"250px"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg"
+                                                    title="Gryffindor"
+                                                    style={{borderColor:"#ffc500",border:"10"}}
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    GRYFFINDOR
+                                                </Typography>
+                                                    <Button
+                                                        onClick={()=>{changehouseto("Gryffindor");}}
+                                                        fullWidth
+                                                        variant="contained"
+                                                        style={{backgroundColor:"#ffc500", color:"#7f0909"}}
+                                                        >
+                                                        Choose
+                                                    </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa",minWidth:"250px"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                className={classes.media}
+                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/slytherin_vb1xzz.jpg"
+                                                title="Slytherin"
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    SLYTHERIN
+                                                </Typography>
+                                                <Button
+                                                    onClick={()=>{changehouseto("Slytherin");}}
+                                                    fullWidth
+                                                    variant="contained"
+                                                    color="primary"
+                                                    style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
+                                                    >
+                                                    Choose
+                                                </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#222f5b",color: "#946b2d",minWidth:"250px"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/ravenclaw3_pmr0wh.jpg"
+                                                    title="Ravenclaw"
+                                                    style={{borderColor:"#ffc500",border:"10"}}
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    RAVENCLAW
+                                                </Typography>
+                                                    <Button
+                                                        onClick={()=>{changehouseto("Ravenclaw");}}
+                                                        fullWidth
+                                                        variant="contained"
+                                                        style={{backgroundColor:"#946b2d", color:"#222f5b"}}
+                                                        >
+                                                        Choose
+                                                    </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                        <Grid container style={{justifyContent:"center"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#ffdb00",color: "#000000",minWidth:"250px"}}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                className={classes.media}
+                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663805/Hp/hufflepuff2_g1ldfl.jpg"
+                                                title="Hufflepuff"
+                                                />
+                                                <CardContent>
+                                                <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
+                                                    HUFFLEPUFF
+                                                </Typography>
+                                                <Button
+                                                    onClick={()=>{changehouseto("Hufflepuff");}}
+                                                    fullWidth
+                                                    variant="contained"
+                                                    color="primary"
+                                                    style={{backgroundColor:"#000000", color:"#ffdb00"}}
+                                                    >
+                                                    Choose
+                                                </Button>
+                                                </CardContent>
+                                            </CardActionArea>
+                                            </Card>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container xs={false} sm={4} md={4} style={{backgroundColor: "#9c9264"}} className= {classes.shat}></Grid>
+    
+                                    </Grid>
+                            </Grid>
+                        </div>
+                    )}
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Your house has been changed, do you want to revisit the sorting hat?"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Even though this practice is frowned upon, you decided to go against the will of the sorting hat. However, we are sure that you had the characteristics of a true {house}. Do you want to visit the sorting hat?
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        No
+                    </Button>
+                    <Button onClick={gotosortinghat} color="primary" autoFocus>
+                        Yes
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
                 ) : (
-                    <div>
-                        <Grid container component="main" className={classes.root}>
-                            <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                <Grid container component={Paper} xs={8} sm={10} md={11} lg={11} xl={11} style={{backgroundColor: "#f9f7f5"}}>
-                                <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#7f0909",color: "#ffc500",minWidth:"250px"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                                className={classes.media}
-                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg"
-                                                title="Gryffindor"
-                                                style={{borderColor:"#ffc500",border:"10"}}
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                GRYFFINDOR
-                                            </Typography>
-                                                <Button
-                                                    onClick={()=>{changehouseto("Gryffindor");}}
-                                                    fullWidth
-                                                    variant="contained"
-                                                    style={{backgroundColor:"#ffc500", color:"#7f0909"}}
-                                                    >
-                                                    Choose
-                                                </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa",minWidth:"250px"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                            className={classes.media}
-                                            image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/slytherin_vb1xzz.jpg"
-                                            title="Slytherin"
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                SLYTHERIN
-                                            </Typography>
-                                            <Button
-                                                onClick={()=>{changehouseto("Slytherin");}}
-                                                fullWidth
-                                                variant="contained"
-                                                color="primary"
-                                                style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
-                                                >
-                                                Choose
-                                            </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                                <Grid container xs={6} sm={4} md={4} style={{backgroundColor: "#f9f7f5"}}>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#222f5b",color: "#946b2d",minWidth:"250px"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                                className={classes.media}
-                                                image="https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/ravenclaw3_pmr0wh.jpg"
-                                                title="Ravenclaw"
-                                                style={{borderColor:"#ffc500",border:"10"}}
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                RAVENCLAW
-                                            </Typography>
-                                                <Button
-                                                    onClick={()=>{changehouseto("Ravenclaw");}}
-                                                    fullWidth
-                                                    variant="contained"
-                                                    style={{backgroundColor:"#946b2d", color:"#222f5b"}}
-                                                    >
-                                                    Choose
-                                                </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                    <Grid container style={{justifyContent:"center"}}>
-                                    <Card style={{padding:"12px",margin: "12px",backgroundColor:"#ffdb00",color: "#000000",minWidth:"250px"}}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                            className={classes.media}
-                                            image="https://res.cloudinary.com/adityakaushik/image/upload/v1627663805/Hp/hufflepuff2_g1ldfl.jpg"
-                                            title="Hufflepuff"
-                                            />
-                                            <CardContent>
-                                            <Typography gutterBottom variant="h6" component="h4" className={classes.harryfont}>
-                                                HUFFLEPUFF
-                                            </Typography>
-                                            <Button
-                                                onClick={()=>{changehouseto("Hufflepuff");}}
-                                                fullWidth
-                                                variant="contained"
-                                                color="primary"
-                                                style={{backgroundColor:"#000000", color:"#ffdb00"}}
-                                                >
-                                                Choose
-                                            </Button>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                                <Grid container xs={false} sm={4} md={4} style={{backgroundColor: "#9c9264"}} className= {classes.shat}></Grid>
-
-                                </Grid>
-                        </Grid>
-                    </div>
-                )}
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Your house has been changed, do you want to revisit the sorting hat?"}</DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Even though this practice is frowned upon, you decided to go against the will of the sorting hat. However, we are sure you had the characteristics of {house}. Do you want to visit the sorting hat?
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    No
-                </Button>
-                <Button onClick={gotosortinghat} color="primary" autoFocus>
-                    Yes
-                </Button>
-                </DialogActions>
-            </Dialog>
+                <Loading/>
+            )}
         </div>
+        
     );
 }
 
