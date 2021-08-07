@@ -1,11 +1,15 @@
 import Navbar from "../navigation/Navbar";
-import { CardActionArea, CardContent, CardMedia, makeStyles, Paper, useMediaQuery, CardActions } from "@material-ui/core";
+import { CardActionArea, CardContent, CardMedia, makeStyles, Paper, useMediaQuery, CardActions, Dialog } from "@material-ui/core";
 import React, { useState, useContext,useEffect } from "react";
 import { GlobalState } from "../../GlobalState";
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Grid, Button, Card, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
 import axios from "axios";
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 const useStyles = makeStyles((theme) => ({
     root:{
         height: '91vh',
@@ -36,7 +40,18 @@ export default function ChangeHouse(){
     const [isLogged] = state.userAPI.isLogged;
     const [house,setHouse] = state.userAPI.house;
     const [token] = state.token;
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     const matches = useMediaQuery('(max-width:768px)');
+    const gotosortinghat = () => {
+        window.location.href = "/sortinghat";
+    }
     const changehouseto = async house => {
         setHouse(house)
         await axios.patch(
@@ -46,6 +61,7 @@ export default function ChangeHouse(){
             headers: { Authorization: token },
           }
         );
+        handleClickOpen()
       };
     var col = "#9c9264"
     var fontcol = "black"
@@ -306,7 +322,27 @@ export default function ChangeHouse(){
                         </Grid>
                     </div>
                 )}
-            
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Your house has been changed, do you want to revisit the sorting hat?"}</DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    Even though this practice is frowned upon, you decided to go against the will of the sorting hat. However, we are sure you had the characteristics of {house}. Do you want to visit the sorting hat?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                    No
+                </Button>
+                <Button onClick={gotosortinghat} color="primary" autoFocus>
+                    Yes
+                </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

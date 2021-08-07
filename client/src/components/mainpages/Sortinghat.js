@@ -38,6 +38,10 @@ function Sortinghat() {
   const [characteristics] = state.userAPI.characteristics;
   const [isLogged] = state.userAPI.isLogged;
   const matches = useMediaQuery('(max-width:768px)');
+  useEffect(() => {
+    let timeout;
+    timeout = setTimeout(() => window.location.href = "/", 14000);
+  }, []);
   var col = "white"
   var fontcol = "black"
   var altcol = "#9c9264"
