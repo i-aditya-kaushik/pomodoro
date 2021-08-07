@@ -5,10 +5,10 @@ import { GlobalState } from "../../GlobalState";
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Grid, Button, Card, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
-
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
     root:{
-        height: '90vh',
+        height: '91vh',
     },
     image:{
         backgroundRepeat: 'no-repeat',
@@ -35,7 +35,18 @@ export default function ChangeHouse(){
     const state = useContext(GlobalState);
     const [isLogged] = state.userAPI.isLogged;
     const [house,setHouse] = state.userAPI.house;
+    const [token] = state.token;
     const matches = useMediaQuery('(max-width:768px)');
+    const changehouseto = async house => {
+        setHouse(house)
+        await axios.patch(
+          "/user/house",
+          { house },
+          {
+            headers: { Authorization: token },
+          }
+        );
+      };
     var col = "#9c9264"
     var fontcol = "black"
     var altcol = "white"
@@ -87,7 +98,7 @@ export default function ChangeHouse(){
                                                 GRYFFINDOR
                                             </Typography>
                                                 <Button
-                                                    onClick={()=>setHouse("Gryffindor")}
+                                                    onClick={()=>{changehouseto("Gryffindor");}}
                                                     fullWidth
                                                     variant="contained"
                                                     style={{backgroundColor:"#ffc500", color:"#7f0909"}}
@@ -111,7 +122,7 @@ export default function ChangeHouse(){
                                                 SLYTHERIN
                                             </Typography>
                                             <Button
-                                                onClick={()=>setHouse("Slytherin")}
+                                                onClick={()=>{changehouseto("Slytherin");}}
                                                 fullWidth
                                                 variant="contained"
                                                 color="primary"
@@ -139,7 +150,7 @@ export default function ChangeHouse(){
                                                 RAVENCLAW
                                             </Typography>
                                                 <Button
-                                                    onClick={()=>setHouse("Ravenclaw")}
+                                                    onClick={()=>{changehouseto("Ravenclaw");}}
                                                     fullWidth
                                                     variant="contained"
                                                     style={{backgroundColor:"#946b2d", color:"#222f5b"}}
@@ -163,7 +174,7 @@ export default function ChangeHouse(){
                                                 HUFFLEPUFF
                                             </Typography>
                                             <Button
-                                                onClick={()=>setHouse("Hufflepuff")}
+                                                onClick={()=>{changehouseto("Hufflepuff");}}
                                                 fullWidth
                                                 variant="contained"
                                                 color="primary"
@@ -200,7 +211,7 @@ export default function ChangeHouse(){
                                                 GRYFFINDOR
                                             </Typography>
                                                 <Button
-                                                    onClick={()=>setHouse("Gryffindor")}
+                                                    onClick={()=>{changehouseto("Gryffindor");}}
                                                     fullWidth
                                                     variant="contained"
                                                     style={{backgroundColor:"#ffc500", color:"#7f0909"}}
@@ -224,7 +235,7 @@ export default function ChangeHouse(){
                                                 SLYTHERIN
                                             </Typography>
                                             <Button
-                                                onClick={()=>setHouse("Slytherin")}
+                                                onClick={()=>{changehouseto("Slytherin");}}
                                                 fullWidth
                                                 variant="contained"
                                                 color="primary"
@@ -252,7 +263,7 @@ export default function ChangeHouse(){
                                                 RAVENCLAW
                                             </Typography>
                                                 <Button
-                                                    onClick={()=>setHouse("Ravenclaw")}
+                                                    onClick={()=>{changehouseto("Ravenclaw");}}
                                                     fullWidth
                                                     variant="contained"
                                                     style={{backgroundColor:"#946b2d", color:"#222f5b"}}
@@ -276,7 +287,7 @@ export default function ChangeHouse(){
                                                 HUFFLEPUFF
                                             </Typography>
                                             <Button
-                                                onClick={()=>setHouse("Hufflepuff")}
+                                                onClick={()=>{changehouseto("Hufflepuff");}}
                                                 fullWidth
                                                 variant="contained"
                                                 color="primary"

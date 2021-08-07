@@ -97,7 +97,6 @@ export default function Navbar(){
     const state = useContext(GlobalState);
     const [isLogged] = state.userAPI.isLogged;
     const [isAdmin] = state.userAPI.isAdmin;
-    const [cart] = state.userAPI.cart;
     const [open, setOpen] = React.useState(false);
     const [error, seterror] = React.useState("Some Kind of error occured!");
     const matches = useMediaQuery('(max-width:768px)');
