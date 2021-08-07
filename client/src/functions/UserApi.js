@@ -6,15 +6,18 @@ function UserApi(token) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [cart, setCart] = useState([]);
   const [house, setHouse] = useState("");
+  const [isloading,setisloading] = useState(false);
   const [sortingdone, setSorting] = useState(true);
   const [characteristics,setCharacteristics] = useState([])
   useEffect(() => {
     if (token) {
       const getUser = async () => {
         try {
+          setisloading(true)
           const res = await axios.get("/user/info", {
             headers: { Authorization: token },
           });
+          setisloading(false)
           setIsLogged(true);
           setHouse(res.data.house)
           res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
@@ -33,6 +36,7 @@ function UserApi(token) {
   }, [token]);
 
   return {
+    isloading: [isloading,setisloading],
     isLogged: [isLogged, setIsLogged],
     isAdmin: [isAdmin, setIsAdmin],
     sortingdone: [sortingdone, setSorting],
