@@ -19,6 +19,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import Logo from '../../static/images/Logo.png'
 import CardMedia from '@material-ui/core/CardMedia';
+import { GlobalState } from '../../GlobalState';
 
 function Copyright() {
   return (
@@ -131,11 +132,8 @@ export default function SignUp() {
     try {
       if(password2.value!=password.value) {alert('Passwords do not match');return}
       var houseval = getRandomHouse()
-      console.log(houseval)
       await axios.post("/user/register", { ...user , house: houseval});
-
       localStorage.setItem("firstLogin", true);
-
       window.location.href = "/sortinghat";
     } catch (err) {
       try{

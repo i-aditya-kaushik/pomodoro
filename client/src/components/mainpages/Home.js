@@ -30,9 +30,6 @@ export default function Home(){
     var fontcol = "black"
     var altcol = "white"
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
-    useEffect(() => {
-        
-    }, [isloading]);
     if(house=="Gryffindor"){
         col = "#7f0909"
         fontcol="#ffc500"
