@@ -12,6 +12,7 @@ import Sortinghat from './components/mainpages/Sortinghat';
 import { DataProvider } from "./GlobalState";
 import NotFound from './components/utilities/NotFound'
 import ChangeHouse from './components/mainpages/Changehouse';
+import Profile from './components/mainpages/Profile';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
                   <Route path="/register" component={SignUp}/>
                   <Route path="/sortinghat" component={Sortinghat}/>
                   <Route path="/changehouse" component={ChangeHouse}/>
+                  <Route path="/profile" component={Profile}/>
                   <Route path="*" exact component={NotFound} />
               </Switch>
           </div>
