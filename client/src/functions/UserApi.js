@@ -8,6 +8,7 @@ function UserApi(token) {
   const [house, setHouse] = useState("");
   const [isloading,setisloading] = useState(false);
   const [sortingdone, setSorting] = useState(true);
+  const [tags,setTags] = useState([])
   const [characteristics,setCharacteristics] = useState([])
   useEffect(() => {
     if (token) {
@@ -20,6 +21,16 @@ function UserApi(token) {
           setisloading(false)
           setIsLogged(true);
           setHouse(res.data.house)
+          setTags(res.data.tags)
+          if(tags.length==0){
+            axios.post(
+            "user/addtags",
+            { name:"Harry Potter Geek" },
+            {
+                headers: { Authorization: token },
+            }
+            );
+          } 
           res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
           res.data.num_login > 1 ? setSorting(true) : setSorting(false)
           if(res.data.house=="Gryffindor") setCharacteristics(...characteristics, ["DETERMINATION","CLEVERNESS","COURAGE"])
@@ -39,6 +50,7 @@ function UserApi(token) {
     isloading: [isloading,setisloading],
     isLogged: [isLogged, setIsLogged],
     isAdmin: [isAdmin, setIsAdmin],
+    tags: [tags,setTags],
     sortingdone: [sortingdone, setSorting],
     house: [house,setHouse],
     characteristics: [characteristics,setCharacteristics]

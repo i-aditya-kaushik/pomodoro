@@ -1,6 +1,4 @@
 const Users = require("../models/userModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const Tags = require("../models/tagsModel")
 
 const tagsController = {
@@ -8,13 +6,20 @@ const tagsController = {
         try {
           const user = await Users.findById(req.user.id);
           if (!user) return res.status(400).json({ msg: "User does not exist." });
-    
           const { name } = req.body;
           const tag = await Tags.findOne({ name });
-          if (tag)
-              return res.status(400).json({ msg: "This category already exists." });
-
           const newTag = new Tags({ name });
+          if (tag){
+            if(user.tags.indexOf(tag.id)==-1){
+            await Users.findOneAndUpdate(
+              { _id: req.user.id },
+              {
+                $push: {tags: tag},
+              }
+              );
+            }
+            return res.json({ msg: "Already existing tag added to user." });
+          }
 
           await newTag.save();
 
@@ -25,7 +30,7 @@ const tagsController = {
             }
           );
 
-          return res.json({ msg: "Added to Tags list" });
+          return res.json({ msg: "New tag given to the user." });
         } catch (err) {
           return res.status(500).json({ msg: err.message });
         }
