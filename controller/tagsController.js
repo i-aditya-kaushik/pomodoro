@@ -53,6 +53,15 @@ const tagsController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  gettags: async (req,res) => {
+    try{
+      const tags = await Tags.find().select("name")
+      return res.json({tags: tags})
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  }
 };
 
 
