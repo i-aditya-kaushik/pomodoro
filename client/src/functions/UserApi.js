@@ -25,7 +25,7 @@ function UserApi(token) {
           if(tags.length==0){
             axios.post(
             "user/addtags",
-            { name:"Harry Potter Geek" },
+            { name:"Harry Potter Fan" },
             {
                 headers: { Authorization: token },
             }

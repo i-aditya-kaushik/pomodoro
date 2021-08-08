@@ -77,9 +77,7 @@ export default function Home(){
                 </div>
             ) : (
                 <Loading/>
-            )}
-                
-            
+            )}    
         </div>
     );
 }
