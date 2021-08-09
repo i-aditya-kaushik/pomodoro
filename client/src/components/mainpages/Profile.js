@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     },
     buttonPc: {
         fontSize:"18px",
-        margin: theme.spacing(0,0,3,2),
     },
     loginButton:{
         background:"black",
@@ -63,6 +62,7 @@ export default function Profile(){
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
     const [isloading,setisloading] = state.userAPI.isloading
+    const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [house] = state.userAPI.house;
 
@@ -121,7 +121,7 @@ export default function Profile(){
                                     <Grid container component={Paper} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
                                         <Box mt={1}>
                                             <Typography component="h1" variant="h3" className={classes.harryfont} style={{color: altcol}}>
-                                                What are your hobbies/profession in the muggle world?
+                                                What are your hobbies/interests define you in the muggle world?
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -134,10 +134,10 @@ export default function Profile(){
                                     <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
                                         <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"200px"}}>
                                                 <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
-                                                    How would you describe yourself in the muggle world?
+                                                    What are the hobbies/interests that define you in the muggle world?
                                                 </Typography>
                                                 <Autocomplete
-                                                    style={{minWidth:"500px"}}
+                                                    fullWidth
                                                     multiple
                                                     freeSolo={true}
                                                     open={open}
@@ -148,9 +148,10 @@ export default function Profile(){
                                                         setOpen(false);
                                                     }}
                                                     getOptionSelected={(option, value) => option.name === value.name}
-                                                    getOptionLabel={(option) => option.name}
+                                                    getOptionLabel={(option) => option.name || option}
                                                     options={options}
                                                     loading={loading}
+                                                    defaultValue = {["Hi","Jude"]}
                                                     onChange={(event, newValue) => {
                                                         console.log(newValue);
                                                     }}
