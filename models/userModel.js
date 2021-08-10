@@ -24,6 +24,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    work_duration: {
+      type: Number,
+      default: 25,
+    },
+    short_break_duration: {
+      type: Number,
+      default: 5,
+    },
+    long_break_duration: {
+      type: Number,
+      default: 20,
+    },
     active_tasks: [{task:{
       type: mongoose.Schema.Types.ObjectId, ref: "Tasks",
     }, time_elapsed: {type: Number,default:0}}],

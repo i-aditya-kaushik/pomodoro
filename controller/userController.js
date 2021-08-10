@@ -136,6 +136,23 @@ const userController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  userupdate : async (req,res) => {
+    try{
+      const user = await Users.findById(req.user.id);
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+
+      await Users.findOneAndUpdate({ _id: req.user.id },
+        { work_duration: req.body.work_duration,
+          short_break_duration: req.body.short_break_duration,
+          long_break_duration: req.body.long_break_duration }
+      );
+
+      return res.json({ msg: "The user has been updated" });
+    } catch {
+      return res.status(500).json({ msg: err.message });
+    }
+  }
 };
 
 const createAccessToken = user => {
