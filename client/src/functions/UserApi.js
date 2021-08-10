@@ -8,6 +8,9 @@ function UserApi(token) {
   const [house, setHouse] = useState("");
   const [isloading,setisloading] = useState(false);
   const [sortingdone, setSorting] = useState(true);
+  const [worktime, setworktime] = useState(25);
+  const [shortbreak, setshortbreak] = useState(5);
+  const [longbreak, setlongbreak] = useState(20);
   const [tags,setTags] = useState([])
   const [usertag,setusertag] = useState([])
   const [characteristics,setCharacteristics] = useState([])
@@ -25,6 +28,9 @@ function UserApi(token) {
             }
           );
           setusertag(response1.data.tags)
+          setworktime(res.data.work_duration)
+          setshortbreak(res.data.short_break_duration)
+          setlongbreak(res.data.long_break_duration)
           setisloading(false)
           setIsLogged(true);
           setHouse(res.data.house)
@@ -61,7 +67,10 @@ function UserApi(token) {
     sortingdone: [sortingdone, setSorting],
     house: [house,setHouse],
     characteristics: [characteristics,setCharacteristics],
-    usertag : [usertag,setusertag]
+    usertag : [usertag,setusertag],
+    worktime:[worktime, setworktime],
+    shortbreak:[shortbreak, setshortbreak],
+    longbreak:[longbreak, setlongbreak],
   };
 }
 
