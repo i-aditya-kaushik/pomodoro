@@ -61,6 +61,34 @@ const tagsController = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+  },
+
+  gettaguser: async (req,res) => {
+    try{
+      const user = await Users.findById(req.user.id);
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+      const tags = await Tags.find( { "_id" : { $in : user.tags } } ).select("name");
+      
+      return res.json({tags: tags})
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  deletetags : async (req,res) => {
+    try{
+      const user = await Users.findById(req.user.id);
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+      await Users.findOneAndUpdate(
+        { _id: req.user.id },
+        {
+          tags: [],
+        }
+      );
+      return res.json({tags: user.tags})
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
   }
 };
 
