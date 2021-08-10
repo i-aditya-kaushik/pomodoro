@@ -52,35 +52,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile(){
     const classes = useStyles();
-    function sleep(delay = 0) {
-        return new Promise(resolve => {
-          setTimeout(resolve, delay);
-        });
-      }
     const state = useContext(GlobalState);
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
+    const [usertag,setusertag] = state.userAPI.usertag
     const loading = open && options.length === 0;
     const [isloading,setisloading] = state.userAPI.isloading
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [house] = state.userAPI.house;
+    const [token] = state.token;
 
     const onChangeHandle = async (value) => {
-        // use the changed value to make request and then use the result. Which
-        console.log(value);
         const response = await fetch(
           "/user/gettags"
         )
           .then((response) => response.json())
           .then((data) => setOptions(data.tags));
+        console.log(options)
       };
     
-      React.useEffect(() => {
+      React.useEffect(async () => {
         if (!open) {
           setOptions([]);
         }
-      }, [open]);
+      }, [open,tags]);
     const matches = useMediaQuery('(max-width:768px)');
     var col = "#9c9264"
     var fontcol = "black"
@@ -118,13 +114,79 @@ export default function Profile(){
                         {matches ? (
                             <div>
                                 <Grid container component="main" className={classes.root}>
-                                    <Grid container component={Paper} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
-                                        <Box mt={1}>
-                                            <Typography component="h1" variant="h3" className={classes.harryfont} style={{color: altcol}}>
-                                                What are your hobbies/interests define you in the muggle world?
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
+                                <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"200px",padding: "20px"}}>
+                                                <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                                    What are the hobbies/interests that define you in the muggle world?
+                                                </Typography>
+                                                <Autocomplete
+                                                    fullWidth
+                                                    style={{paddingTop:"20px"}}
+                                                    multiple
+                                                    limitTags={4}
+                                                    freeSolo={true}
+                                                    open={open}
+                                                    onOpen={() => {
+                                                        setOpen(true);
+                                                    }}
+                                                    onClose={() => {
+                                                        setOpen(false);
+                                                    }}
+                                                    getOptionSelected={(option, value) => {try{option === value.name}catch (err) {option.name ===value.name}}}
+                                                    getOptionLabel={(option) => option.name || option}
+                                                    options={options}
+                                                    loading={loading}
+                                                    defaultValue = {usertag}
+                                                    onChange={async (event, newValue) => {
+                                                        try{
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                          }).then(async ()=>{
+                                                              try{
+                                                                for(var i=0;i<newValue.length;i++){
+                                                                    var name = newValue[i].name
+                                                                    if(typeof(name)=='undefined'){
+                                                                        name = newValue[i]
+                                                                    }
+                                                                    await axios.post("/user/addtags",
+                                                                    {name: name},
+                                                                    {headers: { 'Authorization': token }})
+                                                                }
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                          })
+                                                        } catch(err){
+                                                            console.log(err.response)
+                                                        }
+                                                        console.log(newValue)
+                                                    }}
+                                                    id="tags-outlined"
+                                                    renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        variant="outlined"
+                                                        onChange={ev => {
+                                                            if (ev.target.value !== "" || ev.target.value !== null) {
+                                                              onChangeHandle(ev.target.value);
+                                                            }
+                                                          }}
+                                                        label="Set Your Tags"
+                                                        placeholder= "Press Enter to add a new tag or select from the options"
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            endAdornment: (
+                                                              <React.Fragment>
+                                                                {loading ? (
+                                                                  <CircularProgress color="inherit" size={20} />
+                                                                ) : null}
+                                                                {params.InputProps.endAdornment}
+                                                              </React.Fragment>
+                                                            )
+                                                          }}
+                                                    />
+                                                    )}
+                                                />
+                                        </Grid>
                                 </Grid>
                             </div>
                         ) : (
@@ -141,19 +203,41 @@ export default function Profile(){
                                                     multiple
                                                     freeSolo={true}
                                                     open={open}
+                                                    limitTags={4}
                                                     onOpen={() => {
                                                         setOpen(true);
                                                     }}
                                                     onClose={() => {
                                                         setOpen(false);
                                                     }}
-                                                    getOptionSelected={(option, value) => option.name === value.name}
+                                                    getOptionSelected={(option, value) => {try{option === value.name}catch (err) {option.name ===value.name}}}
                                                     getOptionLabel={(option) => option.name || option}
                                                     options={options}
                                                     loading={loading}
-                                                    defaultValue = {["Hi","Jude"]}
-                                                    onChange={(event, newValue) => {
-                                                        console.log(newValue);
+                                                    defaultValue = {usertag}
+                                                    onChange={async (event, newValue) => {
+                                                        try{
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                          }).then(async ()=>{
+                                                              try{
+                                                                for(var i=0;i<newValue.length;i++){
+                                                                    var name = newValue[i].name
+                                                                    if(typeof(name)=='undefined'){
+                                                                        name = newValue[i]
+                                                                    }
+                                                                    await axios.post("/user/addtags",
+                                                                    {name: name},
+                                                                    {headers: { 'Authorization': token }})
+                                                                }
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                          })
+                                                        } catch(err){
+                                                            console.log(err.response)
+                                                        }
+                                                        console.log(newValue)
                                                     }}
                                                     id="tags-outlined"
                                                     renderInput={(params) => (
@@ -166,6 +250,7 @@ export default function Profile(){
                                                             }
                                                           }}
                                                         label="Set Your Tags"
+                                                        placeholder= "Press Enter to add a new tag or select from the options"
                                                         InputProps={{
                                                             ...params.InputProps,
                                                             endAdornment: (
@@ -180,7 +265,6 @@ export default function Profile(){
                                                     />
                                                     )}
                                                 />
-                                                <Button className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol,maxHeight: '50px',maxWidth:"70px"}}>Add</Button>
                                         </Grid>
                                         <Grid style={{backgroundColor: "#f9f7f5"}}>
                                             
