@@ -42,7 +42,7 @@ function Sortinghat() {
   const matches = useMediaQuery('(max-width:768px)');
   useEffect(() => {
     let timeout;
-    timeout = setTimeout(() => window.location.href = "/", 14000);
+    timeout = setTimeout(() => window.location.href = "/", 15000);
   }, []);
   var col = "white"
   var fontcol = "black"
