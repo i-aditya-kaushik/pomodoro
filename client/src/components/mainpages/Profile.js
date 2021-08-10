@@ -1,5 +1,5 @@
 import Navbar from "../navigation/Navbar";
-import { Divider, makeStyles, Paper, TextField, useMediaQuery} from "@material-ui/core";
+import { Divider, makeStyles, Paper, Slider, TextField, useMediaQuery} from "@material-ui/core";
 import React, { useState, useContext,useEffect } from "react";
 import { GlobalState } from "../../GlobalState";
 import Alert from '@material-ui/lab/Alert';
@@ -9,11 +9,9 @@ import Loading from '../utilities/Loading'
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { withStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
-    root:{
-        height: '91vh',
-    },
     image:{
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -50,6 +48,78 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+const PrettoSlider =  withStyles({
+    root: {
+      color: '#000',
+      height: 8,
+    },
+    thumb: {
+      height: 24,
+      width: 24,
+      backgroundColor: '#fff',
+      border: '2px solid currentColor',
+      marginTop: -8,
+      marginLeft: -12,
+      '&:focus, &:hover, &$active': {
+        boxShadow: 'inherit',
+      },
+    },
+    active: {},
+    valueLabel: {
+      left: 'calc(-50% + 4px)',
+    },
+    track: {
+      height: 8,
+      borderRadius: 4,
+    },
+    rail: {
+      height: 8,
+      borderRadius: 4,
+    },
+  })(Slider);
+
+const TimerComp = props =>{
+    const {title , col, altcol, fontcol , def} = props;
+    const classes = useStyles();
+    return(
+    <div><Typography component="h1" variant="h6" className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh",fontFamily:"cursive"}}>
+        {title}
+    </Typography>
+    <PrettoSlider
+        style={{minWidth:"450px"}}
+        defaultValue={20}
+        step={5}
+        min = {5}
+        max = {55}
+        defaultValue = {def}
+        valueLabelDisplay="auto"
+        marks={[
+            {
+                value: 5,
+                label: '5',
+            },
+            {
+                value: 10,
+                label: '10',
+            },
+            {
+                value: 25,
+                label: '25',
+            },
+            {
+                value: 40,
+                label: '40',
+            },
+            {
+                value: 55,
+                label: '55',
+            },
+        ]}
+    />
+    </div>)
+}
+
 export default function Profile(){
     const classes = useStyles();
     const state = useContext(GlobalState);
@@ -84,7 +154,7 @@ export default function Profile(){
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
     if(house=="Gryffindor"){
         col = "#7f0909"
-        fontcol="#ffc500"
+        fontcol="#ae0001"
         altcol = "#eeba30"
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/gry_banner_grwluz.png"
     }
@@ -194,7 +264,7 @@ export default function Profile(){
                                 <Grid container component="main" className={classes.root}>
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                     <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
-                                        <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"200px"}}>
+                                        <Grid container style={{backgroundColor: "#f9f7f5",minHeight:"20vh"}}>
                                                 <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     What are the hobbies/interests that define you in the muggle world?
                                                 </Typography>
@@ -265,9 +335,14 @@ export default function Profile(){
                                                     />
                                                     )}
                                                 />
-                                        </Grid>
-                                        <Grid style={{backgroundColor: "#f9f7f5"}}>
-                                            
+                                            <Grid style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"5vh"}}>
+                                                <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                                    Your Settings
+                                                </Typography>
+                                                <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={25}/>
+                                                <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={5}/>
+                                                <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={20}/>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
