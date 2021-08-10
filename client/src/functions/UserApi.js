@@ -9,6 +9,7 @@ function UserApi(token) {
   const [isloading,setisloading] = useState(false);
   const [sortingdone, setSorting] = useState(true);
   const [tags,setTags] = useState([])
+  const [usertag,setusertag] = useState([])
   const [characteristics,setCharacteristics] = useState([])
   useEffect(() => {
     if (token) {
@@ -18,6 +19,12 @@ function UserApi(token) {
           const res = await axios.get("/user/info", {
             headers: { Authorization: token },
           });
+          const response1 = await axios.get(
+          "/user/gettagsuser", {
+              headers: { Authorization: token },
+            }
+          );
+          setusertag(response1.data.tags)
           setisloading(false)
           setIsLogged(true);
           setHouse(res.data.house)
@@ -53,7 +60,8 @@ function UserApi(token) {
     tags: [tags,setTags],
     sortingdone: [sortingdone, setSorting],
     house: [house,setHouse],
-    characteristics: [characteristics,setCharacteristics]
+    characteristics: [characteristics,setCharacteristics],
+    usertag : [usertag,setusertag]
   };
 }
 
