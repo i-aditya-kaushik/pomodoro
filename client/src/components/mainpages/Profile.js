@@ -80,18 +80,33 @@ const PrettoSlider =  withStyles({
   })(Slider);
 
 const TimerComp = props =>{
-    const {title , col, altcol, fontcol , def} = props;
+    const {title , col, altcol, fontcol , def ,token} = props;
     const classes = useStyles();
+    const state = useContext(GlobalState);
+    const [worktime, setworktime] = state.userAPI.worktime 
+    const [shortbreak, setshortbreak] = state.userAPI.shortbreak
+    const [longbreak, setlongbreak] = state.userAPI.longbreak
     return(
     <div><Typography component="h1" variant="h6" className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh",fontFamily:"cursive"}}>
         {title}
     </Typography>
     <PrettoSlider
         style={{minWidth:"450px"}}
-        defaultValue={20}
         step={5}
+        key={`slider-${def}`}
         min = {5}
         max = {55}
+        onChange = {async (event,value)=> {
+            if(title=="Work Duration:"){
+                setworktime(value)
+            }
+            if(title=="Short Break Duration:"){
+                setshortbreak(value)
+            }
+            if(title=="Long Break Duration:"){
+                setlongbreak(value)
+            }
+        }}
         defaultValue = {def}
         valueLabelDisplay="auto"
         marks={[
@@ -126,13 +141,26 @@ export default function Profile(){
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [usertag,setusertag] = state.userAPI.usertag
+    const [worktime, setworktime] = state.userAPI.worktime 
+    const [shortbreak, setshortbreak] = state.userAPI.shortbreak
+    const [longbreak, setlongbreak] = state.userAPI.longbreak
     const loading = open && options.length === 0;
     const [isloading,setisloading] = state.userAPI.isloading
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [house] = state.userAPI.house;
     const [token] = state.token;
-
+    useEffect(async () => {
+        try{
+            await axios.put("/user/userupdate", {work_duration: worktime,
+                short_break_duration: shortbreak,
+                long_break_duration: longbreak},{
+                headers: { 'Authorization': token }
+            }).then(console.log("done"));
+        } catch (err) {
+            console.log(err.response)
+        }
+    }, [shortbreak,longbreak,worktime])
     const onChangeHandle = async (value) => {
         const response = await fetch(
           "/user/gettags"
@@ -262,8 +290,8 @@ export default function Profile(){
                         ) : (
                             <div>
                                 <Grid container component="main" className={classes.root}>
-                                    <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                    <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
+                                    <Grid item component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                                    <Grid item component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
                                         <Grid container style={{backgroundColor: "#f9f7f5",minHeight:"20vh"}}>
                                                 <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     What are the hobbies/interests that define you in the muggle world?
@@ -339,13 +367,13 @@ export default function Profile(){
                                                 <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     Your Settings
                                                 </Typography>
-                                                <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={25}/>
-                                                <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={5}/>
-                                                <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={20}/>
+                                                <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
+                                                <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token}/>
+                                                <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token}/>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                                    <Grid item component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                 </Grid>
                             </div>
                         )}
