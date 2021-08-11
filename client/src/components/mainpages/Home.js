@@ -6,6 +6,7 @@ import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
 import Loading from '../utilities/Loading'
+import Timer from './Timer'
 
 const useStyles = makeStyles((theme) => ({
     root:{
@@ -62,14 +63,18 @@ export default function Home(){
                         {matches ? (
                             <div>
                                 <Grid container component="main" className={classes.root}>
-                                    <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}></Grid>
+                                    <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Timer col={col} fontcol= {fontcol} altcol= {altcol}/>
+                                    </Grid>
                                 </Grid>
                             </div>
                         ) : (
                             <div>
                                 <Grid container component="main" className={classes.root}>
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                    <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}></Grid>
+                                    <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}>
+                                        <Timer  col={col} fontcol= {fontcol} altcol= {altcol}/>
+                                    </Grid>
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                 </Grid>
                             </div>
