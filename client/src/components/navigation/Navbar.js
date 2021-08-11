@@ -173,7 +173,7 @@ export default function Navbar(){
                       </div>
                       ) : (
                         <div>
-                      <Button onClick={() => erroroccur("Login to change your House")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
+                      <Button onClick={() => erroroccur("Login to make a profile and get sorted.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                       <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                       <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
                       <Button component={RouterLink} to="/register" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Register</Button>
@@ -199,7 +199,7 @@ export default function Navbar(){
                         </div>
                       ) : (
                         <div>
-                          <MenuItem onClick={() => erroroccur("Login to change your House")}>
+                          <MenuItem onClick={() => erroroccur("Login to make a profile and get sorted.")}>
                             <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                           </MenuItem>
                           <MenuItem onClick={() => erroroccur("Login to view your Profile")}>
