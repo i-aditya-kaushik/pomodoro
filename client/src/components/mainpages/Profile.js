@@ -161,30 +161,6 @@ export default function Profile(){
             console.log(err.response)
         }
     }, [shortbreak,longbreak,worktime])
-    useEffect(async()=>{
-        try{
-        await axios.delete("/user/deletetags", {
-            headers: { 'Authorization': token },
-            }).then(async ()=>{
-                try{
-                for(var i=0;i<usertag.length;i++){
-                    var name = usertag[i].name
-                    if(typeof(name)=='undefined'){
-                        name = usertag[i]
-                    }
-                    await axios.post("/user/addtags",
-                    {name: name},
-                    {headers: { 'Authorization': token }})
-                }
-                } catch(err){
-                    console.log(err.response)
-                }
-            })
-        } catch(err){
-            console.log(err.response)
-        }
-        console.log(usertag)
-    },[usertag])
     const onChangeHandle = async (value) => {
         const response = await fetch(
           "/user/gettags"
@@ -258,7 +234,25 @@ export default function Profile(){
                                                     options={options}
                                                     loading={loading}
                                                     defaultValue = {usertag}
-                                                    onChange={(event,newValue)=> setusertag(newValue)}
+                                                    onChange={async (event, newValue) => {
+                                                        try{
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                          }).then(async ()=>{
+                                                              try{
+                                                                await axios.post("/user/addmultipletags",
+                                                                {newValue: newValue},
+                                                                {headers: { 'Authorization': token }})
+                                                                
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                          })
+                                                        } catch(err){
+                                                            console.log(err.response)
+                                                        }
+                                                        console.log(newValue)
+                                                    }}
                                                     id="tags-outlined"
                                                     renderInput={(params) => (
                                                     <TextField
@@ -314,7 +308,25 @@ export default function Profile(){
                                                     options={options}
                                                     loading={loading}
                                                     defaultValue = {usertag}
-                                                    onChange={(event,newValue)=> setusertag(newValue)}
+                                                    onChange={async (event, newValue) => {
+                                                        try{
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                          }).then(async ()=>{
+                                                              try{
+                                                                await axios.post("/user/addmultipletags",
+                                                                {newValue: newValue},
+                                                                {headers: { 'Authorization': token }})
+                                                                
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                          })
+                                                        } catch(err){
+                                                            console.log(err.response)
+                                                        }
+                                                        console.log(newValue)
+                                                    }}
                                                     id="tags-outlined"
                                                     renderInput={(params) => (
                                                     <TextField
