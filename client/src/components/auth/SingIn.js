@@ -21,18 +21,6 @@ import Logo from '../../static/images/Logo.png'
 import CardMedia from '@material-ui/core/CardMedia';
 import Navbar from '../navigation/Navbar'
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link component={RouterLink} variant="body1" to='/'>
-        {'A Magical Pomodoro'}
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 function getRandomPicture(){
   var links = Array('https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg',
@@ -99,6 +87,9 @@ export default function SignIn() {
     email: "",
     password: "",
   });
+  var col = "#9c9264"
+  var fontcol = "black"
+  var altcol = "white"
   const [remem, setRemem] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [error, seterror] = React.useState("Some Kind of error occured!");
@@ -184,6 +175,7 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
+              style={{color:altcol, backgroundColor:col}}
               variant="contained"
               color="primary"
               className={classes.submit}
@@ -205,9 +197,6 @@ export default function SignIn() {
                   </Link>
               </Box>
             </Grid>
-            <Box mt={3}>
-              <Copyright />
-            </Box>
           </form>
         </div>
       </Grid>
