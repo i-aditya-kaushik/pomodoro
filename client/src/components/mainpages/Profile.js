@@ -10,6 +10,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { withStyles } from "@material-ui/styles";
+import zIndex from "@material-ui/core/styles/zIndex";
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
     image:{
@@ -79,19 +81,57 @@ const PrettoSlider =  withStyles({
     },
   })(Slider);
 
+  const AntSwitch = withStyles((theme) => ({
+    root: {
+      width: 28,
+      height: 16,
+      padding: 0,
+      display: 'flex',
+    },
+    switchBase: {
+      padding: 2,
+      color: theme.palette.grey[500],
+      '&$checked': {
+        transform: 'translateX(12px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: "#000",
+          borderColor: "#000",
+        },
+      },
+    },
+    thumb: {
+      width: 12,
+      height: 12,
+      boxShadow: 'none',
+    },
+    track: {
+      border: `1px solid ${theme.palette.grey[500]}`,
+      borderRadius: 16 / 2,
+      opacity: 1,
+      backgroundColor: theme.palette.common.white,
+    },
+    checked: {},
+  }))(Switch);
+
 const TimerComp = props =>{
-    const {title , col, altcol, fontcol , def ,token} = props;
+    const {title , col, altcol, fontcol , def ,token,matches} = props;
     const classes = useStyles();
     const state = useContext(GlobalState);
     const [worktime, setworktime] = state.userAPI.worktime 
     const [shortbreak, setshortbreak] = state.userAPI.shortbreak
     const [longbreak, setlongbreak] = state.userAPI.longbreak
+    var minwi = "600px"
+    if(matches) minwi = "250px"
+    var vari = "h6"
+    if(matches) vari = "body1"
     return(
-    <div><Typography component="h1" variant="h6" className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh",fontFamily:"cursive"}}>
-        {title}
+    <div><Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
+        {title.toUpperCase()}
     </Typography>
     <PrettoSlider
-        style={{minWidth:"450px"}}
+        style={{minWidth:minwi}}
         step={5}
         key={`slider-${def}`}
         min = {5}
@@ -149,18 +189,21 @@ export default function Profile(){
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [house] = state.userAPI.house;
+    const [autochange,setautochange] = state.userAPI.autochange
     const [token] = state.token;
     useEffect(async () => {
         try{
             await axios.put("/user/userupdate", {work_duration: worktime,
                 short_break_duration: shortbreak,
-                long_break_duration: longbreak},{
+                long_break_duration: longbreak,
+                autochange: autochange
+            },{
                 headers: { 'Authorization': token }
             }).then(console.log("done"));
         } catch (err) {
             console.log(err.response)
         }
-    }, [shortbreak,longbreak,worktime])
+    }, [shortbreak,longbreak,worktime,autochange])
     const onChangeHandle = async (value) => {
         const response = await fetch(
           "/user/gettags"
@@ -176,6 +219,10 @@ export default function Profile(){
         }
       }, [open,tags]);
     const matches = useMediaQuery('(max-width:768px)');
+    var minwi = "600px"
+    if(matches) minwi = "250px"
+    var vari = "h6"
+    if(matches) vari = "body1"
     var col = "#9c9264"
     var fontcol = "black"
     var altcol = "white"
@@ -212,8 +259,8 @@ export default function Profile(){
                         {matches ? (
                             <div>
                                 <Grid container component="main" className={classes.root}>
-                                <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"200px",padding: "20px"}}>
-                                                <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                    <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"50vh",padding: "20px",zIndex: 5}}>
+                                                <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     What are the hobbies/interests that define you in the muggle world?
                                                 </Typography>
                                                 <Autocomplete
@@ -280,13 +327,31 @@ export default function Profile(){
                                                     )}
                                                 />
                                         </Grid>
+                                        <Grid item xs = {8} style={{backgroundColor: "#f9f7f5",minHeight:"50vh",padding: "20px"}}>
+                                            <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                                Your Settings
+                                            </Typography>
+                                            <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}  matches={matches}/>
+                                            <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token} matches={matches}/>
+                                            <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token} matches={matches}/>
+                                            <Grid component="label" container alignItems="center" spacing={1}>
+                                                <Grid item>
+                                                    <Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
+                                                        {"Automatically run/pause: ".toUpperCase()}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item style={{color: fontcol, paddingTop:"3vh"}}>
+                                                    <AntSwitch checked={autochange} onChange={()=> setautochange(!autochange)} />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
                                 </Grid>
                             </div>
                         ) : (
                             <div>
                                 <Grid container component="main" className={classes.root}>
                                     <Grid item component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                    <Grid item component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px"}}>
+                                    <Grid item component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px",zIndex: 5}}>
                                         <Grid container style={{backgroundColor: "#f9f7f5",minHeight:"20vh"}}>
                                                 <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     What are the hobbies/interests that define you in the muggle world?
@@ -360,6 +425,15 @@ export default function Profile(){
                                                 <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
                                                 <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token}/>
                                                 <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token}/>
+                                                <Grid component="label" container alignItems="center" spacing={1} style={{fontSize:"20px"}}>
+                                                    <Grid item>
+                                                    <Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
+                                                        {"Automatically run/pause: ".toUpperCase()}
+                                                    </Typography>
+                                                        
+                                                    </Grid>
+                                                    <Grid item style={{paddingTop:"2vh"}}><AntSwitch checked={autochange} onChange={()=> setautochange(!autochange)}/></Grid>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
