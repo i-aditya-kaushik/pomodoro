@@ -145,7 +145,9 @@ const userController = {
       await Users.findOneAndUpdate({ _id: req.user.id },
         { work_duration: req.body.work_duration,
           short_break_duration: req.body.short_break_duration,
-          long_break_duration: req.body.long_break_duration }
+          long_break_duration: req.body.long_break_duration,
+          autochange: req.body.autochange
+        }
       );
 
       return res.json({ msg: "The user has been updated" });
