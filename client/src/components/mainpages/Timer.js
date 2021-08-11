@@ -10,14 +10,56 @@ import PauseIcon from "@material-ui/icons/Pause";
 import endedAudio from "../../static/Audio/alert_simple.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
-import { Grid, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
     fontFamily: 'Harry P',
   },
 }));
+
+const TimerBorder =  withStyles({
+  colorPrimary: {
+    color: "#444"
+  },
+  colorSecondary:{
+    color: "#000"
+  }
+})(CircularProgress);
+
+
+const CircularProgressWithLabel = props => {
+  const classes = useStyles()
+  const {timerLength , fontcol, seconds,col,altcol} = props 
+  return (
+    <Grid item align="center">
+      <Box position="relative" display="inline-flex">
+        <TimerBorder variant="determinate" thickness={2} size={250}{...props} />
+        <Box
+          top={0}
+          left={0}
+          bottom={0}
+          right={0}
+          position="absolute"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Typography align = "center" variant="h1" className={classes.harryfont}>
+          {Duration.fromObject({
+            minutes: timerLength,
+          }).toFormat("mm:")}
+          <span style={{color:fontcol}}>{Duration.fromObject({
+            seconds: seconds,
+          }).toFormat("ss")}</span>
+        </Typography>
+        </Box>
+      </Box>
+      </Grid>
+  );
+}
+
 
 const Timer = props => {
   const {col,fontcol,altcol} = props
@@ -104,8 +146,24 @@ const Timer = props => {
       setSessionNumber((prevNumber) => prevNumber + 1);
     }
   }, [sessionType, timerDone]);
-
-  //Long Break Handler
+  
+  const [progress, setProgress] = React.useState(100);
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      if (sessionType === "Work") {
+        setProgress(((timerLength*60 + seconds)/((worktimer+1)*60))*100);
+      }
+      if (sessionType === "Break") {
+        setProgress(((timerLength*60 + seconds)/((shorttimer+1)*60))*100);
+      }
+      if (sessionType === "Long Break") {
+        setProgress(((timerLength*60 + seconds)/((longtimer+1)*60))*100);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [timerOn, seconds, timerLength,sessionType]);
 
   useEffect(() => {
     if (sessionNumber > 4) {
@@ -115,50 +173,36 @@ const Timer = props => {
   }, [sessionNumber]);
 
   return (
-    <Grid item xs={12} style={{paddingTop:"10vh"}}>
-      <Typography align = "center" variant="h1" className={classes.harryfont}>
-        {Duration.fromObject({
-          minutes: timerLength,
-        }).toFormat("mm:")}
-        <span style={{color:fontcol}}>{Duration.fromObject({
-          seconds: seconds,
-        }).toFormat("ss")}</span>
-      </Typography>
-      
-      <p className="uppercase border text-lg my-6 py-4 px-2">
-        Session Number: {sessionNumber}
-      </p>
-      <div className="mb-6 animate-bounce">
-        {sessionType === "Break" && (
-          <FreeBreakfastOutlinedIcon
-            style={{ color: "white", fontSize: "50px" }}
-          />
-        )}
-        {sessionType === "Work" && (
-          <LaptopChromebookOutlinedIcon
-            style={{ color: "#69f0ae", fontSize: "50px" }}
-          />
-        )}
-        {sessionType === "Long Break" && (
-          <LocalHotelOutlinedIcon
-            style={{ color: "white", fontSize: "50px" }}
-          />
-        )}
-        <span className="ml-2 text-gray-400 text-xl">{sessionType} Mode</span>
-      </div>
-      <Button
-        style = {{backgroundColor:col, color:fontcol}}
-        color="default"
-        variant="contained"
-        size="large"
-        startIcon={timerOn ? <PauseIcon /> : <PlayArrowIcon />}
-        onClick={() => {
-          setTimerOn(!timerOn);
-          startedSound.play();
-        }}
-      >
-        {timerOn ? "Pause" : "Run"}
-      </Button>
+    <Grid container>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"5vh"}}>
+        <CircularProgressWithLabel value={progress} timerLength = {timerLength} seconds= {seconds} fontcol={fontcol} col={col} altcol={altcol}/>
+        <Typography align = "center" variant="h3" className={classes.harryfont}>
+          Session Number: {sessionNumber}/4
+        </Typography>
+        <Grid align = "center" style={{paddingTop:"1vh"}}>
+          <Typography align = "center" variant="h5" style={{color:fontcol}}>{sessionType} Mode</Typography>
+        </Grid>
+        <Grid align = "center" style={{paddingTop:"3vh"}}>
+          <Button
+              style = {{backgroundColor:col, color:fontcol}}
+              color="default"
+              variant="contained"
+              size="large"
+              startIcon={timerOn ? <PauseIcon /> : <PlayArrowIcon />}
+              onClick={() => {
+                setTimerOn(!timerOn);
+                startedSound.play();
+              }}
+            >
+            {timerOn ? "Pause" : "Run"}
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"5vh"}}>
+        <Typography align = "center" variant="h3" className={classes.harryfont}>
+          Tasks:
+        </Typography>
+      </Grid>
     </Grid>
   );
 };
