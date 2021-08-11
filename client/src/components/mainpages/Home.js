@@ -25,12 +25,17 @@ export default function Home(){
     const state = useContext(GlobalState);
     const [isloading,setisloading] = state.userAPI.isloading
     const [isLogged] = state.userAPI.isLogged;
-    const [house] = state.userAPI.house;
+    const [house,setHouse] = state.userAPI.house;
     const matches = useMediaQuery('(max-width:768px)');
+    if(!isLogged){
+        var list = ["Gryffindor","Slytherin","Ravenclaw","Hufflepuff"]
+        setHouse(list[Math.floor(Math.random()*list.length)])
+    }
     var col = "#9c9264"
     var fontcol = "black"
     var altcol = "white"
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
+
     if(house=="Gryffindor"){
         col = "#7f0909"
         fontcol="#ffc500"
