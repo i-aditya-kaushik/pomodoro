@@ -7,7 +7,10 @@ import LocalHotelOutlinedIcon from "@material-ui/icons/LocalHotel";
 import Button from "@material-ui/core/Button";
 import PauseIcon from "@material-ui/icons/Pause";
 
-import endedAudio from "../../static/Audio/alert_simple.wav";
+import endshortbreak from "../../static/Audio/short_break_end.wav";
+import endlongbreak from "../../static/Audio/long_break_end.wav";
+import longbreakstart from "../../static/Audio/longbreak.wav";
+import workend from "../../static/Audio/work_end.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
 import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
@@ -72,24 +75,20 @@ const Timer = props => {
   const [sessionNumber, setSessionNumber] = useState(0);
 
   const startedSound = new Audio(startedAudio);
-  const endedSound = new Audio(endedAudio);
-  
+  const endshortbreak_aud = new Audio(endshortbreak);
+  const endlongbreak_aud = new Audio(endlongbreak);
+  const workend_aud = new Audio(workend);
+  const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
   const [isLogged] = state.userAPI.isLogged;
-  const [longbreak,setlongbreak] = useState(20);
-  const [shortbreak,setshortbreak] = useState(5);
-  const [worktime,setworktime] = useState(25);
+  const [autochange,setautochange] = state.userAPI.autochange
+  const [longbreak,setlongbreak] = state.userAPI.longbreak
+  const [shortbreak,setshortbreak] = state.userAPI.shortbreak
+  const [worktime,setworktime] = state.userAPI.worktime
 
   const worktimer = parseInt(worktime) - 1;
   const shorttimer = parseInt(shortbreak) - 1;
   const longtimer = parseInt(longbreak) - 1;
-  useEffect(()=>{
-    if(isLogged){
-      setlongbreak(state.userAPI.longbreak)
-      setshortbreak(state.userAPI.shortbreak)
-      setworktime(state.userAPI.worktime)
-    }
-  }, [isLogged])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -103,8 +102,18 @@ const Timer = props => {
         setSeconds((seconds) => seconds + 60);
         setTimerLength((timerLength) => timerLength - 1);
         if (timerLength === 0) {
-          endedSound.play();
-          setTimerOn(false);
+          if(sessionType=="Work"){
+            workend_aud.play()
+          };
+          if(sessionType=="Break"){
+            endshortbreak_aud.play()
+          };
+          if(sessionType=="Long Break"){
+            endlongbreak_aud.play()
+          };
+          if(!autochange){
+            setTimerOn(false);
+          }
           setTimerDone(true);
           setSessionType((prevType) => {
             if (prevType === "Work") return "Break";
@@ -136,6 +145,7 @@ const Timer = props => {
 
   useEffect(() => {
     if (sessionType === "Long Break") {
+      longbreakstart_aud.play()
       setTimerLength(longtimer);
     }
   }, [longtimer, sessionType]);
@@ -174,7 +184,7 @@ const Timer = props => {
 
   return (
     <Grid container>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"5vh"}}>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"20vh"}}>
         <CircularProgressWithLabel value={progress} timerLength = {timerLength} seconds= {seconds} fontcol={fontcol} col={col} altcol={altcol}/>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
           Session Number: {sessionNumber}/4
@@ -200,7 +210,7 @@ const Timer = props => {
       </Grid>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"5vh"}}>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
-          Tasks:
+          Tasks
         </Typography>
       </Grid>
     </Grid>
