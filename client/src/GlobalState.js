@@ -6,10 +6,11 @@ export const GlobalState = createContext();
 
 export const DataProvider = ({ children }) => {
   const [token, setToken] = useState(false);
-
+  const [islocked,setislocked] = useState(false)
   const state = {
     token: [token, setToken],
     userAPI: UserApi(token),
+    islocked: [islocked,setislocked]
   };
 
   useEffect(() => {

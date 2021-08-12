@@ -13,8 +13,9 @@ import longbreakstart from "../../static/Audio/longbreak.wav";
 import workend from "../../static/Audio/work_end.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
-import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Grid, Snackbar, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
@@ -85,7 +86,20 @@ const Timer = props => {
   const [longbreak,setlongbreak] = state.userAPI.longbreak
   const [shortbreak,setshortbreak] = state.userAPI.shortbreak
   const [worktime,setworktime] = state.userAPI.worktime
+  const [islocked,setislocked] = state.islocked
+  const [open, setOpen] = React.useState(false);
+  const [error, seterror] = React.useState("Some Kind of error occured!");
+  const erroroccur = (err) => {
+      setOpen(true);
+      seterror(err);
+    };
+  const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
 
+      setOpen(false);
+    };
   const worktimer = parseInt(worktime) - 1;
   const shorttimer = parseInt(shortbreak) - 1;
   const longtimer = parseInt(longbreak) - 1;
@@ -184,6 +198,11 @@ const Timer = props => {
 
   return (
     <Grid container>
+      <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert onClose={handleClose} severity="info">
+            {error}
+          </Alert>
+        </Snackbar>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"20vh"}}>
         <CircularProgressWithLabel value={progress} timerLength = {timerLength} seconds= {seconds} fontcol={fontcol} col={col} altcol={altcol}/>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
@@ -200,6 +219,8 @@ const Timer = props => {
               size="large"
               startIcon={timerOn ? <PauseIcon /> : <PlayArrowIcon />}
               onClick={() => {
+                setislocked(!islocked);
+                if(!islocked){erroroccur("Pause the timer to change your settings.")}
                 setTimerOn(!timerOn);
                 startedSound.play();
               }}
