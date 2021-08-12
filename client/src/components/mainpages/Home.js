@@ -27,10 +27,6 @@ export default function Home(){
     const [isLogged] = state.userAPI.isLogged;
     const [house,setHouse] = state.userAPI.house;
     const matches = useMediaQuery('(max-width:768px)');
-    if(!isLogged){
-        var list = ["Gryffindor","Slytherin","Ravenclaw","Hufflepuff"]
-        setHouse(list[Math.floor(Math.random()*list.length)])
-    }
     var col = "#9c9264"
     var fontcol = "black"
     var altcol = "white"
