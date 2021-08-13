@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import Duration from "luxon/src/duration.js";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import LaptopChromebookOutlinedIcon from "@material-ui/icons/LaptopChromebook";
@@ -11,6 +11,7 @@ import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
 import longbreakstart from "../../static/Audio/longbreak.wav";
 import workend from "../../static/Audio/work_end.wav";
+import unpause from "../../static/Audio/unpause.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
 import { Box, CircularProgress, Grid, Snackbar, Typography } from "@material-ui/core";
@@ -69,7 +70,7 @@ const Timer = props => {
   const {col,fontcol,altcol} = props
   const classes = useStyles();
   const [timerLength, setTimerLength] = useState(24);
-  const [seconds, setSeconds] = useState(59);
+  const [seconds, setSeconds] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
   const [timerDone, setTimerDone] = useState(true);
   const [sessionType, setSessionType] = useState("Work");
@@ -79,10 +80,10 @@ const Timer = props => {
   const endshortbreak_aud = new Audio(endshortbreak);
   const endlongbreak_aud = new Audio(endlongbreak);
   const workend_aud = new Audio(workend);
+  const unpause_aud = new Audio(unpause);
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
   const [isLogged] = state.userAPI.isLogged;
-  const [autochange,setautochange] = state.userAPI.autochange
   const [longbreak,setlongbreak] = state.userAPI.longbreak
   const [shortbreak,setshortbreak] = state.userAPI.shortbreak
   const [worktime,setworktime] = state.userAPI.worktime
@@ -100,34 +101,34 @@ const Timer = props => {
 
       setOpen(false);
     };
-  const worktimer = parseInt(worktime) - 1;
-  const shorttimer = parseInt(shortbreak) - 1;
-  const longtimer = parseInt(longbreak) - 1;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (timerOn) {
-        setSeconds((seconds) => seconds - 1);
-      }
-    }, 1000);
-
-    if (seconds === 0) {
-      setTimeout(() => {
-        setSeconds((seconds) => seconds + 60);
-        setTimerLength((timerLength) => timerLength - 1);
-        if (timerLength === 0) {
+  const worktimer = parseInt(worktime);
+  const shorttimer = parseInt(shortbreak);
+  const longtimer = parseInt(longbreak);
+  if(document.hidden){
+    if (timerOn) {
+      if (seconds <= 0) {
+        if (timerLength <= 0) {
           if(sessionType=="Work"){
             workend_aud.play()
+            setTimeout(() => {
+              useCallback(unpause_aud.play())
+            }, 10000);
           };
           if(sessionType=="Break"){
             endshortbreak_aud.play()
+            setTimeout(() => {
+              useCallback(unpause_aud.play())
+            }, 10000);
           };
           if(sessionType=="Long Break"){
             endlongbreak_aud.play()
+            setTimeout(() => {
+              useCallback(unpause_aud.play())
+            }, 10000);
           };
-          if(!autochange){
-            setTimerOn(false);
-          }
+          
+          setTimerOn(false);
+          
           setTimerDone(true);
           setSessionType((prevType) => {
             if (prevType === "Work") return "Break";
@@ -135,14 +136,60 @@ const Timer = props => {
             if (prevType === "Long Break") return "Work";
           });
         }
-      }, 1000);
+      }
     }
+  }
+  useEffect(()=>{
+    if(timerOn){
+      const target_date = new Date(new Date().getTime() + timerLength/5 * 60000 + seconds * 1000)
+      const interval = setInterval(() => {
+        const current_date = new Date().getTime();
+        var seconds_left = (target_date - current_date) / 1000;
+        var days = parseInt(seconds_left / 86400);
+        seconds_left = seconds_left % 86400;
+        var hours = parseInt(seconds_left / 3600);
+        seconds_left = seconds_left % 3600;
+        setTimerLength(parseInt(seconds_left / 60));
+        if(Math.round(parseFloat(seconds_left % 60))==60) {setTimerLength(timerLength+1); setSeconds(0)}
+        else setSeconds(Math.round(parseFloat(seconds_left % 60))); 
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+    
+  },[timerOn])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timerOn) {
+        if (seconds <= 0) {
+          if (timerLength <= 0) {
+            if(sessionType=="Work"){
+              workend_aud.play()
+            };
+            if(sessionType=="Break"){
+              endshortbreak_aud.play()
+            };
+            if(sessionType=="Long Break"){
+              endlongbreak_aud.play()
+            };
+            setTimerOn(false);
+            setTimerDone(true);
+            setSessionType((prevType) => {
+              if (prevType === "Work") return "Break";
+              if (prevType === "Break") return "Work";
+              if (prevType === "Long Break") return "Work";
+            });
+          }
+        }
+      }
+    }, 1000);
 
     return () => {
       clearInterval(interval);
     };
   }, [timerOn, seconds, timerLength]);
-
 
   //Switching Timers: From Work Mode to Break Mode
   useEffect(() => {
@@ -175,13 +222,13 @@ const Timer = props => {
   React.useEffect(() => {
     const timer = setInterval(() => {
       if (sessionType === "Work") {
-        setProgress(((timerLength*60 + seconds)/((worktimer+1)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((worktimer)*60))*100);
       }
       if (sessionType === "Break") {
-        setProgress(((timerLength*60 + seconds)/((shorttimer+1)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((shorttimer)*60))*100);
       }
       if (sessionType === "Long Break") {
-        setProgress(((timerLength*60 + seconds)/((longtimer+1)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((longtimer)*60))*100);
       }
     }, 1000);
     return () => {
