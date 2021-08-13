@@ -81,39 +81,6 @@ const PrettoSlider =  withStyles({
     },
   })(Slider);
 
-  const AntSwitch = withStyles((theme) => ({
-    root: {
-      width: 28,
-      height: 16,
-      padding: 0,
-      display: 'flex',
-    },
-    switchBase: {
-      padding: 2,
-      color: theme.palette.grey[500],
-      '&$checked': {
-        transform: 'translateX(12px)',
-        color: theme.palette.common.white,
-        '& + $track': {
-          opacity: 1,
-          backgroundColor: "#000",
-          borderColor: "#000",
-        },
-      },
-    },
-    thumb: {
-      width: 12,
-      height: 12,
-      boxShadow: 'none',
-    },
-    track: {
-      border: `1px solid ${theme.palette.grey[500]}`,
-      borderRadius: 16 / 2,
-      opacity: 1,
-      backgroundColor: theme.palette.common.white,
-    },
-    checked: {},
-  }))(Switch);
 
 const TimerComp = props =>{
     const {title , col, altcol, fontcol , def ,token,matches} = props;
@@ -189,21 +156,19 @@ export default function Profile(){
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [house] = state.userAPI.house;
-    const [autochange,setautochange] = state.userAPI.autochange
     const [token] = state.token;
     useEffect(async () => {
         try{
             await axios.put("/user/userupdate", {work_duration: worktime,
                 short_break_duration: shortbreak,
                 long_break_duration: longbreak,
-                autochange: autochange
             },{
                 headers: { 'Authorization': token }
             }).then(console.log("done"));
         } catch (err) {
             console.log(err.response)
         }
-    }, [shortbreak,longbreak,worktime,autochange])
+    }, [shortbreak,longbreak,worktime])
     const onChangeHandle = async (value) => {
         const response = await fetch(
           "/user/gettags"
@@ -334,16 +299,6 @@ export default function Profile(){
                                             <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}  matches={matches}/>
                                             <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token} matches={matches}/>
                                             <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token} matches={matches}/>
-                                            <Grid component="label" container alignItems="center" spacing={1}>
-                                                <Grid item>
-                                                    <Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
-                                                        {"Automatically run/pause: ".toUpperCase()}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item style={{color: fontcol, paddingTop:"3vh"}}>
-                                                    <AntSwitch checked={autochange} onChange={()=> setautochange(!autochange)} />
-                                                </Grid>
-                                            </Grid>
                                         </Grid>
                                 </Grid>
                             </div>
@@ -425,15 +380,6 @@ export default function Profile(){
                                                 <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
                                                 <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token}/>
                                                 <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token}/>
-                                                <Grid component="label" container alignItems="center" spacing={1} style={{fontSize:"20px"}}>
-                                                    <Grid item>
-                                                    <Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
-                                                        {"Automatically run/pause: ".toUpperCase()}
-                                                    </Typography>
-                                                        
-                                                    </Grid>
-                                                    <Grid item style={{paddingTop:"2vh"}}><AntSwitch checked={autochange} onChange={()=> setautochange(!autochange)}/></Grid>
-                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
