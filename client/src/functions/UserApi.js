@@ -11,7 +11,6 @@ function UserApi(token) {
   const [worktime, setworktime] = useState(25);
   const [shortbreak, setshortbreak] = useState(5);
   const [longbreak, setlongbreak] = useState(20);
-  const [autochange,setautochange] = useState(true)
   const [tags,setTags] = useState([])
   const [usertag,setusertag] = useState([])
   const [characteristics,setCharacteristics] = useState([])
@@ -30,7 +29,6 @@ function UserApi(token) {
           );
           setusertag(response1.data.tags)
           setisloading(false)
-          setautochange(res.data.autochange)
           setworktime(res.data.work_duration)
           setshortbreak(res.data.short_break_duration)
           setlongbreak(res.data.long_break_duration)
@@ -73,7 +71,6 @@ function UserApi(token) {
     worktime:[worktime, setworktime],
     shortbreak:[shortbreak, setshortbreak],
     longbreak:[longbreak, setlongbreak],
-    autochange: [autochange,setautochange]
   };
 }
 

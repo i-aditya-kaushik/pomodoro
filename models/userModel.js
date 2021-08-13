@@ -36,10 +36,6 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 20,
     },
-    autochange: {
-      type: Boolean,
-      default: false,
-    },
     active_tasks: [{task:{
       type: mongoose.Schema.Types.ObjectId, ref: "Tasks",
     }, time_elapsed: {type: Number,default:0}}],
