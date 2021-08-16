@@ -104,46 +104,42 @@ const Timer = props => {
   const worktimer = parseInt(worktime);
   const shorttimer = parseInt(shortbreak);
   const longtimer = parseInt(longbreak);
-  if(document.hidden){
-    if (timerOn) {
-      if (seconds <= 0) {
-        if (timerLength <= 0) {
-          if(sessionType=="Work"){
-            workend_aud.play()
-            setTimeout(() => {
-              useCallback(unpause_aud.play())
-            }, 10000);
-          };
-          if(sessionType=="Break"){
-            endshortbreak_aud.play()
-            setTimeout(() => {
-              useCallback(unpause_aud.play())
-            }, 10000);
-          };
-          if(sessionType=="Long Break"){
-            endlongbreak_aud.play()
-            setTimeout(() => {
-              useCallback(unpause_aud.play())
-            }, 10000);
-          };
-          
-          setTimerOn(false);
-          
-          setTimerDone(true);
-          setSessionType((prevType) => {
-            if (prevType === "Work") return "Break";
-            if (prevType === "Break") return "Work";
-            if (prevType === "Long Break") return "Work";
-          });
-        }
-      }
-    }
-  }
   useEffect(()=>{
     if(timerOn){
       const target_date = new Date(new Date().getTime() + timerLength/5 * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
+        if(document.hidden || !document.hidden){
+          if(parseInt(target_date-current_date) <=0 ){
+            if (timerOn) {
+              if(sessionType=="Work"){
+                workend_aud.play()
+                setTimeout(() => {
+                unpause_aud.play()
+              }, 10000);
+              };
+              if(sessionType=="Break"){
+                endshortbreak_aud.play()
+                setTimeout(() => {
+                unpause_aud.play()
+              }, 10000);
+              };
+              if(sessionType=="Long Break"){
+                endlongbreak_aud.play()
+                setTimeout(() => {
+                unpause_aud.play()
+              }, 10000);
+              };
+              setTimerOn(false);
+              setTimerDone(true);
+              setSessionType((prevType) => {
+                if (prevType === "Work") return "Break";
+                if (prevType === "Break") return "Work";
+                if (prevType === "Long Break") return "Work";
+              });
+            }
+          }
+        }
         var seconds_left = (target_date - current_date) / 1000;
         var days = parseInt(seconds_left / 86400);
         seconds_left = seconds_left % 86400;
@@ -159,37 +155,6 @@ const Timer = props => {
     }
     
   },[timerOn])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (timerOn) {
-        if (seconds <= 0) {
-          if (timerLength <= 0) {
-            if(sessionType=="Work"){
-              workend_aud.play()
-            };
-            if(sessionType=="Break"){
-              endshortbreak_aud.play()
-            };
-            if(sessionType=="Long Break"){
-              endlongbreak_aud.play()
-            };
-            setTimerOn(false);
-            setTimerDone(true);
-            setSessionType((prevType) => {
-              if (prevType === "Work") return "Break";
-              if (prevType === "Break") return "Work";
-              if (prevType === "Long Break") return "Work";
-            });
-          }
-        }
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timerOn, seconds, timerLength]);
 
   //Switching Timers: From Work Mode to Break Mode
   useEffect(() => {
