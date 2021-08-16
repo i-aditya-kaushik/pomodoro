@@ -10,9 +10,10 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListOutlinedIcon from '@material-ui/icons/ListOutlined';
 
-import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
+import { Grid, Button, AppBar, Toolbar, Typography, Avatar, Box, Snackbar} from "@material-ui/core"
 import Logo from '../../static/images/Logo.png'
 import Paper from '@material-ui/core/Paper';
+import Alert from "@material-ui/lab/Alert";
 
 const StyledMenu = withStyles({
   paper: {
@@ -103,6 +104,13 @@ export default function Navbar(){
 
     var col="white";
     var fontcol="black";
+    const [open, setOpen] = React.useState(false);
+    const [error, seterror] = React.useState("Some Kind of error occured!");
+
+    const erroroccur = (err) => {
+      setOpen(true);
+      seterror(err);
+    };
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -148,6 +156,11 @@ export default function Navbar(){
         return(
           <div className={classes.root} style={{border: "10px"}}>
             <AppBar component={Paper} elevation={6} square position="static" color="default" className={classes.AppBar}>
+              <Snackbar open={open} autoHideDuration={4000} onClose={handleClose1} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert variant="filled" onClose={handleClose1} severity="info">
+                  {error}
+                </Alert>
+              </Snackbar>
                 <Toolbar style= {{backgroundColor:col	}}>
                   <Grid className={classes.grow}>
                     <Button component={RouterLink} to="/" className={classes.mainLogo}>
