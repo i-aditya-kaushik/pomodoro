@@ -44,6 +44,18 @@ const taskController = {
           return res.status(500).json({ msg: err.message });
         }
       },
+      gettasksuser: async (req,res) => {
+        try{
+          const user = await Users.findById(req.user.id);
+          if (!user) return res.status(400).json({ msg: "User does not exist." });
+          const active_tasks = await Tasks.find( { "_id" : { $in : user.active_tasks.map(item => {
+            return(item.task)
+          })}}).select("name total_pomodoro");
+          return res.json({active_tasks: active_tasks})
+        } catch (err) {
+          return res.status(500).json({ msg: err.message });
+        }
+      },
 };
 
 module.exports = taskController;

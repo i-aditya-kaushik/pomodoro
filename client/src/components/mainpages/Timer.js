@@ -83,7 +83,6 @@ const Timer = props => {
   const [timerDone, setTimerDone] = useState(true);
   const [sessionType, setSessionType] = useState("Work");
   const [sessionNumber, setSessionNumber] = useState(0);
-  const [tasks,settasks] = useState([{leadid:"Task 1"}, {leadid:"Task 2"},{leadid:"Task 3"},{leadid:"Task 3"}])
   const startedSound = new Audio(startedAudio);
   const endshortbreak_aud = new Audio(endshortbreak);
   const endlongbreak_aud = new Audio(endlongbreak);
@@ -91,6 +90,7 @@ const Timer = props => {
   const unpause_aud = new Audio(unpause);
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
+  const [tasks,settasks] = state.userAPI.tasks
   const [isLogged] = state.userAPI.isLogged;
   const [longbreak,setlongbreak] = state.userAPI.longbreak
   const [shortbreak,setshortbreak] = state.userAPI.shortbreak
@@ -295,6 +295,9 @@ const Timer = props => {
               }}> <SkipNextIcon />
           </Button>
         </Grid>
+        <Grid>
+          {tasks.length ? "abc" : <div></div>}
+        </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"11vh"}}>
         <Typography align = "center" variant="h4" className={classes.harryfont}>
@@ -325,22 +328,22 @@ const Timer = props => {
                 }
               }}> <AddIcon />
           </Button>
-          <List style={{padding:"10px"}}>
+        </Typography>
+        <List style={{padding:"10px"}}>
             {
               tasks.map(item => (
-                <div key = {item.leadid}>
+                <div key = {item._id}>
                     <ListItem component={Paper} elevation={6}
-                        style={{backgroundColor:col,color:fontcol,fontSize:"25px"}}
+                        style={{backgroundColor:col,color:fontcol,fontSize:"22px"}}
                         className= {classes.listItem} 
                         selectedLead = {item}
                         // onClick= {(event)=>this.handleRowSelected(item)}
-                      >{item.leadid.toUpperCase()}
+                      >{item.name.toUpperCase()}
                     </ListItem>
                 </div>
               ))
             }
           </List>
-        </Typography>
       </Grid>
     </Grid>
   );

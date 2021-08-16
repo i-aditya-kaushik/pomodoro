@@ -10,6 +10,7 @@ function UserApi(token) {
   const [sortingdone, setSorting] = useState(true);
   const [worktime, setworktime] = useState(25);
   const [shortbreak, setshortbreak] = useState(5);
+  const [tasks,settasks] = useState([])
   const [longbreak, setlongbreak] = useState(20);
   const [tags,setTags] = useState([])
   const [usertag,setusertag] = useState([])
@@ -27,9 +28,15 @@ function UserApi(token) {
               headers: { Authorization: token },
             }
           );
+          const response2 = await axios.get(
+            "/user/gettasksuser", {
+              headers: { Authorization: token },
+            }
+          );
           setusertag(response1.data.tags)
           setisloading(false)
           setworktime(res.data.work_duration)
+          settasks(response2.data.active_tasks)
           setshortbreak(res.data.short_break_duration)
           setlongbreak(res.data.long_break_duration)
           setIsLogged(true);
@@ -71,6 +78,7 @@ function UserApi(token) {
     worktime:[worktime, setworktime],
     shortbreak:[shortbreak, setshortbreak],
     longbreak:[longbreak, setlongbreak],
+    tasks: [tasks,settasks] 
   };
 }
 
