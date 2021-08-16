@@ -105,9 +105,8 @@ const tagsController = {
     try{
       const user = await Users.findById(req.user.id);
       if (!user) return res.status(400).json({ msg: "User does not exist." });
-      const tags = await Tags.find( { "_id" : { $in : user.tags } } ).select("name");
-      
-      return res.json({tags: tags})
+      const tags = await Users.findById(req.user.id).populate('tags').select("tags")
+      return res.json({tags: tags.tags})
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
