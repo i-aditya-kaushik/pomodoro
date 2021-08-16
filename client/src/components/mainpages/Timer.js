@@ -69,7 +69,7 @@ const CircularProgressWithLabel = props => {
 const Timer = props => {
   const {col,fontcol,altcol} = props
   const classes = useStyles();
-  const [timerLength, setTimerLength] = useState(24);
+  const [timerLength, setTimerLength] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
   const [timerDone, setTimerDone] = useState(true);
@@ -101,12 +101,9 @@ const Timer = props => {
 
       setOpen(false);
     };
-  const worktimer = parseInt(worktime);
-  const shorttimer = parseInt(shortbreak);
-  const longtimer = parseInt(longbreak);
   useEffect(()=>{
     if(timerOn){
-      const target_date = new Date(new Date().getTime() + timerLength/5 * 60000 + seconds * 1000)
+      const target_date = new Date(new Date().getTime() + timerLength * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
@@ -147,7 +144,7 @@ const Timer = props => {
         seconds_left = seconds_left % 3600;
         setTimerLength(parseInt(seconds_left / 60));
         if(Math.round(parseFloat(seconds_left % 60))==60) {setTimerLength(timerLength+1); setSeconds(0)}
-        else setSeconds(Math.round(parseFloat(seconds_left % 60))); 
+        else setSeconds(Math.round(parseFloat(seconds_left % 60)));
       }, 1000);
       return () => {
         clearInterval(interval);
@@ -159,22 +156,22 @@ const Timer = props => {
   //Switching Timers: From Work Mode to Break Mode
   useEffect(() => {
     if (sessionType === "Work") {
-      setTimerLength(worktimer);
+      setTimerLength(parseInt(worktime));
     }
-  }, [sessionType, worktimer]);
+  }, [sessionType, parseInt(worktime)]);
 
   useEffect(() => {
     if (sessionType === "Break") {
-      setTimerLength(shorttimer);
+      setTimerLength(parseInt(shortbreak));
     }
-  }, [shorttimer, sessionType]);
+  }, [parseInt(shortbreak), sessionType]);
 
   useEffect(() => {
     if (sessionType === "Long Break") {
       longbreakstart_aud.play()
-      setTimerLength(longtimer);
+      setTimerLength(parseInt(longbreak));
     }
-  }, [longtimer, sessionType]);
+  }, [parseInt(longbreak), sessionType]);
 
   //Switching Timers: From Break Mode to Long Break Mode
   useEffect(() => {
@@ -187,13 +184,13 @@ const Timer = props => {
   React.useEffect(() => {
     const timer = setInterval(() => {
       if (sessionType === "Work") {
-        setProgress(((timerLength*60 + seconds)/((worktimer)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((parseInt(worktime))*60))*100);
       }
       if (sessionType === "Break") {
-        setProgress(((timerLength*60 + seconds)/((shorttimer)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((parseInt(shortbreak))*60))*100);
       }
       if (sessionType === "Long Break") {
-        setProgress(((timerLength*60 + seconds)/((longtimer)*60))*100);
+        setProgress(((timerLength*60 + seconds)/((parseInt(longbreak))*60))*100);
       }
     }, 1000);
     return () => {
