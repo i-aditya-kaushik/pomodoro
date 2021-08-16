@@ -36,7 +36,7 @@ function UserApi(token) {
           setusertag(response1.data.tags)
           setisloading(false)
           setworktime(res.data.work_duration)
-          settasks(response2.data.active_tasks)
+          settasks(response2.data.final_ret);
           setshortbreak(res.data.short_break_duration)
           setlongbreak(res.data.long_break_duration)
           setIsLogged(true);
