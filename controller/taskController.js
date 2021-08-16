@@ -11,10 +11,10 @@ const taskController = {
     
           const {
             name,
-            duration
+            total_pomodoro
           } = req.body;
           const tags = user.tags
-          const newTask = new Tasks({ name,duration,tags});
+          const newTask = new Tasks({ name,total_pomodoro,tags});
           const addedtask = await newTask.save();
           req.body.active_tasks = addedtask.id;
           await Users.findOneAndUpdate(

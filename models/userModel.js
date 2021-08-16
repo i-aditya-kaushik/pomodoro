@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
     },
     active_tasks: [{task:{
       type: mongoose.Schema.Types.ObjectId, ref: "Tasks",
-    }, time_elapsed: {type: Number,default:0}}],
+    }, pomodoro_done: {type: Number,default:0}}],
     prev_tasks: [{
       type: mongoose.Schema.Types.ObjectId, ref: "Tasks",
       default: []

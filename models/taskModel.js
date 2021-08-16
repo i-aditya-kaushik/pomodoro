@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    duration: {
+    total_pomodoro: {
         type: Number,
         required: true
     },
