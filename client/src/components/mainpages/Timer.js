@@ -8,6 +8,9 @@ import Button from "@material-ui/core/Button";
 import PauseIcon from "@material-ui/icons/Pause";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import AddIcon from '@material-ui/icons/Add';
+import Paper from '@material-ui/core/Paper';
+
 import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
 import longbreakstart from "../../static/Audio/longbreak.wav";
@@ -15,7 +18,7 @@ import workend from "../../static/Audio/work_end.wav";
 import unpause from "../../static/Audio/unpause.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
-import { Box, CircularProgress, Grid, Snackbar, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Grid, List, ListItem, Snackbar, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
 
@@ -23,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
   harryfont:{
     fontFamily: 'Harry P',
   },
+  listItem:{
+    margin:"15px 10px 0px 0px",
+    padding:"10px",
+  }
 }));
 
 const TimerBorder =  withStyles({
@@ -76,7 +83,7 @@ const Timer = props => {
   const [timerDone, setTimerDone] = useState(true);
   const [sessionType, setSessionType] = useState("Work");
   const [sessionNumber, setSessionNumber] = useState(0);
-
+  const [tasks,settasks] = useState([{leadid:"Task 1"}, {leadid:"Task 2"},{leadid:"Task 3"},{leadid:"Task 3"}])
   const startedSound = new Audio(startedAudio);
   const endshortbreak_aud = new Audio(endshortbreak);
   const endlongbreak_aud = new Audio(endlongbreak);
@@ -290,8 +297,49 @@ const Timer = props => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"11vh"}}>
-        <Typography align = "center" variant="h3" className={classes.harryfont}>
-          Tasks
+        <Typography align = "center" variant="h4" className={classes.harryfont}>
+          TASKS <Button
+              style = {{backgroundColor:col, color:fontcol, padding:"10px", marginTop:"-10px"
+                      , borderRadius:"20%", textAlign:"center"}}
+              color="default"
+              variant="contained"
+              size="large"
+              onClick={() => {
+                setTimerOn(false)
+                setSessionType((prevType) => {
+                  if (prevType === "Work") return "Break";
+                  if (prevType === "Break") return "Work";
+                  if (prevType === "Long Break") return "Work";
+                });
+                if (sessionType === "Work") {
+                  setTimerLength(parseInt(worktime));
+                  setSeconds(0)
+                }
+                if (sessionType === "Break") {
+                  setTimerLength(parseInt(shortbreak));
+                  setSeconds(0)
+                }
+                if (sessionType === "Long Break") {
+                  setTimerLength(parseInt(longbreak));
+                  setSeconds(0)
+                }
+              }}> <AddIcon />
+          </Button>
+          <List style={{padding:"10px"}}>
+            {
+              tasks.map(item => (
+                <div key = {item.leadid}>
+                    <ListItem component={Paper} elevation={6}
+                        style={{backgroundColor:col,color:fontcol,fontSize:"25px"}}
+                        className= {classes.listItem} 
+                        selectedLead = {item}
+                        // onClick= {(event)=>this.handleRowSelected(item)}
+                      >{item.leadid.toUpperCase()}
+                    </ListItem>
+                </div>
+              ))
+            }
+          </List>
         </Typography>
       </Grid>
     </Grid>
