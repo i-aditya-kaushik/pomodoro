@@ -265,6 +265,7 @@ const Timer = props => {
               variant="contained"
               size="large"
               onClick={() => {
+                setTimerOn(false)
                 setSessionType((prevType) => {
                   if (prevType === "Work") return "Break";
                   if (prevType === "Break") return "Work";
