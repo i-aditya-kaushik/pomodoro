@@ -168,7 +168,9 @@ const Timer = props => {
 
   useEffect(() => {
     if (sessionType === "Long Break") {
-      longbreakstart_aud.play()
+      setTimeout(() => {
+        longbreakstart_aud.play()
+      }, 2000);
       setTimerLength(parseInt(longbreak));
     }
   }, [parseInt(longbreak), sessionType]);
@@ -271,6 +273,18 @@ const Timer = props => {
                   if (prevType === "Break") return "Work";
                   if (prevType === "Long Break") return "Work";
                 });
+                if (sessionType === "Work") {
+                  setTimerLength(parseInt(worktime));
+                  setSeconds(0)
+                }
+                if (sessionType === "Break") {
+                  setTimerLength(parseInt(shortbreak));
+                  setSeconds(0)
+                }
+                if (sessionType === "Long Break") {
+                  setTimerLength(parseInt(longbreak));
+                  setSeconds(0)
+                }
               }}> <SkipNextIcon />
           </Button>
         </Grid>
