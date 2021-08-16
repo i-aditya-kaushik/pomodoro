@@ -335,11 +335,18 @@ const Timer = props => {
             {
               tasks.map(item => (
                 <div key = {item._id}>
-                    <ListItem component={Paper} elevation={6}
-                        style={{backgroundColor:col,color:fontcol,fontSize:"22px"}}
+                    <ListItem component={Paper} elevation={2}
+                        style={{fontSize:"20px",color:col}}
                         className= {classes.listItem} 
                         selectedLead = {item}
-                      >{item.name.toUpperCase()}
+                      ><Grid container>
+                        <Grid container justifyContent="flex-start">
+                          {item.name.toUpperCase()}
+                        </Grid>
+                        <Grid container justifyContent="flex-end">
+                        {item.pomodoro_done}/{item.total_pomodoro}
+                        </Grid>
+                      </Grid>
                     </ListItem>
                 </div>
               ))
