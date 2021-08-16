@@ -238,6 +238,7 @@ const Timer = props => {
               size="large"
               onClick={() => {
                 setTimerOn(false)
+                setislocked(false)
                 if (sessionType === "Work") {
                   setTimerLength(parseInt(worktime));
                   setSeconds(0)
@@ -275,6 +276,7 @@ const Timer = props => {
               size="large"
               onClick={() => {
                 setTimerOn(false)
+                setislocked(false)
                 setSessionType((prevType) => {
                   if (prevType === "Work") return "Break";
                   if (prevType === "Break") return "Work";
@@ -337,7 +339,6 @@ const Timer = props => {
                         style={{backgroundColor:col,color:fontcol,fontSize:"22px"}}
                         className= {classes.listItem} 
                         selectedLead = {item}
-                        // onClick= {(event)=>this.handleRowSelected(item)}
                       >{item.name.toUpperCase()}
                     </ListItem>
                 </div>
