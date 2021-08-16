@@ -6,7 +6,8 @@ import FreeBreakfastOutlinedIcon from "@material-ui/icons/FreeBreakfast";
 import LocalHotelOutlinedIcon from "@material-ui/icons/LocalHotel";
 import Button from "@material-ui/core/Button";
 import PauseIcon from "@material-ui/icons/Pause";
-
+import RefreshIcon from '@material-ui/icons/Refresh';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
 import longbreakstart from "../../static/Audio/longbreak.wav";
@@ -142,9 +143,8 @@ const Timer = props => {
         seconds_left = seconds_left % 86400;
         var hours = parseInt(seconds_left / 3600);
         seconds_left = seconds_left % 3600;
-        setTimerLength(parseInt(seconds_left / 60));
-        if(Math.round(parseFloat(seconds_left % 60))==60) {setTimerLength(timerLength+1); setSeconds(0)}
-        else setSeconds(Math.round(parseFloat(seconds_left % 60)));
+        if(Math.round(parseFloat(seconds_left % 60))==60) {setTimerLength(parseInt(seconds_left / 60) + 1);setSeconds(0)}
+        else {setTimerLength(parseInt(seconds_left / 60));setSeconds(Math.round(parseFloat(seconds_left % 60)))};
       }, 1000);
       return () => {
         clearInterval(interval);
@@ -222,6 +222,28 @@ const Timer = props => {
         </Grid>
         <Grid align = "center" style={{paddingTop:"3vh"}}>
           <Button
+              style = {{backgroundColor:col, color:fontcol, padding:"10px" , margin:"10px"
+                      , borderRadius:"20%", textAlign:"center"}}
+              color="default"
+              variant="contained"
+              size="large"
+              onClick={() => {
+                setTimerOn(false)
+                if (sessionType === "Work") {
+                  setTimerLength(parseInt(worktime));
+                  setSeconds(0)
+                }
+                if (sessionType === "Break") {
+                  setTimerLength(parseInt(shortbreak));
+                  setSeconds(0)
+                }
+                if (sessionType === "Long Break") {
+                  setTimerLength(parseInt(longbreak));
+                  setSeconds(0)
+                }
+              }}> <RefreshIcon />
+          </Button>
+          <Button
               style = {{backgroundColor:col, color:fontcol}}
               color="default"
               variant="contained"
@@ -236,9 +258,23 @@ const Timer = props => {
             >
             {timerOn ? "Pause" : "Run"}
           </Button>
+          <Button
+              style = {{backgroundColor:col, color:fontcol, padding:"10px" , margin:"10px"
+                      , borderRadius:"20%", textAlign:"center"}}
+              color="default"
+              variant="contained"
+              size="large"
+              onClick={() => {
+                setSessionType((prevType) => {
+                  if (prevType === "Work") return "Break";
+                  if (prevType === "Break") return "Work";
+                  if (prevType === "Long Break") return "Work";
+                });
+              }}> <SkipNextIcon />
+          </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"5vh"}}>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"11vh"}}>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
           Tasks
         </Typography>
