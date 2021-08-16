@@ -10,6 +10,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import AddIcon from '@material-ui/icons/Add';
 import Paper from '@material-ui/core/Paper';
+import Pagination from '@material-ui/lab/Pagination';
 
 import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
@@ -83,6 +84,7 @@ const Timer = props => {
   const [timerDone, setTimerDone] = useState(true);
   const [sessionType, setSessionType] = useState("Work");
   const [sessionNumber, setSessionNumber] = useState(0);
+  const [page, setPage] = React.useState(1);
   const startedSound = new Audio(startedAudio);
   const endshortbreak_aud = new Audio(endshortbreak);
   const endlongbreak_aud = new Audio(endlongbreak);
@@ -97,6 +99,7 @@ const Timer = props => {
   const [worktime,setworktime] = state.userAPI.worktime
   const [islocked,setislocked] = state.islocked
   const [open, setOpen] = React.useState(false);
+  var subset = tasks.slice(0+(page-1)*4, 4+(page-1)*4) 
   const [error, seterror] = React.useState("Some Kind of error occured!");
   const erroroccur = (err) => {
       setOpen(true);
@@ -302,56 +305,62 @@ const Timer = props => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"11vh"}}>
-        <Typography align = "center" variant="h4" className={classes.harryfont}>
-          TASKS <Button
-              style = {{backgroundColor:col, color:fontcol, padding:"10px", marginTop:"-10px"
-                      , borderRadius:"20%", textAlign:"center"}}
-              color="default"
-              variant="contained"
-              size="large"
-              onClick={() => {
-                setTimerOn(false)
-                setSessionType((prevType) => {
-                  if (prevType === "Work") return "Break";
-                  if (prevType === "Break") return "Work";
-                  if (prevType === "Long Break") return "Work";
-                });
-                if (sessionType === "Work") {
-                  setTimerLength(parseInt(worktime));
-                  setSeconds(0)
-                }
-                if (sessionType === "Break") {
-                  setTimerLength(parseInt(shortbreak));
-                  setSeconds(0)
-                }
-                if (sessionType === "Long Break") {
-                  setTimerLength(parseInt(longbreak));
-                  setSeconds(0)
-                }
-              }}> <AddIcon />
-          </Button>
-        </Typography>
-        <List style={{padding:"10px"}}>
-            {
-              tasks.map(item => (
-                <div key = {item._id}>
-                    <ListItem component={Paper} elevation={2}
-                        style={{fontSize:"20px",color:col}}
-                        className= {classes.listItem} 
-                        selectedLead = {item}
-                      ><Grid container>
-                        <Grid container justifyContent="flex-start">
-                          {item.name.toUpperCase()}
+        <Grid style={{minHeight:"65vh"}}>
+          <Typography align = "center" variant="h4" className={classes.harryfont}>
+            TASKS <Button
+                style = {{backgroundColor:col, color:fontcol, padding:"10px", marginTop:"-10px"
+                        , borderRadius:"40%", textAlign:"center"}}
+                color="default"
+                variant="contained"
+                size="large"
+                onClick={() => {
+                  setTimerOn(false)
+                  setSessionType((prevType) => {
+                    if (prevType === "Work") return "Break";
+                    if (prevType === "Break") return "Work";
+                    if (prevType === "Long Break") return "Work";
+                  });
+                  if (sessionType === "Work") {
+                    setTimerLength(parseInt(worktime));
+                    setSeconds(0)
+                  }
+                  if (sessionType === "Break") {
+                    setTimerLength(parseInt(shortbreak));
+                    setSeconds(0)
+                  }
+                  if (sessionType === "Long Break") {
+                    setTimerLength(parseInt(longbreak));
+                    setSeconds(0)
+                  }
+                }}> <AddIcon />
+            </Button>
+          </Typography>
+          <List style={{padding:"10px"}}>
+              {
+                subset.map(item => (
+                  <div key = {item._id}>
+                      <ListItem component={Paper} elevation={2}
+                          style={{fontSize:"20px",color:col}}
+                          className= {classes.listItem} 
+                          selectedLead = {item}
+                        ><Grid container>
+                          <Grid container justifyContent="flex-start">
+                            {item.name.toUpperCase()}
+                          </Grid>
+                          <Grid container justifyContent="flex-end">
+                          {item.pomodoro_done}/{item.total_pomodoro}
+                          </Grid>
                         </Grid>
-                        <Grid container justifyContent="flex-end">
-                        {item.pomodoro_done}/{item.total_pomodoro}
-                        </Grid>
-                      </Grid>
-                    </ListItem>
-                </div>
-              ))
-            }
-          </List>
+                      </ListItem>
+                  </div>
+                ))
+              }
+            </List>
+          </Grid>
+          <Grid>
+            <Pagination count={Math.round(tasks.length/4)} color="primary" variant="outlined" 
+              onChange={(event, value) => {setPage(value)}} shape="rounded" page={page} style={{margin:"10px"}}/>
+          </Grid>
       </Grid>
     </Grid>
   );
