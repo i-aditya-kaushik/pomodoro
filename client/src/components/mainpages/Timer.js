@@ -21,6 +21,7 @@ import { GlobalState } from "../../GlobalState";
 import { Box, CircularProgress, FormControl, Grid, List, ListItem, MenuItem, Snackbar, TextField, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
@@ -80,6 +81,10 @@ const CircularProgressWithLabel = props => {
 const Timer = props => {
   const {col,fontcol,altcol} = props
   const classes = useStyles();
+  const [addtask, setaddtask] = useState({
+    name: "",
+    total_pomodoro: 0,
+  });
   const [timerLength, setTimerLength] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
@@ -102,7 +107,12 @@ const Timer = props => {
   const [worktime,setworktime] = state.userAPI.worktime
   const [islocked,setislocked] = state.islocked
   const [open, setOpen] = React.useState(false);
-  var subset = tasks.slice(0+(page-1)*3, 3+(page-1)*3) 
+  const [token] = state.token;
+  const onChangeInput = e => {
+    const { name, value } = e.target;
+    setaddtask({ ...addtask, [name]: value });
+  };
+  var subset = tasks.slice(0+(page-1)*3, 3+(page-1)*3)
   const [error, seterror] = React.useState("Some Kind of error occured!");
   const erroroccur = (err) => {
       setOpen(true);
@@ -115,9 +125,28 @@ const Timer = props => {
 
       setOpen(false);
     };
+
+  const addthistask = async e => {
+    e.preventDefault();
+    try {
+      await axios.post("/user/addtask", { ...addtask },
+      {
+        headers: { 'Authorization': token }
+      });
+      const response2 = await axios.get(
+        "/user/gettasksuser", {
+          headers: { Authorization: token },
+        }
+      );
+      settasks(response2.data.final_ret)
+    } catch (err) {
+      console.log(err.response)
+    }
+  };
+    
   useEffect(()=>{
     if(timerOn){
-      const target_date = new Date(new Date().getTime() + timerLength * 60000 + seconds * 1000)
+      const target_date = new Date(new Date().getTime() + timerLength/50 * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
@@ -125,7 +154,9 @@ const Timer = props => {
             if (timerOn) {
               if(sessionType=="Work"){
                 workend_aud.play()
-                tasks[0].pomodoro_done +=1
+                if(current_task)
+                  current_task.pomodoro_done+=1
+                else {if(tasks.length) tasks[0].pomodoro_done+=1}
                 console.log(tasks)
                 setTimeout(() => {
                 unpause_aud.play()
@@ -317,7 +348,10 @@ const Timer = props => {
               id="demo-simple-select"
               defaultValue={tasks[0]}
               onChange={(event,value)=>{
-                setcurrenttask(value)
+                setcurrenttask(value.props.value)
+                setTimeout(() => {
+                  console.log(current_task)
+                }, 2000);
               }}
             >
               {tasks.map(item => {
@@ -332,18 +366,18 @@ const Timer = props => {
           <Typography align = "center" variant="h4" className={classes.harryfont}>
             TASKS 
           </Typography>
-          <form className={classes.root} noValidate autoComplete="off" style={{padding:"10px"}}>
+          <form className={classes.root} onSubmit={addthistask} autoComplete="off" style={{padding:"10px"}}>
               <Grid container>
                 <Box flexGrow={1} style={{padding:"5px"}}>
-                  <TextField required id="outlined-basic" label="Task Name" variant="outlined" fullWidth/>
+                  <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined" fullWidth/>
                 </Box>
                 <Box style={{padding:"5px"}}>
-                  <TextField required id="outlined-basic" label="Number of Pomodoros" variant="outlined" type="number"
+                  <TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Number of Pomodoros" variant="outlined" type="number"
                     
                     />
                 </Box>
                 <Box style={{padding:"5px"}}>
-                  <Button style={{marginTop:"10px"}}>Add Task</Button>
+                  <Button type="submit" style={{marginTop:"10px"}}>Add Task</Button>
                 </Box>
               </Grid>
             </form>
@@ -357,7 +391,7 @@ const Timer = props => {
                         selectedLead = {item}
                       ><Grid container>
                         <Grid container justifyContent="flex-start">
-                          {item.name.toUpperCase()}
+                          {item.name}
                         </Grid>
                         <Grid container justifyContent="flex-end">
                         {item.pomodoro_done}/{item.total_pomodoro}
@@ -365,12 +399,12 @@ const Timer = props => {
                       </Grid>
                     </ListItem>
                 </div>
-                ))
+                )) 
               }
             </List>
           </Grid>
           <Grid>
-            <Pagination count={Math.round(tasks.length/3)+1} color="primary" variant="outlined" 
+            <Pagination count={Math.ceil(tasks.length/3)} color="primary" variant="outlined" 
               onChange={(event, value) => {setPage(value)}} shape="rounded" page={page} style={{margin:"10px"}}/>
           </Grid>
       </Grid>
