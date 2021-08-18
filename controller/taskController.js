@@ -51,9 +51,9 @@ const taskController = {
           const active_tasks = await Tasks.find( { "_id" : { $in : user.active_tasks.map(item => {
             return(item.task)
           })}}).select("name total_pomodoro _id popularity");
-          const tags = await Users.findById(req.user.id).select("active_tasks -_id").populate('active_tasks.task')
+          const tags = await Users.findById(req.user.id).select("active_tasks").populate('active_tasks.task')
           const final_ret = tags.active_tasks.map(item=>{
-            item = {name:item.task.name,total_pomodoro:item.task.total_pomodoro, popularity: item.task.popularity
+            item = {id:item.task.id,name:item.task.name,total_pomodoro:item.task.total_pomodoro, popularity: item.task.popularity
               ,pomodoro_done:item.pomodoro_done}
             return item
           })

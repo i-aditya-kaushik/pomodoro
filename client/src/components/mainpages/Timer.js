@@ -1,9 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import Duration from "luxon/src/duration.js";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import LaptopChromebookOutlinedIcon from "@material-ui/icons/LaptopChromebook";
-import FreeBreakfastOutlinedIcon from "@material-ui/icons/FreeBreakfast";
-import LocalHotelOutlinedIcon from "@material-ui/icons/LocalHotel";
 import Button from "@material-ui/core/Button";
 import PauseIcon from "@material-ui/icons/Pause";
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -11,6 +8,8 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import AddIcon from '@material-ui/icons/Add';
 import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 
 import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
@@ -19,7 +18,7 @@ import workend from "../../static/Audio/work_end.wav";
 import unpause from "../../static/Audio/unpause.wav";
 import startedAudio from "../../static/Audio/notification_simple-01.wav";
 import { GlobalState } from "../../GlobalState";
-import { Box, CircularProgress, Grid, List, ListItem, Snackbar, Typography } from "@material-ui/core";
+import { Box, CircularProgress, FormControl, Grid, List, ListItem, MenuItem, Snackbar, TextField, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
 
@@ -30,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   listItem:{
     margin:"15px 10px 0px 0px",
     padding:"10px",
+  },
+  formControl:{
+    minWidth: 200,
   }
 }));
 
@@ -92,14 +94,15 @@ const Timer = props => {
   const unpause_aud = new Audio(unpause);
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
-  const [tasks,settasks] = state.userAPI.tasks
+  const [tasks,settasks] = state.userAPI.tasks;
+  const [current_task,setcurrenttask] = useState()
   const [isLogged] = state.userAPI.isLogged;
   const [longbreak,setlongbreak] = state.userAPI.longbreak
   const [shortbreak,setshortbreak] = state.userAPI.shortbreak
   const [worktime,setworktime] = state.userAPI.worktime
   const [islocked,setislocked] = state.islocked
   const [open, setOpen] = React.useState(false);
-  var subset = tasks.slice(0+(page-1)*4, 4+(page-1)*4) 
+  var subset = tasks.slice(0+(page-1)*3, 3+(page-1)*3) 
   const [error, seterror] = React.useState("Some Kind of error occured!");
   const erroroccur = (err) => {
       setOpen(true);
@@ -122,6 +125,8 @@ const Timer = props => {
             if (timerOn) {
               if(sessionType=="Work"){
                 workend_aud.play()
+                tasks[0].pomodoro_done +=1
+                console.log(tasks)
                 setTimeout(() => {
                 unpause_aud.play()
               }, 10000);
@@ -163,7 +168,10 @@ const Timer = props => {
     
   },[timerOn])
 
-  //Switching Timers: From Work Mode to Break Mode
+  useEffect(()=>{
+    setcurrenttask(tasks[0])
+  },[])
+
   useEffect(() => {
     if (sessionType === "Work") {
       setTimerLength(parseInt(worktime));
@@ -185,7 +193,7 @@ const Timer = props => {
     }
   }, [parseInt(longbreak), sessionType]);
 
-  //Switching Timers: From Break Mode to Long Break Mode
+  
   useEffect(() => {
     if (sessionType === "Work" && timerDone) {
       setSessionNumber((prevNumber) => prevNumber + 1);
@@ -224,7 +232,7 @@ const Timer = props => {
             {error}
           </Alert>
         </Snackbar>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"20vh"}}>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"14vh"}}>
         <CircularProgressWithLabel value={progress} timerLength = {timerLength} seconds= {seconds} fontcol={fontcol} col={col} altcol={altcol}/>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
           Session Number: {sessionNumber}/4
@@ -300,65 +308,69 @@ const Timer = props => {
               }}> <SkipNextIcon />
           </Button>
         </Grid>
-        <Grid>
-          {tasks.length ? "abc" : <div></div>}
+        <Grid align="center" style={{paddingTop:"10px"}}>
+          {tasks.length ? 
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-simple-select-label">Working on</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              defaultValue={tasks[0]}
+              onChange={(event,value)=>{
+                setcurrenttask(value)
+              }}
+            >
+              {tasks.map(item => {
+                return <MenuItem value={item}>{item.name}</MenuItem>
+              })}
+            </Select>
+          </FormControl> : <div></div>}
         </Grid>
       </Grid>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"11vh"}}>
+      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"9vh"}}>
         <Grid style={{minHeight:"65vh"}}>
           <Typography align = "center" variant="h4" className={classes.harryfont}>
-            TASKS <Button
-                style = {{backgroundColor:col, color:fontcol, padding:"10px", marginTop:"-10px"
-                        , borderRadius:"40%", textAlign:"center"}}
-                color="default"
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  setTimerOn(false)
-                  setSessionType((prevType) => {
-                    if (prevType === "Work") return "Break";
-                    if (prevType === "Break") return "Work";
-                    if (prevType === "Long Break") return "Work";
-                  });
-                  if (sessionType === "Work") {
-                    setTimerLength(parseInt(worktime));
-                    setSeconds(0)
-                  }
-                  if (sessionType === "Break") {
-                    setTimerLength(parseInt(shortbreak));
-                    setSeconds(0)
-                  }
-                  if (sessionType === "Long Break") {
-                    setTimerLength(parseInt(longbreak));
-                    setSeconds(0)
-                  }
-                }}> <AddIcon />
-            </Button>
+            TASKS 
           </Typography>
+          <form className={classes.root} noValidate autoComplete="off" style={{padding:"10px"}}>
+              <Grid container>
+                <Box flexGrow={1} style={{padding:"5px"}}>
+                  <TextField required id="outlined-basic" label="Task Name" variant="outlined" fullWidth/>
+                </Box>
+                <Box style={{padding:"5px"}}>
+                  <TextField required id="outlined-basic" label="Number of Pomodoros" variant="outlined" type="number"
+                    
+                    />
+                </Box>
+                <Box style={{padding:"5px"}}>
+                  <Button style={{marginTop:"10px"}}>Add Task</Button>
+                </Box>
+              </Grid>
+            </form>
           <List style={{padding:"10px"}}>
-              {
+              { 
                 subset.map(item => (
                   <div key = {item._id}>
-                      <ListItem component={Paper} elevation={2}
-                          style={{fontSize:"20px",color:col}}
-                          className= {classes.listItem} 
-                          selectedLead = {item}
-                        ><Grid container>
-                          <Grid container justifyContent="flex-start">
-                            {item.name.toUpperCase()}
-                          </Grid>
-                          <Grid container justifyContent="flex-end">
-                          {item.pomodoro_done}/{item.total_pomodoro}
-                          </Grid>
+                    <ListItem component={Paper} elevation={2}
+                        style={{fontSize:"20px",color:fontcol, backgroundColor:col}}
+                        className= {classes.listItem} 
+                        selectedLead = {item}
+                      ><Grid container>
+                        <Grid container justifyContent="flex-start">
+                          {item.name.toUpperCase()}
                         </Grid>
-                      </ListItem>
-                  </div>
+                        <Grid container justifyContent="flex-end">
+                        {item.pomodoro_done}/{item.total_pomodoro}
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                </div>
                 ))
               }
             </List>
           </Grid>
           <Grid>
-            <Pagination count={Math.round(tasks.length/4)} color="primary" variant="outlined" 
+            <Pagination count={Math.round(tasks.length/3)+1} color="primary" variant="outlined" 
               onChange={(event, value) => {setPage(value)}} shape="rounded" page={page} style={{margin:"10px"}}/>
           </Grid>
       </Grid>
