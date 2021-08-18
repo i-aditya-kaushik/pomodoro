@@ -100,7 +100,7 @@ const Timer = props => {
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
   const [tasks,settasks] = state.userAPI.tasks;
-  const [current_task,setcurrenttask] = useState()
+  const [current_task,setcurrenttask] = tasks.length ? useState(tasks[0]) : useState()
   const [isLogged] = state.userAPI.isLogged;
   const [longbreak,setlongbreak] = state.userAPI.longbreak
   const [shortbreak,setshortbreak] = state.userAPI.shortbreak
@@ -139,6 +139,7 @@ const Timer = props => {
         }
       );
       settasks(response2.data.final_ret)
+      setcurrenttask(tasks[0])
     } catch (err) {
       console.log(err.response)
     }
@@ -201,7 +202,7 @@ const Timer = props => {
 
   useEffect(()=>{
     setcurrenttask(tasks[0])
-  },[])
+  },[tasks])
 
   useEffect(() => {
     if (sessionType === "Work") {
