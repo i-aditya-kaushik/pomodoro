@@ -155,6 +155,7 @@ export default function Profile(){
     const [isloading,setisloading] = state.userAPI.isloading
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
+    const [newval,setnewval] = useState(null)
     const [house] = state.userAPI.house;
     const [token] = state.token;
     useEffect(async () => {
@@ -247,23 +248,7 @@ export default function Profile(){
                                                     loading={loading}
                                                     defaultValue = {usertag}
                                                     onChange={async (event, newValue) => {
-                                                        try{
-                                                        await axios.delete("/user/deletetags", {
-                                                            headers: { 'Authorization': token },
-                                                          }).then(async ()=>{
-                                                              try{
-                                                                await axios.post("/user/addmultipletags",
-                                                                {newValue: newValue},
-                                                                {headers: { 'Authorization': token }})
-                                                                
-                                                                } catch(err){
-                                                                    console.log(err.response)
-                                                                }
-                                                          })
-                                                        } catch(err){
-                                                            console.log(err.response)
-                                                        }
-                                                        console.log(newValue)
+                                                        setnewval(newValue)
                                                     }}
                                                     id="tags-outlined"
                                                     renderInput={(params) => (
@@ -293,7 +278,27 @@ export default function Profile(){
                                                 />
                                         </Grid>
                                         <Grid item xs = {8} style={{backgroundColor: "#f9f7f5",minHeight:"50vh",padding: "20px"}}>
-                                            <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                            <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                if(newval){
+                                                    try{
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                        }).then(async ()=>{
+                                                            try{
+                                                                await axios.post("/user/addmultipletags",
+                                                                {newValue: newval},
+                                                                {headers: { 'Authorization': token }})
+                                                                
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                        })
+                                                    } catch(err){
+                                                        console.log(err.response)
+                                                    }
+                                                }
+                                            }}>Update Tags</Button>
+                                            <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol,marginTop:"20px"}}>
                                                 Your Settings
                                             </Typography>
                                             <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}  matches={matches}/>
@@ -329,23 +334,7 @@ export default function Profile(){
                                                     loading={loading}
                                                     defaultValue = {usertag}
                                                     onChange={async (event, newValue) => {
-                                                        try{
-                                                        await axios.delete("/user/deletetags", {
-                                                            headers: { 'Authorization': token },
-                                                          }).then(async ()=>{
-                                                              try{
-                                                                await axios.post("/user/addmultipletags",
-                                                                {newValue: newValue},
-                                                                {headers: { 'Authorization': token }})
-                                                                
-                                                                } catch(err){
-                                                                    console.log(err.response)
-                                                                }
-                                                          })
-                                                        } catch(err){
-                                                            console.log(err.response)
-                                                        }
-                                                        console.log(newValue)
+                                                        setnewval(newValue)
                                                     }}
                                                     id="tags-outlined"
                                                     renderInput={(params) => (
@@ -373,8 +362,29 @@ export default function Profile(){
                                                     />
                                                     )}
                                                 />
-                                            <Grid style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"5vh"}}>
-                                                <Typography component="h1" variant="h3" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                            <Grid style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"1vh"}}>
+                                                <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                if(newval){
+                                                    try{
+                                                        setusertag(newval)
+                                                        await axios.delete("/user/deletetags", {
+                                                            headers: { 'Authorization': token },
+                                                        }).then(async ()=>{
+                                                            try{
+                                                                await axios.post("/user/addmultipletags",
+                                                                {newValue: newval},
+                                                                {headers: { 'Authorization': token }})
+                                                                
+                                                                } catch(err){
+                                                                    console.log(err.response)
+                                                                }
+                                                        })
+                                                    } catch(err){
+                                                        console.log(err.response)
+                                                    }
+                                                }
+                                            }}>Update Tags</Button>
+                                                <Typography component="h1" variant="h3" className={[classes.harryfont]} style={{color: altcol,paddingTop:"4vh"}}>
                                                     Your Settings
                                                 </Typography>
                                                 <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
