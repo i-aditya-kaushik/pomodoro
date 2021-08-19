@@ -168,6 +168,7 @@ const Timer = props => {
     } catch (err) {
       console.log(err.response)
     }
+    e.target.reset();
   };
     
   useEffect(()=>{
