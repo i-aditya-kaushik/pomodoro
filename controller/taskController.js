@@ -8,12 +8,12 @@ const taskController = {
         try {
           const user = await Users.findById(req.user.id);
           if (!user) return res.status(400).json({ msg: "User does not exist."});
-    
+          console.log(req.body)
           const {
             name,
-            total_pomodoro
+            total_pomodoro,
+            tags
           } = req.body;
-          const tags = user.tags
           const newTask = new Tasks({ name,total_pomodoro,tags});
           const addedtask = await newTask.save();
           req.body.active_tasks = addedtask.id;
@@ -89,6 +89,16 @@ const taskController = {
               { safe: true },
           );
           return res.json({msg:"Done successfully"})
+        } catch (err) {
+          return res.status(500).json({ msg: err.message });
+        }
+      },
+      gettasks: async (req,res) => {
+        try{
+          const user = await Users.findById(req.user.id);
+          if (!user) return res.status(400).json({ msg: "User does not exist." });
+          const tasks = await Tasks.find({ "tags" : { $in : user.tags}}).select("name total_pomodoro")
+          return res.json({Tasks: tasks})
         } catch (err) {
           return res.status(500).json({ msg: err.message });
         }
