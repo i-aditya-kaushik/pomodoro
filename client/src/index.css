@@ -4,3 +4,9 @@
       url("./static/fonts/HarryP.TTF") format("truetype");
 }
 
+@font-face {
+  font-family: "PfefferMediaeval";
+  src: local("Pfeffer Mediæval"),
+    url("./static/fonts/PfefferMediaeval.otf") format("opentype");
+}
+
