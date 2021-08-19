@@ -278,9 +278,10 @@ export default function Profile(){
                                                 />
                                         </Grid>
                                         <Grid item xs = {8} style={{backgroundColor: "#f9f7f5",minHeight:"50vh",padding: "20px"}}>
-                                            <Button className={classes.loginButton,classes.harryfont} style={{color:altcol,backgroundColor:col}} onClick={async ()=>{
+                                            <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
                                                 if(newval){
                                                     try{
+                                                        setusertag(newval)
                                                         await axios.delete("/user/deletetags", {
                                                             headers: { 'Authorization': token },
                                                         }).then(async ()=>{
@@ -363,7 +364,7 @@ export default function Profile(){
                                                     )}
                                                 />
                                             <Grid style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"1vh"}}>
-                                                <Button className={classes.loginButton,classes.harryfont} style={{color:altcol,backgroundColor:col}} onClick={async ()=>{
+                                                <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
                                                 if(newval){
                                                     try{
                                                         setusertag(newval)
