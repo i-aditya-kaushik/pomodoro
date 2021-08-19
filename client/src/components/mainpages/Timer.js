@@ -473,9 +473,7 @@ const Timer = props => {
                           removeactive(item,token)
                         }} style={{fontSize:"20px",color:fontcol, backgroundColor:col,
                         minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
-                        <Tooltip title="Edit Task"><Button style={{fontSize:"20px",color:fontcol, backgroundColor:col,
-                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><EditIcon/></Button></Tooltip>
-                        <Tooltip title="Mark Task as complete"><Button onClick={async()=>{
+                        <Tooltip title="Mark as Completed"><Button onClick={async()=>{
                           item.pomodoro_done=item.total_pomodoro
                           removeactive(item,token)
                         }} style={{fontSize:"20px",color:fontcol, backgroundColor:col,
