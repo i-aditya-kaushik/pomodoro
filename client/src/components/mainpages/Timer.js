@@ -25,6 +25,7 @@ import { Box, CircularProgress, FormControl, Grid, List, ListItem, MenuItem, Sna
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
@@ -85,7 +86,6 @@ const Timer = props => {
   const {col,fontcol,altcol} = props
   const classes = useStyles();
   const [addtask, setaddtask] = useState({
-    name: "",
     total_pomodoro: 0,
   });
   const [timerLength, setTimerLength] = useState(25);
@@ -100,8 +100,14 @@ const Timer = props => {
   const endlongbreak_aud = new Audio(endlongbreak);
   const workend_aud = new Audio(workend);
   const unpause_aud = new Audio(unpause);
+  const [open1, setOpen1] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const loading = open1 && options.length === 0;
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
+  const [tasktag, settasktag] = React.useState('');
+  const [taskname,settaskname] = useState("")
+  const [usertag,setusertag] = state.userAPI.usertag
   const [tasks,settasks] = state.userAPI.tasks;
   const [current_task,setcurrenttask] = tasks.length ? useState(tasks[0]) : useState()
   const [isLogged] = state.userAPI.isLogged;
@@ -128,7 +134,29 @@ const Timer = props => {
 
       setOpen(false);
     };
-  
+    // const onChangeHandle = async (value) => {
+    //   const response = await fetch(
+    //     "/user/gettasks", {headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': token
+    //     },}
+    //   )
+    //     .then((response) => response.json())
+    //     .then((data) => {console.log(data.Tasks);setOptions(data.Tasks)});
+    // };
+    
+    // useEffect(async ()=>{
+    //   const res = await axios.get("/user/gettasks", {
+    //     headers: { "Authorization": token },
+    //   })
+    //   setOptions(res.data.Tasks)
+    // },[])
+
+    React.useEffect(async () => {
+      if (!open1) {
+        setOptions([]);
+      }
+    }, [open1,tasks]);
   const removeactive = async (current_task,token) =>{
     try{
       await axios.put("/user/deleteactivetask", 
@@ -154,7 +182,7 @@ const Timer = props => {
   const addthistask = async e => {
     e.preventDefault();
     try {
-      await axios.post("/user/addtask", { ...addtask },
+      await axios.post("/user/addtask", { ...addtask, tags:tasktag },
       {
         headers: { 'Authorization': token }
       });
@@ -168,7 +196,6 @@ const Timer = props => {
     } catch (err) {
       console.log(err.response)
     }
-    e.target.reset();
   };
     
   useEffect(()=>{
@@ -397,22 +424,40 @@ const Timer = props => {
           <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
             TASKS 
           </Typography>
-          <form className={classes.root} onSubmit={addthistask} autoComplete="off" style={{padding:"10px"}}>
+          <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
               <Grid container>
-                <Box flexGrow={1} style={{padding:"5px"}}>
-                  <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined" fullWidth/>
+              <Box style={{padding:"5px"}}>
+                  <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined"/>
                 </Box>
                 <Box style={{padding:"5px"}}>
-                  <TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Number of Pomodoros" variant="outlined" type="number"
-                    
-                    />
+                <InputLabel id="tags" name="tags" onChange={onChangeInput}></InputLabel>
+                  <Select
+                    variant="outlined"
+                    value={tasktag}
+                    className={classes.formControl}
+                    displayEmpty
+                    id="tags" name="tags"
+                    onChange={(event,value)=>{
+                      settasktag(value.props.value)
+                    }}
+                  ><MenuItem value="" disabled>
+                      <span color="#aaa">Choose Tag *</span>
+                    </MenuItem>
+                    {usertag.map(item => {
+                      return <MenuItem value={item}>{item.name}</MenuItem>
+                    })}
+                  </Select>
                 </Box>
-                <Box style={{padding:"5px"}}>
-                  <Button type="submit" style={{marginTop:"10px",fontFamily:"PfefferMediaeval"}}>Add Task</Button>
+                <Box style={{padding:"5px",maxWidth:"120px"}}>
+                  <Tooltip title="The number of work pomodoros required"><TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
+                    /></Tooltip>
+                </Box>
+                <Box textAlign="right" >
+                  <Tooltip title="Add Task"><Button type="submit" style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip>
                 </Box>
               </Grid>
             </form>
-          <List style={{padding:"10px"}}>
+          <List style={{padding:"5px"}}>
               { 
                 subset.map(item => (
                   <div key = {item._id}>
