@@ -62,6 +62,37 @@ const taskController = {
           return res.status(500).json({ msg: err.message });
         }
       },
+      deleteactivetask : async (req,res) => {
+        try{
+          const user = await Users.findById(req.user.id);
+          if (!user) return res.status(400).json({ msg: "User does not exist." });
+          const {
+            id,
+            total_pomodoro,
+            pomodoro_done
+          } = req.body;
+          if(total_pomodoro == pomodoro_done){
+            await Users.findOneAndUpdate(
+              { _id: req.user.id },
+              {
+                $push: {"prev_tasks": id},
+              }
+            );
+          }
+          await Users.findOneAndUpdate( 
+              { _id: req.user.id },
+              {
+                  $pull: {
+                    active_tasks: { task : id }
+                  }
+              },
+              { safe: true },
+          );
+          return res.json({msg:"Done successfully"})
+        } catch (err) {
+          return res.status(500).json({ msg: err.message });
+        }
+      },
 };
 
 module.exports = taskController;
