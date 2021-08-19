@@ -303,7 +303,7 @@ const Timer = props => {
           Session Number: {sessionNumber}/4
         </Typography>
         <Grid align = "center" style={{paddingTop:"1vh"}}>
-          <Typography align = "center" variant="h5" style={{color:fontcol}}>{sessionType} Mode</Typography>
+          <Typography align = "center" variant="h4" style={{color:fontcol,fontFamily: 'PfefferMediaeval'}}>{sessionType} Mode</Typography>
         </Grid>
         <Grid align = "center" style={{paddingTop:"3vh"}}>
           <Button
@@ -408,7 +408,7 @@ const Timer = props => {
                     />
                 </Box>
                 <Box style={{padding:"5px"}}>
-                  <Button type="submit" style={{marginTop:"10px"}}>Add Task</Button>
+                  <Button type="submit" style={{marginTop:"10px",fontFamily:"PfefferMediaeval"}}>Add Task</Button>
                 </Box>
               </Grid>
             </form>
@@ -417,7 +417,7 @@ const Timer = props => {
                 subset.map(item => (
                   <div key = {item._id}>
                     <ListItem component={Paper} elevation={2}
-                        style={{fontSize:"20px",color:fontcol, backgroundColor:col}}
+                        style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:fontcol, backgroundColor:col}}
                         className= {classes.listItem} 
                       ><Grid container>
                         <Grid container justifyContent="flex-start">
