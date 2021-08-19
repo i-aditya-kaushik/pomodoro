@@ -195,8 +195,8 @@ export default function Profile(){
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
     if(house=="Gryffindor"){
         col = "#7f0909"
-        fontcol="#ae0001"
-        altcol = "#eeba30"
+        fontcol="#eeba30"
+        altcol = "#ae0001"
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/gry_banner_grwluz.png"
     }
     if(house=="Slytherin"){
