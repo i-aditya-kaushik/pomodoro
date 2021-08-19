@@ -6,11 +6,14 @@ import PauseIcon from "@material-ui/icons/Pause";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-
+import EditIcon from '@material-ui/icons/EditOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import CheckOutlinedIcon from '@material-ui/icons/CheckOutlined';
 import endshortbreak from "../../static/Audio/short_break_end.wav";
 import endlongbreak from "../../static/Audio/long_break_end.wav";
 import longbreakstart from "../../static/Audio/longbreak.wav";
@@ -125,6 +128,28 @@ const Timer = props => {
 
       setOpen(false);
     };
+  
+  const removeactive = async (current_task,token) =>{
+    try{
+      await axios.put("/user/deleteactivetask", 
+        {...current_task},{
+          headers: { 'Authorization': token }
+      });
+  } catch(err) {
+    console.log(err.response)
+  }
+  try{
+    const response2 = await axios.get(
+      "/user/gettasksuser", {
+        headers: { "Authorization": token },
+      }
+    );
+    settasks(response2.data.final_ret)
+    tasks.length ? setcurrenttask(tasks[0]) : setcurrenttask(null)
+  } catch(err) {
+    console.log(err.response.data)
+  }
+  }
 
   const addthistask = async e => {
     e.preventDefault();
@@ -135,7 +160,7 @@ const Timer = props => {
       });
       const response2 = await axios.get(
         "/user/gettasksuser", {
-          headers: { Authorization: token },
+          headers: { "Authorization": token },
         }
       );
       settasks(response2.data.final_ret)
@@ -147,7 +172,7 @@ const Timer = props => {
     
   useEffect(()=>{
     if(timerOn){
-      const target_date = new Date(new Date().getTime() + timerLength/50 * 60000 + seconds * 1000)
+      const target_date = new Date(new Date().getTime() + timerLength * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
@@ -155,10 +180,16 @@ const Timer = props => {
             if (timerOn) {
               if(sessionType=="Work"){
                 workend_aud.play()
-                if(current_task)
+                if(tasks.length>=2){
                   current_task.pomodoro_done+=1
-                else {if(tasks.length) tasks[0].pomodoro_done+=1}
-                console.log(tasks)
+                  if(current_task.total_pomodoro==current_task.pomodoro_done){
+                    erroroccur(`${current_task.name} has been completed.`)
+                    removeactive(current_task,token)
+                  }
+                }
+                else {if(tasks.length){tasks[0].pomodoro_done+=1;if(tasks[0].total_pomodoro==tasks[0].pomodoro_done){
+                  removeactive(tasks[0],token)
+                }}}
                 setTimeout(() => {
                 unpause_aud.play()
               }, 10000);
@@ -192,6 +223,7 @@ const Timer = props => {
         seconds_left = seconds_left % 3600;
         if(Math.round(parseFloat(seconds_left % 60))==60) {setTimerLength(parseInt(seconds_left / 60) + 1);setSeconds(0)}
         else {setTimerLength(parseInt(seconds_left / 60));setSeconds(Math.round(parseFloat(seconds_left % 60)))};
+        if(parseInt(target_date-current_date) < 0 ) setSeconds(0)
       }, 1000);
       return () => {
         clearInterval(interval);
@@ -350,9 +382,6 @@ const Timer = props => {
               defaultValue={tasks[0]}
               onChange={(event,value)=>{
                 setcurrenttask(value.props.value)
-                setTimeout(() => {
-                  console.log(current_task)
-                }, 2000);
               }}
             >
               {tasks.map(item => {
@@ -389,12 +418,19 @@ const Timer = props => {
                     <ListItem component={Paper} elevation={2}
                         style={{fontSize:"20px",color:fontcol, backgroundColor:col}}
                         className= {classes.listItem} 
-                        selectedLead = {item}
                       ><Grid container>
                         <Grid container justifyContent="flex-start">
                           {item.name}
                         </Grid>
                         <Grid container justifyContent="flex-end">
+                        <Tooltip title="Delete Task"><Button onClick={async()=>{
+                          removeactive(item,token)
+                        }} style={{fontSize:"20px",color:fontcol, backgroundColor:col,
+                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
+                        <Tooltip title="Edit Task"><Button style={{fontSize:"20px",color:fontcol, backgroundColor:col,
+                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><EditIcon/></Button></Tooltip>
+                        <Tooltip title="Mark Task as complete"><Button style={{fontSize:"20px",color:fontcol, backgroundColor:col,
+                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><CheckOutlinedIcon/></Button></Tooltip>
                         {item.pomodoro_done}/{item.total_pomodoro}
                         </Grid>
                       </Grid>
