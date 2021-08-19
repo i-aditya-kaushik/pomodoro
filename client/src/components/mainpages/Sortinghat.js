@@ -89,12 +89,12 @@ function Sortinghat() {
             <Grid container spacing={0} direction="column" alignItems="center"  justify="center" className={classes.padding1} >
               {matches ? (
                 <ReactTypingEffect 
-                text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+                text={["I can see some " + characteristics[0] + ". But..! "+characteristics[1] 
                 + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
                 cursor=" "/>
               ):(
                 <ReactTypingEffect 
-                text={["I can see some " + characteristics[0] + ". Aahh!! "+characteristics[1] 
+                text={["I can see some " + characteristics[0] + ". But..! "+characteristics[1] 
                 + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
                 cursor=" "/>
               )}
