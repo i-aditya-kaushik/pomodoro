@@ -394,7 +394,7 @@ const Timer = props => {
       </Grid>
       <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"9vh"}}>
         <Grid style={{minHeight:"65vh"}}>
-          <Typography align = "center" variant="h4" className={classes.harryfont}>
+          <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
             TASKS 
           </Typography>
           <form className={classes.root} onSubmit={addthistask} autoComplete="off" style={{padding:"10px"}}>
