@@ -170,6 +170,7 @@ export default function Navbar(){
                   <Box component={Grid} display={matches ? "none" : "block"} className={classes.right}>
                     {isLogged ? (
                       <div>
+                      <Button disabled={islocked} component={RouterLink} to="/tasks" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
                       <Button disabled={islocked} component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                       <Button disabled={islocked} component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                       <Button component={RouterLink} to="/" onClick={logoutUser} className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Logout</Button>
@@ -190,6 +191,9 @@ export default function Navbar(){
                       
                       {isLogged ? (
                         <div>
+                          <MenuItem component={RouterLink} to="/tasks">
+                            <Button disabled={true} color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
+                          </MenuItem>
                           <MenuItem component={RouterLink} to="/changehouse">
                             <Button disabled={true} color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                           </MenuItem>
