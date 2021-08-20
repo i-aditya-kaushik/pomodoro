@@ -177,6 +177,7 @@ export default function Navbar(){
                       </div>
                       ) : (
                         <div>
+                      <Button onClick={() => erroroccur("Login to manage tasks.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
                       <Button onClick={() => erroroccur("Login to make a profile and get sorted.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                       <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
                       <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
@@ -206,6 +207,9 @@ export default function Navbar(){
                         </div>
                       ) : (
                         <div>
+                          <MenuItem onClick={() => erroroccur("Login to manage tasks.")}>
+                            <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
+                          </MenuItem>
                           <MenuItem onClick={() => erroroccur("Login to make a profile and get sorted.")}>
                             <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
                           </MenuItem>
