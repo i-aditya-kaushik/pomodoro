@@ -27,8 +27,8 @@ export default function Home(){
     const [isLogged] = state.userAPI.isLogged;
     const [house,setHouse] = state.userAPI.house;
     const matches = useMediaQuery('(max-width:768px)');
-    var col = "#9c9264"
-    var fontcol = "black"
+    var col = "black"
+    var fontcol = "#aaa"
     var altcol = "white"
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
 
