@@ -87,8 +87,8 @@ export default function SignIn() {
     email: "",
     password: "",
   });
-  var col = "#9c9264"
-  var fontcol = "black"
+  var col = "black"
+  var fontcol = "#aaa"
   var altcol = "white"
   const [remem, setRemem] = React.useState(false);
   const [open, setOpen] = React.useState(false);

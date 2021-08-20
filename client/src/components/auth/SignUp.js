@@ -98,8 +98,8 @@ export default function SignUp() {
     password: "",
     password2:""
   });
-  var col = "#9c9264"
-  var fontcol = "black"
+  var col = "black"
+  var fontcol = "#aaa"
   var altcol = "white"
   const [open, setOpen] = React.useState(false);
   const [error, seterror] = React.useState("Some Kind of error occured!");
