@@ -97,8 +97,12 @@ const taskController = {
         try{
           const user = await Users.findById(req.user.id);
           if (!user) return res.status(400).json({ msg: "User does not exist." });
-          const tasks = await Tasks.find({ "tags" : { $in : user.tags}}).select("name total_pomodoro")
-          return res.json({Tasks: tasks})
+          const tasks = await Tasks.find({ "tags" : { $in : user.tags}}).select("name total_pomodoro tags popularity").populate("tags").sort({ popularity : "descending"})
+          const final_ret = tasks.map(item=>{
+            item = {name:item.name, _id: item._id, total_pomodoro:item.total_pomodoro, tagname:item.tags[0].name, popularity:item.popularity}
+            return item
+          })
+          return res.json({Tasks: final_ret})
         } catch (err) {
           return res.status(500).json({ msg: err.message });
         }
