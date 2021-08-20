@@ -461,8 +461,8 @@ const Timer = props => {
               { 
                 subset.map(item => (
                   <div key = {item._id}>
-                    <ListItem component={Paper} elevation={2}
-                        style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:fontcol, backgroundColor:col}}
+                    <ListItem variant="outlined" component={Paper} elevation={2}
+                        style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:col, borderColor:col}}
                         className= {classes.listItem} 
                       ><Grid container>
                         <Grid container justifyContent="flex-start">
@@ -471,12 +471,12 @@ const Timer = props => {
                         <Grid container justifyContent="flex-end">
                         <Tooltip title="Delete Task"><Button onClick={async()=>{
                           removeactive(item,token)
-                        }} style={{fontSize:"20px",color:fontcol, backgroundColor:col,
+                        }} style={{fontSize:"20px",color:col,
                         minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
                         <Tooltip title="Mark as Completed"><Button onClick={async()=>{
                           item.pomodoro_done=item.total_pomodoro
                           removeactive(item,token)
-                        }} style={{fontSize:"20px",color:fontcol, backgroundColor:col,
+                        }} style={{fontSize:"20px",color:col,
                         minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><CheckOutlinedIcon/></Button></Tooltip>
                         {item.pomodoro_done}/{item.total_pomodoro}
                         </Grid>
