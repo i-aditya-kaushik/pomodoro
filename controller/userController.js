@@ -108,6 +108,41 @@ const userController = {
     }
   },
 
+  forgotpass: async (req, res) => {
+    try {
+      const {
+        email
+      } = req.body;
+      const user = await Users.findOne({ email }).select("-password");
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+
+      res.json(user);
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  updatepass: async (req, res) => {
+    try {
+      const {
+        email,
+        password
+      } = req.body;
+      const user = await Users.findOne({ email }).select("-password");
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+      const passwordHash = await bcrypt.hash(password, 14);
+      await Users.findOneAndUpdate(
+        { _id: user._id },
+        {
+          password: passwordHash,
+        }
+      );
+      res.json({msg:"Successfully updated the password."});
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
   getUser: async (req, res) => {
     try {
       const user = await Users.findById(req.user.id).select("-password");
