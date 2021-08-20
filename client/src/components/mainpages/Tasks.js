@@ -12,10 +12,11 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import axios from "axios";
-
+import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 const useStyles = makeStyles((theme) => ({
     root:{
-        height: '100vh',
+        height: '91vh',
     },
     cardroot: {
         minHeight:'32vh',
@@ -67,13 +68,20 @@ export default function Tasks(){
     const [usertag,setusertag] = state.userAPI.usertag
     const [token] = state.token
     const [tasks,settasks] = state.userAPI.tasks;
-
+    const [showwhat,setshowwhat] = useState(false)
+    const [prev,setprev] = state.userAPI.prev
     useEffect(async ()=>{
         const response3 = await axios.get("/user/gettasks", {
             headers: { "Authorization": token },
           })
         setsimilartasks(response3.data.Tasks)
     },[usertag])
+    useEffect(async ()=>{
+        const response4 = await axios.get("/user/getprevtasks", {
+            headers: { "Authorization": token },
+          })
+        setprev(response4.data.final_ret)
+    },[tasks])
 
     const matches = useMediaQuery('(max-width:768px)');
     var col = "#9c9264"
@@ -115,14 +123,64 @@ export default function Tasks(){
                         {matches ? (
                             <div>
                                 <Grid container component="main">
-                                    <Grid style={{maxHeight:"30vh"}}>
+                                    {!showwhat ? (
+                                        <Grid container>
+                                        <Grid style={{maxHeight:"20vh"}}>
+                                            <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol,margin:"20px"}}>
+                                                TASKS BASED ON YOUR INTERESTS:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
+                                            <Grid style={{maxHeight: '55vh',minHeight:"55vh", width:"100%" , overflow: 'auto'}}>
+                                                {similartasks.map(item =>{
+                                                    return <Grid item xs={12} style={{margin:"20px"}}> 
+                                                    <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
+                                                    <CardContent>
+                                                        <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                            {item.name}
+                                                        </Typography>
+                                                        <Typography variant="h5" component="h2">
+                                                        </Typography>
+                                                        <Typography className={classes.pos} color="textSecondary">
+                                                         Tag: {item.tagname} <br/>
+                                                         Total Pomodoros: {item.total_pomodoro}<br/>
+                                                         Popularity: {item.popularity}
+                                                        </Typography>
+                                                    </CardContent>
+                                                    <CardActions>
+                                                        <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                            try {
+                                                                await axios.post("/user/addtask", { ...item},
+                                                                {
+                                                                    headers: { 'Authorization': token }
+                                                                });
+                                                                const response2 = await axios.get(
+                                                                    "/user/gettasksuser", {
+                                                                    headers: { "Authorization": token },
+                                                                    }
+                                                                );
+                                                                settasks(response2.data.final_ret)
+                                                                } catch (err) {
+                                                                console.log(err.response)
+                                                            }
+                                                        }}>Add this task</Button>
+                                                    </CardActions><br/>
+                                                    </Card>
+                                                    </Grid>
+                                                })}
+                                            </Grid>
+                                        </Grid>
+                                        </Grid>
+                                    ) : (
+                                        <Grid container>
+                                    <Grid style={{maxHeight:"20vh"}}>
                                         <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol,margin:"20px"}}>
-                                            TASKS BASED ON YOUR INTERESTS:
+                                            YOUR COMPLETED TASKS:
                                         </Typography>
                                     </Grid>
                                     <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                        <Grid style={{maxHeight: '40vh', width:"100%" , overflow: 'auto'}}>
-                                            {similartasks.map(item =>{
+                                        <Grid style={{maxHeight: '55vh',minHeight:"55vh", width:"100%" , overflow: 'auto'}}>
+                                            {prev.map(item =>{
                                                 return <Grid item xs={12} style={{margin:"20px"}}> 
                                                 <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
                                                 <CardContent>
@@ -132,7 +190,6 @@ export default function Tasks(){
                                                     <Typography variant="h5" component="h2">
                                                     </Typography>
                                                     <Typography className={classes.pos} color="textSecondary">
-                                                     Tag: {item.tagname} <br/>
                                                      Total Pomodoros: {item.total_pomodoro}<br/>
                                                      Popularity: {item.popularity}
                                                     </Typography>
@@ -160,50 +217,12 @@ export default function Tasks(){
                                             })}
                                         </Grid>
                                     </Grid>
-                                    <Grid style={{maxHeight:"30vh"}}>
-                                        <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol,margin:"20px"}}>
-                                            YOUR PREVIOUS TASK HISTORY:
-                                        </Typography>
                                     </Grid>
-                                    <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                        <Grid style={{maxHeight: '40vh', width:"100%" , overflow: 'auto'}}>
-                                            {similartasks.map(item =>{
-                                                return <Grid item xs={12} style={{margin:"20px"}}> 
-                                                <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
-                                                <CardContent>
-                                                    <Typography component="h1" variant="h5" style={{color:fontcol}}>
-                                                        {item.name}
-                                                    </Typography>
-                                                    <Typography variant="h5" component="h2">
-                                                    </Typography>
-                                                    <Typography className={classes.pos} color="textSecondary">
-                                                     Tag: {item.tagname} <br/>
-                                                     Total Pomodoros: {item.total_pomodoro}<br/>
-                                                     Popularity: {item.popularity}
-                                                    </Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
-                                                        try {
-                                                            await axios.post("/user/addtask", { ...item},
-                                                            {
-                                                                headers: { 'Authorization': token }
-                                                            });
-                                                            const response2 = await axios.get(
-                                                                "/user/gettasksuser", {
-                                                                headers: { "Authorization": token },
-                                                                }
-                                                            );
-                                                            settasks(response2.data.final_ret)
-                                                            } catch (err) {
-                                                            console.log(err.response)
-                                                        }
-                                                    }}>Add this task</Button>
-                                                </CardActions><br/>
-                                                </Card>
-                                                </Grid>
-                                            })}
-                                        </Grid>
+                                    )}
+                                    <Grid style={{padding:"10px"}}>
+                                    <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                        setshowwhat(!showwhat)
+                                    }}>{showwhat ? <ArrowBackIosOutlinedIcon/> : <ArrowForwardIosOutlinedIcon/>}</Button>
                                     </Grid>
                                 </Grid>
                             </div>
@@ -212,99 +231,103 @@ export default function Tasks(){
                                 <Grid container component="main">
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                     <Grid item className={classes.root} component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}>
-                                        {similartasks.length ? (
-                                                <div>
-                                                    <Grid style={{maxHeight:"10vh"}}>
-                                                        <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
-                                                            TASKS BASED ON YOUR INTERESTS:
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid container style={{maxHeight: '40vh', width:"100%" , overflow: 'auto'}}>
-                                                        {similartasks.map(item =>{
-                                                            return  <Grid item xs={2} style={{margin:"10px"}}> 
-                                                            <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
-                                                            <CardContent>
-                                                                <Typography component="h1" variant="h5" style={{color:fontcol}}>
-                                                                {item.name}
-                                                                </Typography>
-                                                                <Typography variant="h5" component="h2">
-                                                                </Typography>
-                                                                <Typography className={classes.pos} color="textSecondary">
-                                                                Tag: {item.tagname} <br/>
-                                                                Total Pomodoros: {item.total_pomodoro}<br/>
-                                                                Popularity: {item.popularity}
-                                                                </Typography>
-                                                            </CardContent>
-                                                            <CardActions>
-                                                                <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
-                                                                    try {
-                                                                        await axios.post("/user/addtask", { ...item},
-                                                                        {
-                                                                            headers: { 'Authorization': token }
-                                                                        });
-                                                                        const response2 = await axios.get(
-                                                                            "/user/gettasksuser", {
-                                                                            headers: { "Authorization": token },
-                                                                            }
-                                                                        );
-                                                                        settasks(response2.data.final_ret)
-                                                                        } catch (err) {
-                                                                        console.log(err.response)
-                                                                    }
-                                                                }}>Add this task</Button>
-                                                            </CardActions>
-                                                            </Card>
-                                                            </Grid>
-                                                        })}
-                                                    </Grid>
-                                                    <Grid style={{maxHeight:"10vh"}}>
-                                                        <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
-                                                            YOUR PREVIOUS TASK HISTORY:
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid container style={{maxHeight: '40vh', width:"100%" , overflow: 'auto'}}>
-                                                        {similartasks.map(item =>{
-                                                            return  <Grid item xs={2} style={{margin:"10px"}}> 
-                                                            <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
-                                                            <CardContent>
-                                                                <Typography component="h1" variant="h5" style={{color:fontcol}}>
-                                                                {item.name}
-                                                                </Typography>
-                                                                <Typography variant="h5" component="h2">
-                                                                </Typography>
-                                                                <Typography className={classes.pos} color="textSecondary">
-                                                                Tag: {item.tagname} <br/>
-                                                                Total Pomodoros: {item.total_pomodoro}<br/>
-                                                                Popularity: {item.popularity}
-                                                                </Typography>
-                                                            </CardContent>
-                                                            <CardActions>
-                                                                <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
-                                                                    try {
-                                                                        await axios.post("/user/addtask", { ...item},
-                                                                        {
-                                                                            headers: { 'Authorization': token }
-                                                                        });
-                                                                        const response2 = await axios.get(
-                                                                            "/user/gettasksuser", {
-                                                                            headers: { "Authorization": token },
-                                                                            }
-                                                                        );
-                                                                        settasks(response2.data.final_ret)
-                                                                        } catch (err) {
-                                                                        console.log(err.response)
-                                                                    }
-                                                                }}>Add this task</Button>
-                                                            </CardActions>
-                                                            </Card>
-                                                            </Grid>
-                                                        })}
-                                                    </Grid>
-                                                </div>
-                                            )
-                                            :
-                                            (<div></div>)
-                                        }
+                                        {!showwhat ? (
+                                            <div>
+                                                <Grid style={{maxHeight:"10vh"}}>
+                                                    <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                                        TASKS BASED ON YOUR INTERESTS:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid container style={{maxHeight: '60vh',minHeight:"60vh", width:"100%" , overflow: 'auto'}}>
+                                                    {similartasks.map(item =>{
+                                                        return  <Grid item xs={2} style={{margin:"10px"}}> 
+                                                        <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
+                                                        <CardContent>
+                                                            <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                            {item.name}
+                                                            </Typography>
+                                                            <Typography variant="h5" component="h2">
+                                                            </Typography>
+                                                            <Typography className={classes.pos} color="textSecondary">
+                                                            Tag: {item.tagname} <br/>
+                                                            Total Pomodoros: {item.total_pomodoro}<br/>
+                                                            Popularity: {item.popularity}
+                                                            </Typography>
+                                                        </CardContent>
+                                                        <CardActions>
+                                                            <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                                try {
+                                                                    await axios.post("/user/addtask", { ...item},
+                                                                    {
+                                                                        headers: { 'Authorization': token }
+                                                                    });
+                                                                    const response2 = await axios.get(
+                                                                        "/user/gettasksuser", {
+                                                                        headers: { "Authorization": token },
+                                                                        }
+                                                                    );
+                                                                    settasks(response2.data.final_ret)
+                                                                    } catch (err) {
+                                                                    console.log(err.response)
+                                                                }
+                                                            }}>Add this task</Button>
+                                                        </CardActions>
+                                                        </Card>
+                                                        </Grid>
+                                                    })}
+                                                </Grid>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <Grid style={{maxHeight:"10vh"}}>
+                                            <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
+                                                YOUR COMPLETED TASKS:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid container style={{maxHeight: '60vh',minHeight:"60vh", width:"100%" , overflow: 'auto'}}>
+                                            {prev.map(item =>{
+                                                return  <Grid item xs={2} style={{margin:"10px"}}> 
+                                                <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
+                                                <CardContent>
+                                                    <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                    {item.name}
+                                                    </Typography>
+                                                    <Typography variant="h5" component="h2">
+                                                    </Typography>
+                                                    <Typography className={classes.pos} color="textSecondary">
+                                                    Total Pomodoros: {item.total_pomodoro}<br/>
+                                                    Popularity: {item.popularity}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                        try {
+                                                            await axios.post("/user/addtask", { ...item},
+                                                            {
+                                                                headers: { 'Authorization': token }
+                                                            });
+                                                            const response2 = await axios.get(
+                                                                "/user/gettasksuser", {
+                                                                headers: { "Authorization": token },
+                                                                }
+                                                            );
+                                                            settasks(response2.data.final_ret)
+                                                            } catch (err) {
+                                                            console.log(err.response)
+                                                        }
+                                                    }}>Add this task</Button>
+                                                </CardActions>
+                                                </Card>
+                                                </Grid>
+                                            })}
+                                        </Grid>
+                                            </div>
+                                        )}
+                                        <Grid style={{padding:"10px"}}>
+                                        <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                            setshowwhat(!showwhat)
+                                        }}>{showwhat ? <ArrowBackIosOutlinedIcon/> : <ArrowForwardIosOutlinedIcon/>}</Button>
+                                        </Grid>
                                     </Grid>
                                     <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                 </Grid>
