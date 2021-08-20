@@ -324,7 +324,7 @@ const Timer = props => {
             {error}
           </Alert>
         </Snackbar>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"14vh"}}>
+      <Grid item xs={12} md={12} lg={isLogged?6:12} xl={isLogged?6:12} style={{paddingTop:"14vh"}}>
         <CircularProgressWithLabel value={progress} timerLength = {timerLength} seconds= {seconds} fontcol={fontcol} col={col} altcol={altcol}/>
         <Typography align = "center" variant="h3" className={classes.harryfont}>
           Session Number: {sessionNumber}/4
@@ -419,79 +419,79 @@ const Timer = props => {
           </FormControl> : <div></div>}
         </Grid>
       </Grid>
-      <Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"9vh"}}>
-        <Grid style={{minHeight:"65vh"}}>
-          <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
-            TASKS 
-          </Typography>
-          <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
-              <Grid container>
-              <Box style={{padding:"5px"}}>
-                  <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined"/>
-                </Box>
+      {isLogged ? (<Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"9vh"}}>
+          <Grid style={{minHeight:"65vh"}}>
+            <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
+              TASKS 
+            </Typography>
+            <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
+                <Grid container>
                 <Box style={{padding:"5px"}}>
-                <InputLabel id="tags" name="tags" onChange={onChangeInput}></InputLabel>
-                  <Select
-                    variant="outlined"
-                    value={tasktag}
-                    className={classes.formControl}
-                    displayEmpty
-                    id="tags" name="tags"
-                    onChange={(event,value)=>{
-                      settasktag(value.props.value)
-                    }}
-                  ><MenuItem value="" disabled>
-                      <span color="#aaa">Choose Tag *</span>
-                    </MenuItem>
-                    {usertag.map(item => {
-                      return <MenuItem value={item}>{item.name}</MenuItem>
-                    })}
-                  </Select>
-                </Box>
-                <Box style={{padding:"5px",maxWidth:"120px"}}>
-                  <Tooltip title="The number of work pomodoros required"><TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
-                    /></Tooltip>
-                </Box>
-                <Box textAlign="right" >
-                  <Tooltip title="Add Task"><Button type="submit" style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip>
-                </Box>
-              </Grid>
-            </form>
-          <List style={{padding:"5px"}}>
-              { 
-                subset.map(item => (
-                  <div key = {item._id}>
-                    <ListItem variant="outlined" component={Paper} elevation={2}
-                        style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:col, borderColor:col}}
-                        className= {classes.listItem} 
-                      ><Grid container>
-                        <Grid container justifyContent="flex-start">
-                          {item.name}
+                    <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined"/>
+                  </Box>
+                  <Box style={{padding:"5px"}}>
+                  <InputLabel id="tags" name="tags" onChange={onChangeInput}></InputLabel>
+                    <Select
+                      variant="outlined"
+                      value={tasktag}
+                      className={classes.formControl}
+                      displayEmpty
+                      id="tags" name="tags"
+                      onChange={(event,value)=>{
+                        settasktag(value.props.value)
+                      }}
+                    ><MenuItem value="" disabled>
+                        <span color="#aaa">Choose Tag *</span>
+                      </MenuItem>
+                      {usertag.map(item => {
+                        return <MenuItem value={item}>{item.name}</MenuItem>
+                      })}
+                    </Select>
+                  </Box>
+                  <Box style={{padding:"5px",maxWidth:"120px"}}>
+                    <Tooltip title="The number of work pomodoros required"><TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
+                      /></Tooltip>
+                  </Box>
+                  <Box textAlign="right" >
+                    <Tooltip title="Add Task"><Button type="submit" style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip>
+                  </Box>
+                </Grid>
+              </form>
+            <List style={{padding:"5px"}}>
+                { 
+                  subset.map(item => (
+                    <div key = {item._id}>
+                      <ListItem variant="outlined" component={Paper} elevation={2}
+                          style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:col, borderColor:col}}
+                          className= {classes.listItem} 
+                        ><Grid container>
+                          <Grid container justifyContent="flex-start">
+                            {item.name}
+                          </Grid>
+                          <Grid container justifyContent="flex-end">
+                          <Tooltip title="Delete Task"><Button onClick={async()=>{
+                            removeactive(item,token)
+                          }} style={{fontSize:"20px",color:col,
+                          minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
+                          <Tooltip title="Mark as Completed"><Button onClick={async()=>{
+                            item.pomodoro_done=item.total_pomodoro
+                            removeactive(item,token)
+                          }} style={{fontSize:"20px",color:col,
+                          minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><CheckOutlinedIcon/></Button></Tooltip>
+                          {item.pomodoro_done}/{item.total_pomodoro}
+                          </Grid>
                         </Grid>
-                        <Grid container justifyContent="flex-end">
-                        <Tooltip title="Delete Task"><Button onClick={async()=>{
-                          removeactive(item,token)
-                        }} style={{fontSize:"20px",color:col,
-                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
-                        <Tooltip title="Mark as Completed"><Button onClick={async()=>{
-                          item.pomodoro_done=item.total_pomodoro
-                          removeactive(item,token)
-                        }} style={{fontSize:"20px",color:col,
-                        minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><CheckOutlinedIcon/></Button></Tooltip>
-                        {item.pomodoro_done}/{item.total_pomodoro}
-                        </Grid>
-                      </Grid>
-                    </ListItem>
-                </div>
-                )) 
-              }
-            </List>
-          </Grid>
-          <Grid>
-            <Pagination count={Math.ceil(tasks.length/3)} color="primary" variant="outlined" 
-              onChange={(event, value) => {setPage(value)}} shape="rounded" page={page} style={{margin:"10px"}}/>
-          </Grid>
-      </Grid>
+                      </ListItem>
+                  </div>
+                  )) 
+                }
+              </List>
+            </Grid>
+            <Grid>
+              <Pagination count={Math.ceil(tasks.length/3)} color="primary" variant="outlined" 
+                onChange={(event, value) => {setPage(value)}} shape="rounded" page={page} style={{margin:"10px"}}/>
+            </Grid>
+        </Grid>) : (<div></div>)}
     </Grid>
   );
 };
