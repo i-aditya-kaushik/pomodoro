@@ -15,7 +15,6 @@ const taskController = {
             tags
           } = req.body;
           const check = await Tasks.findOne({name: name,total_pomodoro: total_pomodoro})
-          console.log(check)
           if(check){
             await Users.findOneAndUpdate(
             { _id: req.user.id },
@@ -90,7 +89,6 @@ const taskController = {
           } = req.body;
           if(total_pomodoro == pomodoro_done){
             const check = await Users.find({"_id" : req.user.id , prev_tasks : id})
-            console.log(check)
             if(!check.length)
               await Users.findOneAndUpdate(
                 { _id: req.user.id },
