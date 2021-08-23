@@ -152,11 +152,15 @@ const Timer = props => {
     //   setOptions(res.data.Tasks)
     // },[])
 
-    React.useEffect(async () => {
-      if (!open1) {
-        setOptions([]);
-      }
-    }, [open1,tasks]);
+    useEffect(async ()=>{
+      const response1 = await axios.get(
+        "/user/gettagsuser", {
+            headers: { Authorization: token },
+          }
+        );
+        setOptions(response1.data.tags)
+    },[usertag])
+
   const removeactive = async (current_task,token) =>{
     try{
       await axios.put("/user/deleteactivetask", 
@@ -427,7 +431,7 @@ const Timer = props => {
             <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
                 <Grid container>
                 <Box style={{padding:"5px"}}>
-                    <TextField onChange={onChangeInput} required id="name" name="name" label="Task Name" variant="outlined"/>
+                    <TextField inputProps={{maxLength: 20}} onChange={onChangeInput} required id="name" name="name" label="Task Name[Keep it short]" variant="outlined"/>
                   </Box>
                   <Box style={{padding:"5px"}}>
                   <InputLabel id="tags" name="tags" onChange={onChangeInput}></InputLabel>
@@ -443,7 +447,7 @@ const Timer = props => {
                     ><MenuItem value="" disabled>
                         <span color="#aaa">Choose Tag *</span>
                       </MenuItem>
-                      {usertag.map(item => {
+                      {options.map(item => {
                         return <MenuItem value={item}>{item.name}</MenuItem>
                       })}
                     </Select>

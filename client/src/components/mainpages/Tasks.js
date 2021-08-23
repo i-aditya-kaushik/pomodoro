@@ -136,7 +136,7 @@ export default function Tasks(){
                                                     return <Grid item xs={12} style={{margin:"20px"}}> 
                                                     <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
                                                     <CardContent>
-                                                        <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                        <Typography component="h5" variant="h6" style={{color:fontcol}}>
                                                             {item.name}
                                                         </Typography>
                                                         <Typography variant="h5" component="h2">
@@ -184,7 +184,7 @@ export default function Tasks(){
                                                 return <Grid item xs={12} style={{margin:"20px"}}> 
                                                 <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
                                                 <CardContent>
-                                                    <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                    <Typography component="h5" variant="h6" style={{color:fontcol}}>
                                                         {item.name}
                                                     </Typography>
                                                     <Typography variant="h5" component="h2">
@@ -243,7 +243,7 @@ export default function Tasks(){
                                                         return  <Grid item xs={2} style={{margin:"10px"}}> 
                                                         <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
                                                         <CardContent>
-                                                            <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                            <Typography component="h5" variant="h6" style={{color:fontcol}}>
                                                             {item.name}
                                                             </Typography>
                                                             <Typography variant="h5" component="h2">
@@ -289,7 +289,7 @@ export default function Tasks(){
                                                 return  <Grid item xs={2} style={{margin:"10px"}}> 
                                                 <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
                                                 <CardContent>
-                                                    <Typography component="h1" variant="h5" style={{color:fontcol}}>
+                                                    <Typography component="h5" variant="h6" style={{color:fontcol}}>
                                                     {item.name}
                                                     </Typography>
                                                     <Typography variant="h5" component="h2">

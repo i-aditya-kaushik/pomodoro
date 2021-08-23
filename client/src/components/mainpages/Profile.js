@@ -264,6 +264,7 @@ export default function Profile(){
                                                         placeholder= "Press Enter to add a new tag or select from the options"
                                                         InputProps={{
                                                             ...params.InputProps,
+                                                            maxLength: 20,
                                                             endAdornment: (
                                                               <React.Fragment>
                                                                 {loading ? (
@@ -281,6 +282,7 @@ export default function Profile(){
                                             <Button className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
                                                 if(newval){
                                                     try{
+                                                        setisloading(true)
                                                         setusertag(newval)
                                                         await axios.delete("/user/deletetags", {
                                                             headers: { 'Authorization': token },
@@ -289,11 +291,11 @@ export default function Profile(){
                                                                 await axios.post("/user/addmultipletags",
                                                                 {newValue: newval},
                                                                 {headers: { 'Authorization': token }})
-                                                                
                                                                 } catch(err){
                                                                     console.log(err.response)
                                                                 }
                                                         })
+                                                        setisloading(false)
                                                     } catch(err){
                                                         console.log(err.response)
                                                     }
@@ -367,6 +369,7 @@ export default function Profile(){
                                                 <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
                                                 if(newval){
                                                     try{
+                                                        setisloading(true)
                                                         setusertag(newval)
                                                         await axios.delete("/user/deletetags", {
                                                             headers: { 'Authorization': token },
@@ -380,6 +383,7 @@ export default function Profile(){
                                                                     console.log(err.response)
                                                                 }
                                                         })
+                                                        setisloading(false)
                                                     } catch(err){
                                                         console.log(err.response)
                                                     }
