@@ -134,23 +134,6 @@ const Timer = props => {
 
       setOpen(false);
     };
-    // const onChangeHandle = async (value) => {
-    //   const response = await fetch(
-    //     "/user/gettasks", {headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': token
-    //     },}
-    //   )
-    //     .then((response) => response.json())
-    //     .then((data) => {console.log(data.Tasks);setOptions(data.Tasks)});
-    // };
-    
-    // useEffect(async ()=>{
-    //   const res = await axios.get("/user/gettasks", {
-    //     headers: { "Authorization": token },
-    //   })
-    //   setOptions(res.data.Tasks)
-    // },[])
 
     useEffect(async ()=>{
       const response1 = await axios.get(
@@ -240,6 +223,7 @@ const Timer = props => {
               };
               setTimerOn(false);
               setTimerDone(true);
+              setislocked(false)
               setSessionType((prevType) => {
                 if (prevType === "Work") return "Break";
                 if (prevType === "Break") return "Work";
