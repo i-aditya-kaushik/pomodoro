@@ -136,12 +136,13 @@ const Timer = props => {
     };
 
     useEffect(async ()=>{
+      if(isLogged){
       const response1 = await axios.get(
         "/user/gettagsuser", {
             headers: { Authorization: token },
           }
         );
-        setOptions(response1.data.tags)
+        setOptions(response1.data.tags)}
     },[usertag])
 
   const removeactive = async (current_task,token) =>{
@@ -412,7 +413,7 @@ const Timer = props => {
             <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
               TASKS 
             </Typography>
-            <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
+            <form className={classes.root} onSubmit={addthistask} autoComplete ="off" style={{padding:"10px"}}>
                 <Grid container>
                 <Box style={{padding:"5px"}}>
                     <TextField inputProps={{maxLength: 20}} onChange={onChangeInput} required id="name" name="name" label="Task Name[Keep it short]" variant="outlined"/>
