@@ -92,7 +92,6 @@ const Timer = props => {
   const [seconds, setSeconds] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
   const [timerDone, setTimerDone] = useState(true);
-  const [sessionType, setSessionType] = useState("Work");
   const [sessionNumber, setSessionNumber] = useState(0);
   const [page, setPage] = React.useState(1);
   const startedSound = new Audio(startedAudio);
@@ -105,6 +104,7 @@ const Timer = props => {
   const loading = open1 && options.length === 0;
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
+  const [sessionType, setSessionType] = state.userAPI.sessionType;
   const [tasktag, settasktag] = React.useState('');
   const [taskname,settaskname] = useState("")
   const [usertag,setusertag] = state.userAPI.usertag

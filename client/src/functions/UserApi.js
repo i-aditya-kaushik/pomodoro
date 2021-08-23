@@ -4,9 +4,9 @@ import axios from "axios";
 function UserApi(token) {
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cart, setCart] = useState([]);
   const [house, setHouse] = useState("");
   const [isloading,setisloading] = useState(false);
+  const [sessionType, setSessionType] = useState("Work");
   const [sortingdone, setSorting] = useState(true);
   const [worktime, setworktime] = useState(25);
   const [shortbreak, setshortbreak] = useState(5);
@@ -89,6 +89,7 @@ function UserApi(token) {
     shortbreak:[shortbreak, setshortbreak],
     longbreak:[longbreak, setlongbreak],
     tasks: [tasks,settasks],
+    sessionType: [sessionType, setSessionType],
     similartasks: [similartasks,setsimilartasks],
     prev: [prev,setprev]
   };
