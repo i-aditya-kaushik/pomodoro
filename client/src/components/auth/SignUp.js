@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import { Link as RouterLink} from "react-router-dom";
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
@@ -18,8 +16,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 import Logo from '../../static/images/Logo.png'
-import CardMedia from '@material-ui/core/CardMedia';
-import { GlobalState } from '../../GlobalState';
 
 
 function getRandomPicture(){
@@ -70,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -122,14 +118,14 @@ export default function SignUp() {
     e.preventDefault();
     try {
       if(password2.value!=password.value) {alert('Passwords do not match');return}
-      var houseval = getRandomHouse()
+      const houseval = getRandomHouse()
       await axios.post("/user/register", { ...user , house: houseval});
       localStorage.setItem("firstLogin", true);
       window.location.href = "/sortinghat";
     } catch (err) {
       try{
         erroroccur(err.response.data.msg)}catch (err) {
-          erroroccur("Some Kind of Error Occured. Try Again.")
+        erroroccur("Some Kind of Error Occured. Try Again.")
     }}
   };
 
