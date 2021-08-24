@@ -44,6 +44,13 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0px 2px 10px #888888"
     }
   },
+  logo: {
+    backgroundImage: `url(https://res.cloudinary.com/adityakaushik/image/upload/c_scale,w_247/v1629829596/Hp/nothing_here_jvrkvg.png)`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    maxHeight: '47vh',
+    minHeight:"47vh",
+  },
 }));
 
 const TimerBorder =  withStyles({
@@ -455,7 +462,7 @@ const Timer = props => {
                   </Box>
                 </Grid>
               </form>
-            <List style={{padding:"5px"}}>
+            <List style={{padding:"5px"}} className={subset.length ? classes.noclass : classes.logo}>
                 { 
                   subset.map(item => (
                     <div key = {item._id}>
