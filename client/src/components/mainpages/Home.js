@@ -30,7 +30,7 @@ export default function Home(){
     var col = "black"
     var fontcol = "#aaa"
     var altcol = "white"
-    var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
+    var img = ""
 
     useEffect(()=>{
         const firstLogin = localStorage.getItem("firstLogin");
@@ -68,11 +68,11 @@ export default function Home(){
                     <Navbar/>
                         <div>
                             <Grid container component="main" className={classes.root}>
-                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                <Grid item component={Paper} xs={12} sm={12} md={matches?12:10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}>
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor: isLogged ? col : fontcol}}></Grid>
+                                <Grid item component={Paper} xs={12} sm={12} md={matches?12:10} lg={matches?12:10} xl={matches?12:10} style={{backgroundColor: "#f9f7f5"}}>
                                     <Timer  col={col} fontcol= {fontcol} altcol= {altcol}/>
                                 </Grid>
-                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor: col}}></Grid>
                             </Grid>
                         </div>
                 </div>
