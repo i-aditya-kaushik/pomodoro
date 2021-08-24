@@ -480,12 +480,13 @@ const Timer = props => {
                           /></Tooltip>
                       </Grid>
                   </Grid>
+                  <DialogActions>
+                    <Tooltip title="Cancel"><Button onClick={handleClosedialog} className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Cancel</Button></Tooltip>
+                    <Tooltip title="Add Task"><Button type="submit" className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Add this task</Button></Tooltip> 
+                  </DialogActions>
                 </form>
               </DialogContent>
-              <DialogActions>
-                <Tooltip title="Cancel"><Button onClick={handleClosedialog} className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Cancel</Button></Tooltip>
-                <Tooltip title="Add Task"><Button type="submit" className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Add this task</Button></Tooltip> 
-              </DialogActions>
+              
             </Dialog>
               <Grid container style={{padding:"10px"}}>
                 <Box flexGrow={1}>
