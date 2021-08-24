@@ -65,8 +65,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${Logo})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    minHeight:100,
-    minWidth: 107
   }
 }));
 
