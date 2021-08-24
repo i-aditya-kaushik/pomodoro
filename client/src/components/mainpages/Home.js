@@ -20,6 +20,40 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+export const useImage = (src) => {
+    const [hasLoaded, setHasLoaded] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [hasStartedInitialFetch, setHasStartedInitialFetch] = useState(false);
+
+    useEffect(() => {
+        setHasStartedInitialFetch(true);
+        setHasLoaded(false);
+        setHasError(false);
+
+        const image = new Image();
+        image.src = src;
+
+        const handleError = () => {
+            setHasError(true);
+        };
+
+        const handleLoad = () => {
+            setHasLoaded(true);
+            setHasError(false);
+        };
+
+        image.onerror = handleError;
+        image.onload = handleLoad;
+
+        return () => {
+            image.removeEventListener("error", handleError);
+            image.removeEventListener("load", handleLoad);
+        };
+    }, [src]);
+
+    return { hasLoaded, hasError, hasStartedInitialFetch };
+};
+
 export default function Home(){
     const classes = useStyles();
     const state = useContext(GlobalState);
@@ -30,12 +64,16 @@ export default function Home(){
     var col = "black"
     var fontcol = "#aaa"
     var altcol = "white"
-    var img = ""
-
+    
+    var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
+    const { hasLoaded, hasError } = useImage(img);
+    if (hasError) {
+        return null;
+    }
     useEffect(()=>{
         const firstLogin = localStorage.getItem("firstLogin");
-        if(!firstLogin) {setisloading(false)}
-    },[])
+        if(!firstLogin && hasLoaded) {setisloading(false)}
+    },[hasLoaded])
 
     if(house=="Gryffindor"){
         col = "#7f0909"
@@ -68,11 +106,11 @@ export default function Home(){
                     <Navbar/>
                         <div>
                             <Grid container component="main" className={classes.root}>
-                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor: isLogged ? col : fontcol}}></Grid>
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                 <Grid item component={Paper} xs={12} sm={12} md={matches?12:10} lg={matches?12:10} xl={matches?12:10} style={{backgroundColor: "#f9f7f5"}}>
                                     <Timer  col={col} fontcol= {fontcol} altcol= {altcol}/>
                                 </Grid>
-                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor: col}}></Grid>
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={matches?false:1} xl={matches?false:1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                             </Grid>
                         </div>
                 </div>

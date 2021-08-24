@@ -3,7 +3,7 @@ import Navbar from "../navigation/Navbar";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import Logo from '../../static/images/Logo.png'
-
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -31,6 +31,7 @@ function Loading() {
       <Grid item xs={3} variant="outline" className={classes.logo}></Grid>  
 
     </Grid> 
+    <Grid item align="center"><CircularProgress/></Grid>
     </div>;
 }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +15,7 @@ import axios from "axios";
 import '../../static/fonts/HarryP.TTF'; 
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import { CircularProgress } from "@material-ui/core";
 
 import Logo from '../../static/images/Logo.png'
 import { GlobalState } from '../../GlobalState';
@@ -41,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url('+ getRandomPicture() +')',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -76,8 +76,49 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     minHeight:100,
     minWidth: 107
+  },
+  logocover: {
+    backgroundImage: `url(${Logo})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    minHeight:100,
+    minWidth: 107
   }
 }));
+
+export const useImage = (src) => {
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [hasStartedInitialFetch, setHasStartedInitialFetch] = useState(false);
+
+  useEffect(() => {
+      setHasStartedInitialFetch(true);
+      setHasLoaded(false);
+      setHasError(false);
+
+      const image = new Image();
+      image.src = src;
+
+      const handleError = () => {
+          setHasError(true);
+      };
+
+      const handleLoad = () => {
+          setHasLoaded(true);
+          setHasError(false);
+      };
+
+      image.onerror = handleError;
+      image.onload = handleLoad;
+
+      return () => {
+          image.removeEventListener("error", handleError);
+          image.removeEventListener("load", handleLoad);
+      };
+  }, [src]);
+
+  return { hasLoaded, hasError, hasStartedInitialFetch };
+};
 
 export default function SignIn() {
   const classes = useStyles();
@@ -85,6 +126,12 @@ export default function SignIn() {
     email: "",
     password: "",
   });
+  const img = "https://res.cloudinary.com/adityakaushik/image/upload/v1627663840/Hp/gryffindor3_zedlqb.jpg"
+  const { hasLoaded, hasError } = useImage(img);
+    if (hasError) {
+        return null;
+  }
+
   var col = "black"
   var fontcol = "#aaa"
   var altcol = "white"
@@ -127,7 +174,7 @@ export default function SignIn() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={hasLoaded ? classes.image : classes.logocover} style={{backgroundImage: hasLoaded ? 'url('+ img +')': 'url('+ Logo +')'}}/>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
         <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>

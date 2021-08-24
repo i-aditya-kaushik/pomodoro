@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -43,12 +43,46 @@ function getRandomHouse(){
     return houses[Math.floor(Math.random()*houses.length)];
 }
 
+export const useImage = (src) => {
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [hasStartedInitialFetch, setHasStartedInitialFetch] = useState(false);
+
+  useEffect(() => {
+      setHasStartedInitialFetch(true);
+      setHasLoaded(false);
+      setHasError(false);
+
+      const image = new Image();
+      image.src = src;
+
+      const handleError = () => {
+          setHasError(true);
+      };
+
+      const handleLoad = () => {
+          setHasLoaded(true);
+          setHasError(false);
+      };
+
+      image.onerror = handleError;
+      image.onload = handleLoad;
+
+      return () => {
+          image.removeEventListener("error", handleError);
+          image.removeEventListener("load", handleLoad);
+      };
+  }, [src]);
+
+  return { hasLoaded, hasError, hasStartedInitialFetch };
+};
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url('+ getRandomPicture() +')',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -83,11 +117,23 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     minHeight:100,
     minWidth: 107
+  },
+  logocover: {
+    backgroundImage: `url(${Logo})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    minHeight:100,
+    minWidth: 107
   }
 }));
 
 export default function SignUp() {
   const classes = useStyles();
+  const img = "https://res.cloudinary.com/adityakaushik/image/upload/v1627661406/Hp/slytherin_vb1xzz.jpg"
+  const { hasLoaded, hasError } = useImage(img);
+    if (hasError) {
+        return null;
+  }
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -132,7 +178,7 @@ export default function SignUp() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={hasLoaded ? classes.image : classes.logocover} style={{backgroundImage: hasLoaded ? 'url('+ img +')': 'url('+ Logo +')'}} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
