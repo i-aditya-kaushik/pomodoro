@@ -18,6 +18,12 @@ const useStyles = makeStyles((theme) => ({
     root:{
         height: '91vh',
     },
+    noclass: {
+        maxHeight: '55vh',
+        minHeight:"55vh",
+        width:"100%" ,
+        overflow: 'auto',
+    },
     cardroot: {
         minHeight:'32vh',
         maxHeight:'32vh',
@@ -36,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
     },
     pos: {
     marginBottom: 12,
+    },
+    logo: {
+        backgroundImage: `url(https://res.cloudinary.com/adityakaushik/image/upload/c_scale,w_247/v1629829596/Hp/nothing_here_jvrkvg.png)`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        maxHeight: '55vh',
+        minHeight:"55vh",
     },
     image:{
         backgroundRepeat: 'no-repeat',
@@ -131,7 +144,7 @@ export default function Tasks(){
                                             </Typography>
                                         </Grid>
                                         <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                            <Grid style={{maxHeight: '55vh',minHeight:"55vh", width:"100%" , overflow: 'auto'}}>
+                                            <Grid className={similartasks.length ? classes.noclass : classes.logo} container>
                                                 {similartasks.map(item =>{
                                                     return <Grid item xs={12} style={{margin:"20px"}}> 
                                                     <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
@@ -179,7 +192,7 @@ export default function Tasks(){
                                         </Typography>
                                     </Grid>
                                     <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                        <Grid style={{maxHeight: '55vh',minHeight:"55vh", width:"100%" , overflow: 'auto'}}>
+                                        <Grid className={prev.length ? classes.noclass : classes.logo} container>
                                             {prev.map(item =>{
                                                 return <Grid item xs={12} style={{margin:"20px"}}> 
                                                 <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
@@ -238,7 +251,7 @@ export default function Tasks(){
                                                         TASKS BASED ON YOUR INTERESTS:
                                                     </Typography>
                                                 </Grid>
-                                                <Grid container style={{maxHeight: '60vh',minHeight:"60vh", width:"100%" , overflow: 'auto'}}>
+                                                <Grid container className={similartasks.length ? classes.noclass : classes.logo}>
                                                     {similartasks.map(item =>{
                                                         return  <Grid item xs={2} style={{margin:"10px"}}> 
                                                         <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">
@@ -284,7 +297,7 @@ export default function Tasks(){
                                                 YOUR COMPLETED TASKS:
                                             </Typography>
                                         </Grid>
-                                        <Grid container style={{maxHeight: '60vh',minHeight:"60vh", width:"100%" , overflow: 'auto'}}>
+                                        <Grid className={prev.length ? classes.noclass : classes.logo} container>
                                             {prev.map(item =>{
                                                 return  <Grid item xs={2} style={{margin:"10px"}}> 
                                                 <Card style={{ borderColor:col}} className={classes.cardroot} variant="outlined">

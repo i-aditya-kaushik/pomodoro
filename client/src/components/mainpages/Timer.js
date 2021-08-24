@@ -104,6 +104,7 @@ const Timer = props => {
   const loading = open1 && options.length === 0;
   const longbreakstart_aud = new Audio(longbreakstart);
   const state = useContext(GlobalState);
+  const [isloading,setisloading] = state.userAPI.isloading
   const [sessionType, setSessionType] = state.userAPI.sessionType;
   const [tasktag, settasktag] = React.useState('');
   const [taskname,settaskname] = useState("")
@@ -170,6 +171,7 @@ const Timer = props => {
     e.preventDefault();
     if(addtask.total_pomodoro<=0) {erroroccur("Pomodoros have to be greater than 0."); return}
     try {
+      setisloading(true)
       await axios.post("/user/addtask", { ...addtask, tags:tasktag },
       {
         headers: { 'Authorization': token }
@@ -181,6 +183,7 @@ const Timer = props => {
       );
       settasks(response2.data.final_ret)
       setcurrenttask(tasks[0])
+      setisloading(false)
     } catch (err) {
       console.log(err.response)
     }
