@@ -20,12 +20,31 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "70px",
     color: "black",
   },
-    image: {
-      backgroundImage: 'url(https://res.cloudinary.com/adityakaushik/image/upload/v1628144994/Hp/sorting_hat_twrqbs.png)',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    },
+  image: {
+    backgroundImage: 'url(https://res.cloudinary.com/adityakaushik/image/upload/v1628144994/Hp/sorting_hat_twrqbs.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  buttonFontSize:{
+    fontSize:"15px",
+    color:"black",
+  },
+  buttonPc: {
+    fontSize:"18px",
+    margin: theme.spacing(1),
+  },
+  loginButton:{
+    background:"black",
+    color:'white',
+    borderRadius:"10px",
+    padding:"0px 25px",
+
+    '&:hover':{
+      background: "black",
+      boxShadow: "0px 2px 10px #888888"
+    }
+  },
     
 }));
 
@@ -39,11 +58,7 @@ function Sortinghat() {
   const [house,setHouse] = state.userAPI.house;
   const [characteristics] = state.userAPI.characteristics;
   const [isLogged] = state.userAPI.isLogged;
-  const matches = useMediaQuery('(max-width:768px)');
-  useEffect(() => {
-    let timeout;
-    timeout = setTimeout(() => window.location.href = "/", 15000);
-  }, []);
+  const matches = useMediaQuery('(max-width:1025px)');
   var col = "white"
   var fontcol = "black"
   var altcol = "#9c9264"
@@ -86,20 +101,13 @@ function Sortinghat() {
               style={{ minHeight: '91vh',backgroundColor: altcol }}
             > </Grid></Grid>
             <Grid item xs={12} sm={12} md={5} component={Paper} elevation={4} style={{backgroundColor:col}} square>
-            <Grid container spacing={0} direction="column" alignItems="center"  justify="center" className={classes.padding1} >
-              {matches ? (
+            <Grid container spacing={0} direction="column" className={classes.padding1} style={{minHeight:"80vh"}}>
                 <ReactTypingEffect 
                 text={["I can see some " + characteristics[0] + ". But..! "+characteristics[1] 
-                + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"40px",padding:"50px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
+                + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize: matches?"40px":"60px",padding: matches?"50px":"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
                 cursor=" "/>
-              ):(
-                <ReactTypingEffect 
-                text={["I can see some " + characteristics[0] + ". But..! "+characteristics[1] 
-                + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize:"70px",padding:"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
-                cursor=" "/>
-              )}
-              </Grid>
-              </Grid></Grid>
+            </Grid><Grid align = "center"><Button component={RouterLink} to="/" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{fontSize:"20px"}}>Go to Home Page</Button></Grid>
+            </Grid></Grid>
           </div>
         ) : (
           <NotFound/>

@@ -2,8 +2,6 @@ import Navbar from "../navigation/Navbar";
 import { CardActionArea, CardContent, CardMedia, makeStyles, Paper, useMediaQuery, CardActions, Dialog } from "@material-ui/core";
 import React, { useState, useContext,useEffect } from "react";
 import { GlobalState } from "../../GlobalState";
-import Alert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
 import { Grid, Button, Card, Toolbar, Typography, Avatar, Box} from "@material-ui/core"
 import axios from "axios";
 import DialogActions from '@material-ui/core/DialogActions';
