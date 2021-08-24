@@ -32,6 +32,11 @@ export default function Home(){
     var altcol = "white"
     var img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/hog_banner_inmxc4.png"
 
+    useEffect(()=>{
+        const firstLogin = localStorage.getItem("firstLogin");
+        if(!firstLogin) {setisloading(false)}
+    },[])
+
     if(house=="Gryffindor"){
         col = "#7f0909"
         fontcol="#ffc500"
@@ -61,25 +66,15 @@ export default function Home(){
             {!isloading ? (
                 <div>
                     <Navbar/>
-                        {matches ? (
-                            <div>
-                                <Grid container component="main" className={classes.root}>
-                                    <Grid container component={Paper} style={{backgroundColor: "#f9f7f5"}}>
-                                        <Timer col={col} fontcol= {fontcol} altcol= {altcol}/>
-                                    </Grid>
+                        <div>
+                            <Grid container component="main" className={classes.root}>
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                                <Grid item component={Paper} xs={12} sm={12} md={matches?12:10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}>
+                                    <Timer  col={col} fontcol= {fontcol} altcol= {altcol}/>
                                 </Grid>
-                            </div>
-                        ) : (
-                            <div>
-                                <Grid container component="main" className={classes.root}>
-                                    <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                    <Grid container component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5"}}>
-                                        <Timer  col={col} fontcol= {fontcol} altcol= {altcol}/>
-                                    </Grid>
-                                    <Grid container component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
-                                </Grid>
-                            </div>
-                        )}
+                                <Grid item component={Paper} xs={false} sm={false} md={matches?false:1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
+                            </Grid>
+                        </div>
                 </div>
             ) : (
                 <Loading/>

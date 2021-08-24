@@ -5,7 +5,7 @@ function UserApi(token) {
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [house, setHouse] = useState("");
-  const [isloading,setisloading] = useState(false);
+  const [isloading,setisloading] = useState(true);
   const [sessionType, setSessionType] = useState("Work");
   const [sortingdone, setSorting] = useState(true);
   const [worktime, setworktime] = useState(25);
