@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -18,8 +17,7 @@ import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import Logo from '../../static/images/Logo.png'
-import CardMedia from '@material-ui/core/CardMedia';
-import Navbar from '../navigation/Navbar'
+import { GlobalState } from '../../GlobalState';
 
 
 function getRandomPicture(){
@@ -92,6 +90,8 @@ export default function SignIn() {
   var altcol = "white"
   const [remem, setRemem] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const state = useContext(GlobalState);
+  const [isloading,setisloading] = state.userAPI.isloading
   const [error, seterror] = React.useState("Some Kind of error occured!");
   const rememberme_change = (event) => {
     setRemem( event.target.checked );
@@ -104,8 +104,7 @@ export default function SignIn() {
     setOpen(true);
     seterror(err);
   };
-  const loginSubmit = async e => {
-    e.preventDefault();
+  const loginSubmit = async () => {
     try {
       await axios.post("/user/login", { ...user , remem});
       localStorage.setItem("firstLogin", true);
@@ -172,14 +171,8 @@ export default function SignIn() {
               control={<Checkbox color="primary" checked={remem.value} onChange={rememberme_change} name="remem" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              style={{color:altcol, backgroundColor:col}}
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
+            <Button fullWidth variant="body1"
+              className={classes.submit} style={{color:altcol, backgroundColor:col}} onClick={loginSubmit} >
               Sign In
             </Button>
             <Grid container>
