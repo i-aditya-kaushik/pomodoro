@@ -7,6 +7,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import { Link as RouterLink } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -25,7 +26,11 @@ import { Box, CircularProgress, FormControl, Grid, List, ListItem, MenuItem, Sna
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   harryfont:{
@@ -113,6 +118,16 @@ const Timer = props => {
   const workend_aud = new Audio(workend);
   const unpause_aud = new Audio(unpause);
   const [open1, setOpen1] = React.useState(false);
+  const [opendialog, setOpendialog] = React.useState(false);
+
+  const handleClickOpendialog = () => {
+    setOpendialog(true);
+  };
+
+  const handleClosedialog = () => {
+    setOpendialog(false);
+  };
+
   const [options, setOptions] = React.useState([]);
   const loading = open1 && options.length === 0;
   const longbreakstart_aud = new Audio(longbreakstart);
@@ -374,7 +389,7 @@ const Timer = props => {
                 startedSound.play();
               }}
             >
-            {timerOn ? "Pause" : "Run"}
+            {timerOn ? "Pause Timer" : "Start Working"}
           </Button>
           <Button
               style = {{backgroundColor:col, color:fontcol, padding:"10px" , margin:"10px"
@@ -427,41 +442,59 @@ const Timer = props => {
       {isLogged ? (<Grid item xs={12} md={12} lg={6} xl={6} style={{paddingTop:"9vh"}}>
           <Grid style={{minHeight:"65vh"}}>
             <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
-              TASKS 
+              YOUR TASKS 
             </Typography>
-            <form className={classes.root} onSubmit={addthistask} Autocomplete="off" style={{padding:"10px"}}>
-                <Grid container>
-                <Box style={{padding:"5px"}}>
-                    <TextField inputProps={{maxLength: 20}} onChange={onChangeInput} required id="name" name="name" label="Task Name[Keep it short]" variant="outlined"/>
-                  </Box>
-                  <Box style={{padding:"5px"}}>
-                  <InputLabel id="tags" name="tags" onChange={onChangeInput}></InputLabel>
-                    <Select
-                      variant="outlined"
-                      value={tasktag}
-                      className={classes.formControl}
-                      displayEmpty
-                      id="tags" name="tags"
-                      onChange={(event,value)=>{
-                        settasktag(value.props.value)
-                      }}
-                    ><MenuItem value="" disabled>
-                        <span color="#aaa">Choose Tag *</span>
-                      </MenuItem>
-                      {options.map(item => {
-                        return <MenuItem value={item}>{item.name}</MenuItem>
-                      })}
-                    </Select>
-                  </Box>
-                  <Box style={{padding:"5px",maxWidth:"120px"}}>
-                    <Tooltip title="The number of work pomodoros required"><TextField onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
-                      /></Tooltip>
-                  </Box>
-                  <Box textAlign="right" >
-                    <Tooltip title="Add Task"><Button type="submit" className={classes.loginButton} style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip> 
-                  </Box>
-                </Grid>
-              </form>
+            <Dialog open={opendialog} onClose={handleClosedialog} aria-labelledby="form-dialog-title">
+              <DialogTitle style={{color:col}}>Add a Task</DialogTitle>
+              <DialogContent>
+                <DialogContentText style={{color:fontcol,fontFamily: 'PfefferMediaeval'}}>
+                  A task contains a name, the tag associated with the task [if you do not have a suitable tag, edit your tag in the profile section], and the total work pomodoros required to complete the task.
+                </DialogContentText>
+                  <form className={classes.root} onSubmit={addthistask} Autocomplete="off">
+                  <Grid>
+                    <Grid style={{marginTop:"10px"}}>
+                      <TextField fullWidth inputProps={{maxLength: 20}} onChange={onChangeInput} required id="name" name="name" label="Task Name[Keep it short]" variant="outlined"/>
+                    </Grid>
+                    <Grid style={{marginTop:"10px"}}>
+                        <InputLabel fullWidth id="tags" name="tags" onChange={onChangeInput}></InputLabel>
+                          <Select
+                            variant="outlined"
+                            value={tasktag}
+                            className={classes.formControl}
+                            displayEmpty
+                            fullWidth
+                            id="tags" name="tags"
+                            onChange={(event,value)=>{
+                              settasktag(value.props.value)
+                            }}
+                          ><MenuItem value="" disabled>
+                              <span color="#aaa">Choose Tag *</span>
+                            </MenuItem>
+                            {options.map(item => {
+                              return <MenuItem value={item}>{item.name}</MenuItem>
+                            })}
+                          </Select>
+                      </Grid>
+                      <Grid style={{marginTop:"10px"}}>
+                        <Tooltip title="The number of work pomodoros required"><TextField fullWidth onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
+                          /></Tooltip>
+                      </Grid>
+                  </Grid>
+                </form>
+              </DialogContent>
+              <DialogActions>
+                <Tooltip title="Cancel"><Button onClick={handleClosedialog} className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Cancel</Button></Tooltip>
+                <Tooltip title="Add Task"><Button type="submit" className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Add this task</Button></Tooltip> 
+              </DialogActions>
+            </Dialog>
+              <Grid container style={{padding:"10px"}}>
+                <Box flexGrow={1}>
+                  <Tooltip title="Add Task"><Button onClick={handleClickOpendialog} className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Add a Task</Button></Tooltip>
+                </Box>
+                <Box>
+                  <Tooltip title="Task Management"><Button component={RouterLink} to="/tasks" className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Task Management</Button></Tooltip>
+                </Box>
+              </Grid>
             <List style={{padding:"5px"}} className={subset.length ? classes.noclass : classes.logo}>
                 { 
                   subset.map(item => (

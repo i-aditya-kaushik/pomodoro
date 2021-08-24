@@ -165,9 +165,9 @@ export default function Profile(){
                 long_break_duration: longbreak,
             },{
                 headers: { 'Authorization': token }
-            }).then(console.log("done"));
+            })
         } catch (err) {
-            console.log(err.response)
+            
         }
     }, [shortbreak,longbreak,worktime])
     const onChangeHandle = async (value) => {
@@ -176,7 +176,6 @@ export default function Profile(){
         )
           .then((response) => response.json())
           .then((data) => setOptions(data.tags));
-        console.log(options)
       };
     
       React.useEffect(async () => {

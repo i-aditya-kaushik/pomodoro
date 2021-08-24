@@ -155,7 +155,7 @@ export default function Tasks(){
                                                         <Typography variant="h5" component="h2">
                                                         </Typography>
                                                         <Typography className={classes.pos} color="textSecondary">
-                                                         Tag: {item.tagname} <br/>
+                                                         Tag: {item.tagname.length>20 ? item.tagname.slice(0,15) + "..." : item.tagname} <br/>
                                                          Total Pomodoros: {item.total_pomodoro}<br/>
                                                          Popularity: {item.popularity}
                                                         </Typography>
@@ -262,7 +262,7 @@ export default function Tasks(){
                                                             <Typography variant="h5" component="h2">
                                                             </Typography>
                                                             <Typography className={classes.pos} color="textSecondary">
-                                                            Tag: {item.tagname} <br/>
+                                                            Tag: {item.tagname.length>20 ? item.tagname.slice(0,15) + "..." : item.tagname} <br/>
                                                             Total Pomodoros: {item.total_pomodoro}<br/>
                                                             Popularity: {item.popularity}
                                                             </Typography>
