@@ -37,7 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl:{
     minWidth: 200,
-  }
+  },
+  loginButton:{
+    '&:hover':{
+      background: "black",
+      boxShadow: "0px 2px 10px #888888"
+    }
+  },
 }));
 
 const TimerBorder =  withStyles({
@@ -445,7 +451,7 @@ const Timer = props => {
                       /></Tooltip>
                   </Box>
                   <Box textAlign="right" >
-                    <Tooltip title="Add Task"><Button type="submit" style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip>
+                    <Tooltip title="Add Task"><Button type="submit" className={classes.loginButton} style={{marginTop:"5px", fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,height:"55px"}}><AddIcon/></Button></Tooltip> 
                   </Box>
                 </Grid>
               </form>
@@ -454,7 +460,7 @@ const Timer = props => {
                   subset.map(item => (
                     <div key = {item._id}>
                       <ListItem variant="outlined" component={Paper} elevation={2}
-                          style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:col, borderColor:col}}
+                          style={{fontFamily: 'PfefferMediaeval',fontSize:"20px",color:fontcol, borderColor:col}}
                           className= {classes.listItem} 
                         ><Grid container>
                           <Grid container justifyContent="flex-start">
@@ -463,12 +469,12 @@ const Timer = props => {
                           <Grid container justifyContent="flex-end">
                           <Tooltip title="Delete Task"><Button onClick={async()=>{
                             removeactive(item,token)
-                          }} style={{fontSize:"20px",color:col,
+                          }} style={{fontSize:"20px",color:fontcol,
                           minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><DeleteIcon/></Button></Tooltip>
                           <Tooltip title="Mark as Completed"><Button onClick={async()=>{
                             item.pomodoro_done=item.total_pomodoro
                             removeactive(item,token)
-                          }} style={{fontSize:"20px",color:col,
+                          }} style={{fontSize:"20px",color:fontcol,
                           minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><CheckOutlinedIcon/></Button></Tooltip>
                           {item.pomodoro_done}/{item.total_pomodoro}
                           </Grid>

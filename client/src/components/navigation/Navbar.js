@@ -133,7 +133,7 @@ export default function Navbar(){
     }
     if(house=="Slytherin"){
       col = "#aaaaaa"
-      fontcol="#2a623d"
+      fontcol="#0b4d00"
       altcol = "#5d5d5d"
     }
     if(house=="Ravenclaw"){
@@ -142,8 +142,8 @@ export default function Navbar(){
       altcol = "#5d5d5d"
     }
     if(house=="Hufflepuff"){
-      col="#ffdb00"
-      fontcol="#000000"
+      col="#666"
+      fontcol="#ffdb00"
       altcol = "#726255"
     }
     const classes = useStyles();

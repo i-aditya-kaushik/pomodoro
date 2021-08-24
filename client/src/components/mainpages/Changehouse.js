@@ -74,7 +74,7 @@ export default function ChangeHouse(){
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/gry_banner_grwluz.png"
     }
     if(house=="Slytherin"){
-        col = "#2a623d"
+        col = "#0b4d00"
         fontcol="#aaaaaa"
         altcol = "#5d5d5d"
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/sly_banner_yvl105.png"
@@ -86,7 +86,7 @@ export default function ChangeHouse(){
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/rav_banner_oba4vi.png"
     }
     if(house=="Hufflepuff"){
-        col="#fff4b1"
+        col="#ffdb00"
         fontcol="#000000"
         altcol = "#726255"
         img = "https://res.cloudinary.com/adityakaushik/image/upload/v1628269706/Hp/huf_banner_j4rbs1.png"
@@ -128,7 +128,7 @@ export default function ChangeHouse(){
                                             </Card>
                                         </Grid>
                                         <Grid container style={{justifyContent:"center"}}>
-                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#0b4d00",color: "#aaaaaa"}}>
                                             <CardActionArea>
                                                 <CardMedia
                                                 className={classes.media}
@@ -144,7 +144,7 @@ export default function ChangeHouse(){
                                                     fullWidth
                                                     variant="contained"
                                                     color="primary"
-                                                    style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
+                                                    style={{backgroundColor:"#aaaaaa", color:"#0b4d00"}}
                                                     >
                                                     Choose
                                                 </Button>
@@ -241,7 +241,7 @@ export default function ChangeHouse(){
                                             </Card>
                                         </Grid>
                                         <Grid container style={{justifyContent:"center"}}>
-                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#2a623d",color: "#aaaaaa",minWidth:"250px"}}>
+                                        <Card style={{padding:"12px",margin: "12px",backgroundColor:"#0b4d00",color: "#aaaaaa",minWidth:"250px"}}>
                                             <CardActionArea>
                                                 <CardMedia
                                                 className={classes.media}
@@ -257,7 +257,7 @@ export default function ChangeHouse(){
                                                     fullWidth
                                                     variant="contained"
                                                     color="primary"
-                                                    style={{backgroundColor:"#aaaaaa", color:"#2a623d"}}
+                                                    style={{backgroundColor:"#aaaaaa", color:"#0b4d00"}}
                                                     >
                                                     Choose
                                                 </Button>

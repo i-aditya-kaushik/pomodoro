@@ -68,7 +68,7 @@ function Sortinghat() {
     altcol = "#eeba30"
   }
   if(house=="Slytherin"){
-    col = "#2a623d"
+    col = "#0b4d00"
     fontcol="#aaaaaa"
     altcol = "#5d5d5d"
   }
@@ -78,7 +78,7 @@ function Sortinghat() {
     altcol = "#5d5d5d"
   }
   if(house=="Hufflepuff"){
-    col="#fff4b1"
+    col="#ffdb00"
     fontcol="#000000"
     altcol = "#726255"
   }
@@ -106,7 +106,10 @@ function Sortinghat() {
                 text={["I can see some " + characteristics[0] + ". But..! "+characteristics[1] 
                 + " as well... Hmm.. " +characteristics[2] + ", Lots of "+ characteristics[2]+"... Better be... "+ house.toUpperCase()+"!!!"]} className={classes.harryfont} style={{fontSize: matches?"40px":"60px",padding: matches?"50px":"20px",color:fontcol}} speed= "100" eraseSpeed="9999999999" eraseDelay= "9999999999" typingDelay="100" 
                 cursor=" "/>
-            </Grid><Grid align = "center"><Button component={RouterLink} to="/" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{fontSize:"20px"}}>Go to Home Page</Button></Grid>
+            </Grid><Grid align = "center">
+              <Button component={RouterLink} to="/" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{fontSize:"20px",margin:"10px"}}>Go to Home Page</Button>
+              <Button component={RouterLink} to="/profile" className={[classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{fontSize:"20px",margin:"10px"}}>Set up my Profile</Button>
+            </Grid>
             </Grid></Grid>
           </div>
         ) : (
