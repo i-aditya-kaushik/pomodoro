@@ -81,6 +81,19 @@ export default function Tasks(){
     const [usertag,setusertag] = state.userAPI.usertag
     const [token] = state.token
     const [tasks,settasks] = state.userAPI.tasks;
+    const [open, setOpen] = React.useState(false);
+    const [error, seterror] = React.useState("Some Kind of error occured!");
+    const erroroccur = (err) => {
+        setOpen(true);
+        seterror(err);
+    };
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
     const [showwhat,setshowwhat] = useState(false)
     const [prev,setprev] = state.userAPI.prev
     useEffect(async ()=>{
@@ -133,6 +146,11 @@ export default function Tasks(){
                 {isLogged ? (
                     <div>
                     <Navbar/>
+                        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                            <Alert onClose={handleClose} severity="info">
+                                {error}
+                            </Alert>
+                        </Snackbar>
                         {matches ? (
                             <div>
                                 <Grid container component="main">
@@ -176,6 +194,7 @@ export default function Tasks(){
                                                                 } catch (err) {
                                                                 console.log(err.response)
                                                             }
+                                                            erroroccur("The task has been added. You can edit notes in the home section.")
                                                         }}>Add this task</Button>
                                                     </CardActions><br/>
                                                     </Card>
@@ -223,6 +242,7 @@ export default function Tasks(){
                                                             } catch (err) {
                                                             console.log(err.response)
                                                         }
+                                                        erroroccur("The task has been added. You can edit notes in the home section.")
                                                     }}>Add this task</Button>
                                                 </CardActions><br/>
                                                 </Card>
@@ -283,6 +303,7 @@ export default function Tasks(){
                                                                     } catch (err) {
                                                                     console.log(err.response)
                                                                 }
+                                                                erroroccur("The task has been added. You can edit notes in the home section.")
                                                             }}>Add this task</Button>
                                                         </CardActions>
                                                         </Card>
@@ -328,6 +349,7 @@ export default function Tasks(){
                                                             } catch (err) {
                                                             console.log(err.response)
                                                         }
+                                                        erroroccur("The task has been added. You can edit notes in the home section.")
                                                     }}>Add this task</Button>
                                                 </CardActions>
                                                 </Card>

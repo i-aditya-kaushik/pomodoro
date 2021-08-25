@@ -25,6 +25,7 @@ import { GlobalState } from "../../GlobalState";
 import { Box, CircularProgress, FormControl, Grid, List, ListItem, MenuItem, Snackbar, TextField, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/styles";
 import Alert from "@material-ui/lab/Alert";
+import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -128,7 +129,16 @@ const Timer = props => {
   const handleClosedialog = () => {
     setOpendialog(false);
   };
+  const [opendialognotes, setOpendialognotes] = React.useState(false);
 
+  const handleClickOpendialognotes = () => {
+    setOpendialognotes(true);
+  };
+
+  const handleClosedialognotes = () => {
+    setOpendialognotes(false);
+  };
+  const [notes,setnotes] = React.useState(null)
   const [options, setOptions] = React.useState([]);
   const loading = open1 && options.length === 0;
   const longbreakstart_aud = new Audio(longbreakstart);
@@ -462,11 +472,53 @@ const Timer = props => {
             <Typography align = "center" variant="h4" style={{fontFamily:"PfefferMediaeval"}}>
               YOUR TASKS 
             </Typography>
+            <Dialog open={opendialognotes} onClose={handleClosedialognotes} aria-labelledby="form-dialog-title">
+              <DialogTitle style={{color:col}}>Edit Notes for the task : {notes ? notes.name : ""}</DialogTitle>
+              <DialogContent>
+                <DialogContentText style={{color:fontcol,fontFamily: 'PfefferMediaeval'}}>
+                  You can add some subtasks, objectives, or simply include something which you should not forget.
+                </DialogContentText>
+                  <Grid>
+                      <Grid style={{marginTop:"10px"}}>
+                      <TextField
+                          id="notes"
+                          name="notes"
+                          label="Notes for the task"
+                          variant="outlined"
+                          multiline
+                          defaultValue={(notes)?notes.notes:""}
+                          onChange={onChangeInput}
+                          fullWidth
+                          rows={4}
+                          variant="outlined"
+                        />
+                      </Grid>
+                  </Grid>
+                  <DialogActions>
+                    <Tooltip title="Cancel"><Button onClick={handleClosedialognotes} className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Cancel</Button></Tooltip>
+                    <Tooltip title="Update Notes"><Button onClick={async () => {
+                      try{
+                        notes.notes = addtask.notes
+                        await axios.post("/user/taskupdatenotes", 
+                          { id: notes._id , notes: addtask.notes },{
+                            headers: { 'Authorization': token }
+                        });
+                        handleClosedialognotes()
+                      } catch (err) {
+                        console.log(err)
+                      }
+                    }} className={classes.loginButton} style={{fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol,margin:"10px"}}>Edit Task Notes</Button></Tooltip> 
+                  </DialogActions>
+              </DialogContent>
+              
+            </Dialog>
+
             <Dialog open={opendialog} onClose={handleClosedialog} aria-labelledby="form-dialog-title">
               <DialogTitle style={{color:col}}>Add a Task</DialogTitle>
               <DialogContent>
                 <DialogContentText style={{color:fontcol,fontFamily: 'PfefferMediaeval'}}>
                   A task contains a name, the tag associated with the task [if you do not have a suitable tag, edit your tag in the profile section], and the total work pomodoros required to complete the task.
+                  <br/>You can add some subtasks, objectives, or simply include something which you should not forget as your notes.
                 </DialogContentText>
                   <form className={classes.root} onSubmit={addthistask} Autocomplete="off">
                   <Grid>
@@ -539,6 +591,11 @@ const Timer = props => {
                             {item.name}
                           </Grid>
                           <Grid container justifyContent="flex-end">
+                          <Tooltip title="Notes for this task"><Button onClick={async()=>{
+                            setnotes(item)
+                            handleClickOpendialognotes()
+                          }} style={{fontSize:"20px",color:fontcol,
+                          minHeight:"0",minWidth:"0",padding:"0",margin:"0 10px 0 0"}}><EventNoteOutlinedIcon/></Button></Tooltip>
                           <Tooltip title="Delete Task"><Button onClick={async()=>{
                             removeactive(item,token)
                           }} style={{fontSize:"20px",color:fontcol,
