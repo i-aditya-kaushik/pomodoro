@@ -199,7 +199,7 @@ const Timer = props => {
     e.preventDefault();
     if(addtask.total_pomodoro<=0) {erroroccur("Pomodoros have to be greater than 0."); return}
     try {
-      setisloading(true)
+      handleClosedialog()
       await axios.post("/user/addtask", { ...addtask, tags:tasktag },
       {
         headers: { 'Authorization': token }
@@ -211,7 +211,6 @@ const Timer = props => {
       );
       settasks(response2.data.final_ret)
       setcurrenttask(tasks[0])
-      setisloading(false)
     } catch (err) {
       console.log(err.response)
     }
@@ -384,12 +383,12 @@ const Timer = props => {
               startIcon={timerOn ? <PauseIcon /> : <PlayArrowIcon />}
               onClick={() => {
                 setislocked(!islocked);
-                if(!islocked){erroroccur("Pause the timer to change your settings.")}
+                if(!islocked){erroroccur("Pause the timer to change your settings/tasks.")}
                 setTimerOn(!timerOn);
                 startedSound.play();
               }}
             >
-            {timerOn ? "Pause Timer" : "Start Working"}
+            {timerOn ? "Pause Timer" : sessionType=="Work" ? "Start Working" : "Start the Break"}
           </Button>
           <Button
               style = {{backgroundColor:col, color:fontcol, padding:"10px" , margin:"10px"
@@ -490,10 +489,10 @@ const Timer = props => {
             </Dialog>
               <Grid container style={{padding:"10px"}}>
                 <Box flexGrow={1}>
-                  <Tooltip title="Add Task"><Button onClick={handleClickOpendialog} className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Add a Task</Button></Tooltip>
+                  <Tooltip title="Add Task"><Button disabled={islocked} onClick={handleClickOpendialog} className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Add a Task</Button></Tooltip>
                 </Box>
                 <Box>
-                  <Tooltip title="Task Management"><Button component={RouterLink} to="/tasks" className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Task Management</Button></Tooltip>
+                  <Tooltip title="Task Management"><Button disabled={islocked} component={RouterLink} to="/tasks" className={classes.loginButton} style={{ fontFamily:"PfefferMediaeval",backgroundColor:col,color:fontcol}}>Task Management</Button></Tooltip>
                 </Box>
               </Grid>
             <List style={{padding:"5px"}} className={subset.length ? classes.noclass : classes.logo}>
