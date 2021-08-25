@@ -93,7 +93,7 @@ const taskController = {
           const tags = await Users.findById(req.user.id).select("active_tasks").populate('active_tasks.task')
           const final_ret = tags.active_tasks.map(item=>{
             item = {_id:item._id, id:item.task.id,name:item.task.name,total_pomodoro:item.task.total_pomodoro, popularity: item.task.popularity
-              ,pomodoro_done:item.pomodoro_done}
+              ,pomodoro_done:item.pomodoro_done, notes: item.notes}
             return item
           })
           return res.json({final_ret: final_ret})
