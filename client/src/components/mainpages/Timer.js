@@ -233,7 +233,6 @@ const Timer = props => {
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
-          console.log(current_task)
           if(parseInt(target_date-current_date) <=0 ){
             if (timerOn) {
               if(sessionType=="Work"){
@@ -440,6 +439,7 @@ const Timer = props => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               defaultValue={tasks[0]}
+              disabled={islocked}
               onChange={(event,value)=>{
                 setcurrenttask(value.props.value)
               }}
