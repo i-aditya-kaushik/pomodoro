@@ -17,7 +17,7 @@ const taskController = {
           const check = await Tasks.findOne({name: name,total_pomodoro: total_pomodoro})
           if(check){
             await Users.findOneAndUpdate(
-            { _id: req.user.id },
+            { _id: req.user.id , 'active_tasks.task': { $ne: check._id }},
             {
               $push: {"active_tasks" : {task: check._id}},
             }
@@ -28,7 +28,7 @@ const taskController = {
               popularity: check.popularity+1,
             }
             );
-            return res.json({ msg: "Added to Tasks list" });
+            return res.json({ msg: "Added to Tasks list if did not exist" });
           }
           const newTask = new Tasks({ name,total_pomodoro,tags});
           const addedtask = await newTask.save();
