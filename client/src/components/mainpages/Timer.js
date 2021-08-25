@@ -229,7 +229,7 @@ const Timer = props => {
     
   useEffect(()=>{
     if(timerOn){
-      const target_date = new Date(new Date().getTime() + timerLength/50 * 60000 + seconds * 1000)
+      const target_date = new Date(new Date().getTime() + timerLength * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
