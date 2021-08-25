@@ -211,6 +211,7 @@ const Timer = props => {
     if(addtask.total_pomodoro<=0) {erroroccur("Pomodoros have to be greater than 0."); return}
     try {
       handleClosedialog()
+      setisloading(true)
       await axios.post("/user/addtask", { ...addtask, tags:tasktag },
       {
         headers: { 'Authorization': token }
@@ -222,6 +223,7 @@ const Timer = props => {
       );
       settasks(response2.data.final_ret)
       setcurrenttask(tasks[0])
+      setisloading(false)
     } catch (err) {
       console.log(err.response)
     }
