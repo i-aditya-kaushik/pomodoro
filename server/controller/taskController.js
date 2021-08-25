@@ -12,14 +12,15 @@ const taskController = {
           const {
             name,
             total_pomodoro,
-            tags
+            tags,
+            notes
           } = req.body;
           const check = await Tasks.findOne({name: name,total_pomodoro: total_pomodoro})
           if(check){
             await Users.findOneAndUpdate(
             { _id: req.user.id , 'active_tasks.task': { $ne: check._id }},
             {
-              $push: {"active_tasks" : {task: check._id}},
+              $push: {"active_tasks" : {task: check._id, notes:notes}},
             }
             );
             await Tasks.findOneAndUpdate(
@@ -36,7 +37,7 @@ const taskController = {
           await Users.findOneAndUpdate(
             { _id: req.user.id },
             {
-              $push: {"active_tasks": {task: [addedtask.id]}},
+              $push: {"active_tasks": {task: [addedtask.id] , notes: notes}},
             }
           );
           return res.json({ msg: "Added to Tasks list" });
@@ -63,18 +64,21 @@ const taskController = {
         return res.status(500).json({ msg: err.message });
       }
     },
-    taskupdate: async (req, res) => {
+    taskupdatenotes: async (req, res) => {
         try {
           const user = await Users.findById(req.user.id);
           if (!user) return res.status(400).json({ msg: "User does not exist." });
+          const {
+            id,
+            notes
+          } = req.body;
           await Users.findOneAndUpdate(
-            { _id: req.user.id },
-            {
-              active_tasks: [req.body.tasks,0],
-            }
+          { _id: user._id , "active_tasks._id" : id },
+          {'$set': {
+            'active_tasks.$.notes': notes
+          }}
           );
-    
-          return res.json({ msg: "Updated user tasks" });
+          return res.json({ msg: "Active Task's Notes Updated" });
         } catch (err) {
           return res.status(500).json({ msg: err.message });
         }

@@ -105,6 +105,7 @@ const Timer = props => {
   const classes = useStyles();
   const [addtask, setaddtask] = useState({
     total_pomodoro: 0,
+    notes: ""
   });
   const [timerLength, setTimerLength] = useState(25);
   const [seconds, setSeconds] = useState(0);
@@ -224,6 +225,9 @@ const Timer = props => {
       settasks(response2.data.final_ret)
       setcurrenttask(tasks[0])
       setisloading(false)
+      setaddtask({
+        total_pomodoro: 0,
+        notes: ""})
     } catch (err) {
       console.log(err.response)
     }
@@ -492,6 +496,19 @@ const Timer = props => {
                       <Grid style={{marginTop:"10px"}}>
                         <Tooltip title="The number of work pomodoros required"><TextField fullWidth onChange={onChangeInput} required id="total_pomodoro" name="total_pomodoro" label="Pomodoros" variant="outlined" type="number"
                           /></Tooltip>
+                      </Grid>
+                      <Grid style={{marginTop:"10px"}}>
+                      <TextField
+                          id="notes"
+                          name="notes"
+                          label="Notes for the task"
+                          variant="outlined"
+                          multiline
+                          onChange={onChangeInput}
+                          fullWidth
+                          rows={4}
+                          variant="outlined"
+                        />
                       </Grid>
                   </Grid>
                   <DialogActions>

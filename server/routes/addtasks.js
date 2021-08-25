@@ -4,7 +4,7 @@ const taskController = require("../controller/taskController");
 
 router.post("/addtask", auth, taskController.addtask);
 router.post("/increasecurrentpomodoro", auth, taskController.increasecurrentpomodoro);
-router.put("/taskupdate", auth, taskController.taskupdate);
+router.put("/taskupdatenotes", auth, taskController.taskupdatenotes);
 router.get("/gettasksuser", auth, taskController.gettasksuser);
 router.get("/getprevtasks", auth, taskController.getprevtasks);
 router.put("/deleteactivetask", auth, taskController.deleteactivetask);
