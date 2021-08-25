@@ -3,6 +3,7 @@ const auth = require("../middlewares/auth");
 const taskController = require("../controller/taskController");
 
 router.post("/addtask", auth, taskController.addtask);
+router.post("/increasecurrentpomodoro", auth, taskController.increasecurrentpomodoro);
 router.put("/taskupdate", auth, taskController.taskupdate);
 router.get("/gettasksuser", auth, taskController.gettasksuser);
 router.get("/getprevtasks", auth, taskController.getprevtasks);

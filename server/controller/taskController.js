@@ -44,6 +44,25 @@ const taskController = {
           return res.status(500).json({ msg: err.message });
         }
     },
+    increasecurrentpomodoro: async (req, res) => {
+      try {
+        const user = await Users.findById(req.user.id);
+        if (!user) return res.status(400).json({ msg: "User does not exist." });
+        const {
+          id,
+          pomodoro_done
+        } = req.body;
+        await Users.findOneAndUpdate(
+        { _id: user._id , "active_tasks._id" : id },
+        {'$set': {
+          'active_tasks.$.pomodoro_done': pomodoro_done+1
+        }}
+        );
+        return res.json({ msg: "Task Updated" });
+      } catch (err) {
+        return res.status(500).json({ msg: err.message });
+      }
+    },
     taskupdate: async (req, res) => {
         try {
           const user = await Users.findById(req.user.id);
@@ -69,7 +88,7 @@ const taskController = {
           })}}).select("name total_pomodoro _id popularity");
           const tags = await Users.findById(req.user.id).select("active_tasks").populate('active_tasks.task')
           const final_ret = tags.active_tasks.map(item=>{
-            item = {id:item.task.id,name:item.task.name,total_pomodoro:item.task.total_pomodoro, popularity: item.task.popularity
+            item = {_id:item._id, id:item.task.id,name:item.task.name,total_pomodoro:item.task.total_pomodoro, popularity: item.task.popularity
               ,pomodoro_done:item.pomodoro_done}
             return item
           })

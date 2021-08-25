@@ -195,6 +195,17 @@ const Timer = props => {
   }
   }
 
+  const updatepomodoro = async (current_task,token) =>{
+    try{
+      await axios.post("/user/increasecurrentpomodoro", 
+        { id: current_task._id , pomodoro_done: current_task.pomodoro_done},{
+          headers: { 'Authorization': token }
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const addthistask = async e => {
     e.preventDefault();
     if(addtask.total_pomodoro<=0) {erroroccur("Pomodoros have to be greater than 0."); return}
@@ -218,22 +229,24 @@ const Timer = props => {
     
   useEffect(()=>{
     if(timerOn){
-      const target_date = new Date(new Date().getTime() + timerLength * 60000 + seconds * 1000)
+      const target_date = new Date(new Date().getTime() + timerLength/50 * 60000 + seconds * 1000)
       const interval = setInterval(() => {
         const current_date = new Date().getTime();
         if(document.hidden || !document.hidden){
+          console.log(current_task)
           if(parseInt(target_date-current_date) <=0 ){
             if (timerOn) {
               if(sessionType=="Work"){
                 workend_aud.play()
                 if(tasks.length>=2){
+                  updatepomodoro(current_task,token)
                   current_task.pomodoro_done+=1
                   if(current_task.total_pomodoro==current_task.pomodoro_done){
                     erroroccur(`${current_task.name} has been completed.`)
                     removeactive(current_task,token)
                   }
                 }
-                else {if(tasks.length){tasks[0].pomodoro_done+=1;if(tasks[0].total_pomodoro==tasks[0].pomodoro_done){
+                else {if(tasks.length){updatepomodoro(tasks[0],token);tasks[0].pomodoro_done+=1;if(tasks[0].total_pomodoro==tasks[0].pomodoro_done){
                   removeactive(tasks[0],token)
                 }}}
                 setTimeout(() => {
