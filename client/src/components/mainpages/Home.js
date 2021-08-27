@@ -72,12 +72,14 @@ export default function Home(){
     }
     useEffect(()=>{
         const firstLogin = localStorage.getItem("firstLogin");
-        if(!state.token){
-            localStorage.clear();
-            window.location.href = "/";
-        }
         if(!firstLogin && hasLoaded) {setisloading(false)}
     },[hasLoaded])
+
+    useEffect(()=>{
+        setTimeout( function() { if(isloading){
+            setisloading(false)
+        } }, 7000);
+    },[])
 
     if(house=="Gryffindor"){
         col = "#7f0909"
