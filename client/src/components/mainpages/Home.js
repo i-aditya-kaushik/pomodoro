@@ -72,6 +72,10 @@ export default function Home(){
     }
     useEffect(()=>{
         const firstLogin = localStorage.getItem("firstLogin");
+        if(!state.token){
+            localStorage.clear();
+            window.location.href = "/";
+        }
         if(!firstLogin && hasLoaded) {setisloading(false)}
     },[hasLoaded])
 
