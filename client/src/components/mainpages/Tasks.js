@@ -94,6 +94,11 @@ export default function Tasks(){
 
         setOpen(false);
     };
+    useEffect(()=>{
+        setTimeout( function() { if(isloading){
+            setisloading(false)
+        } }, 7000);
+    },[])
     const [showwhat,setshowwhat] = useState(false)
     const [prev,setprev] = state.userAPI.prev
     useEffect(async ()=>{

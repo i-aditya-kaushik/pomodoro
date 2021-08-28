@@ -59,6 +59,11 @@ function Sortinghat() {
   const [characteristics] = state.userAPI.characteristics;
   const [isLogged] = state.userAPI.isLogged;
   const matches = useMediaQuery('(max-width:1025px)');
+  useEffect(()=>{
+    setTimeout( function() { if(isloading){
+        setisloading(false)
+    } }, 7000);
+  },[])
   var col = "white"
   var fontcol = "black"
   var altcol = "#9c9264"

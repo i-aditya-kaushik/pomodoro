@@ -170,18 +170,20 @@ export default function Navbar(){
                   <Box component={Grid} display={matches ? "none" : "block"} className={classes.right}>
                     {isLogged ? (
                       <div>
-                      <Button disabled={islocked} component={RouterLink} to="/tasks" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
-                      <Button disabled={islocked} component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
-                      <Button disabled={islocked} component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
-                      <Button component={RouterLink} to="/" onClick={logoutUser} className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Logout</Button>
+                        <Button disabled={islocked} component={RouterLink} to="/" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Home</Button>
+                        <Button disabled={islocked} component={RouterLink} to="/tasks" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
+                        <Button disabled={islocked} component={RouterLink} to="/changehouse" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
+                        <Button disabled={islocked} component={RouterLink} to="/profile" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
+                        <Button component={RouterLink} to="/" onClick={logoutUser} className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Logout</Button>
                       </div>
                       ) : (
                         <div>
-                      <Button onClick={() => erroroccur("Login to manage tasks.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
-                      <Button onClick={() => erroroccur("Login to make a profile and get sorted.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
-                      <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
-                      <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
-                      <Button component={RouterLink} to="/register" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Register</Button>
+                          <Button disabled={islocked} component={RouterLink} to="/" color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Home</Button>
+                          <Button onClick={() => erroroccur("Login to manage tasks.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
+                          <Button onClick={() => erroroccur("Login to make a profile and get sorted.")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Change House</Button>
+                          <Button onClick={() => erroroccur("Login to view your Profile")} color="inherit" className={[classes.buttonPc,classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Profile</Button>
+                          <Button component={RouterLink} to="/login" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Login</Button>
+                          <Button component={RouterLink} to="/register" className={[classes.buttonPc,classes.buttonFontSize,classes.loginButton,classes.harryfont]} style={{color:col,backgroundColor:fontcol}}>Register</Button>
                         </div>
                     )}
                   </Box>
@@ -192,6 +194,9 @@ export default function Navbar(){
                       
                       {isLogged ? (
                         <div>
+                          <MenuItem component={RouterLink} to="/">
+                            <Button disabled={true} color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Home</Button>
+                          </MenuItem>
                           <MenuItem component={RouterLink} to="/tasks">
                             <Button disabled={true} color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
                           </MenuItem>
@@ -207,6 +212,9 @@ export default function Navbar(){
                         </div>
                       ) : (
                         <div>
+                          <MenuItem component={RouterLink} to="/">
+                            <Button disabled={true} color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Home</Button>
+                          </MenuItem>
                           <MenuItem onClick={() => erroroccur("Login to manage tasks.")}>
                             <Button  color="inherit" className={[classes.buttonFontSize,classes.harryfont]} style={{color: fontcol}}>Manage Tasks</Button>
                           </MenuItem>

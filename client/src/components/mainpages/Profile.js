@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { withStyles } from "@material-ui/styles";
 import zIndex from "@material-ui/core/styles/zIndex";
 import Switch from '@material-ui/core/Switch';
+import NotFound from "../utilities/NotFound";
 
 const useStyles = makeStyles((theme) => ({
     image:{
@@ -145,19 +146,32 @@ const TimerComp = props =>{
 export default function Profile(){
     const classes = useStyles();
     const state = useContext(GlobalState);
-    const [open, setOpen] = React.useState(false);
+    const [open1, setopen1] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [usertag,setusertag] = state.userAPI.usertag
     const [worktime, setworktime] = state.userAPI.worktime 
     const [shortbreak, setshortbreak] = state.userAPI.shortbreak
     const [longbreak, setlongbreak] = state.userAPI.longbreak
-    const loading = open && options.length === 0;
+    const loading = open1 && options.length === 0;
     const [isloading,setisloading] = state.userAPI.isloading
     const [tags,settags] = state.userAPI.tags
     const [isLogged] = state.userAPI.isLogged;
     const [newval,setnewval] = useState(null)
     const [house] = state.userAPI.house;
     const [token] = state.token;
+    const [open, setOpen] = React.useState(false);
+    const [error, seterror] = React.useState("Some Kind of error occured!");
+    const erroroccur = (err) => {
+        setOpen(true);
+        seterror(err);
+        };
+  const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      setOpen(false);
+    };
     useEffect(async () => {
         try{
             await axios.put("/user/userupdate", {work_duration: worktime,
@@ -166,10 +180,18 @@ export default function Profile(){
             },{
                 headers: { 'Authorization': token }
             })
+            erroroccur("Configurations updated successfully!")
         } catch (err) {
             
         }
     }, [shortbreak,longbreak,worktime])
+
+    useEffect(()=>{
+        setTimeout( function() { if(isloading){
+            setisloading(false)
+        } }, 7000);
+    },[])
+
     const onChangeHandle = async (value) => {
         const response = await fetch(
           "/user/gettags"
@@ -179,10 +201,10 @@ export default function Profile(){
       };
     
       React.useEffect(async () => {
-        if (!open) {
+        if (!open1) {
           setOptions([]);
         }
-      }, [open,tags]);
+      }, [open1,tags]);
     const matches = useMediaQuery('(max-width:768px)');
     var minwi = "600px"
     if(matches) minwi = "250px"
@@ -220,10 +242,17 @@ export default function Profile(){
         <div>
             {!isloading ? (
                 <div>
+                {isLogged ? (
+                    <div>
                     <Navbar/>
                         {matches ? (
                             <div>
                                 <Grid container component="main" className={classes.root}>
+                                    <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                                        <Alert onClose={handleClose} severity="info">
+                                            {error}
+                                        </Alert>
+                                    </Snackbar>
                                     <Grid container style={{backgroundColor: "#f9f7f5",maxHeight:"50vh",padding: "20px",zIndex: 5}}>
                                                 <Typography component="h1" variant="h4" className={[classes.harryfont,classes.paddingt]} style={{color: altcol}}>
                                                     What are the hobbies/interests that define you in the muggle world?
@@ -234,12 +263,12 @@ export default function Profile(){
                                                     multiple
                                                     limitTags={4}
                                                     freeSolo={true}
-                                                    open={open}
+                                                    open={open1}
                                                     onOpen={() => {
-                                                        setOpen(true);
+                                                        setopen1(true);
                                                     }}
                                                     onClose={() => {
-                                                        setOpen(false);
+                                                        setopen1(false);
                                                     }}
                                                     getOptionSelected={(option, value) => {try{option === value.name}catch (err) {option.name ===value.name}}}
                                                     getOptionLabel={(option) => option.name || option}
@@ -312,6 +341,11 @@ export default function Profile(){
                         ) : (
                             <div>
                                 <Grid container component="main" className={classes.root}>
+                                    <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                                        <Alert onClose={handleClose} severity="info">
+                                            {error}
+                                        </Alert>
+                                    </Snackbar>
                                     <Grid item component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
                                     <Grid item component={Paper} xs={8} sm={8} md={10} lg={10} xl={10} style={{backgroundColor: "#f9f7f5",padding:"20px",zIndex: 5}}>
                                         <Grid container style={{backgroundColor: "#f9f7f5",minHeight:"20vh"}}>
@@ -322,13 +356,13 @@ export default function Profile(){
                                                     fullWidth
                                                     multiple
                                                     freeSolo={true}
-                                                    open={open}
+                                                    open={open1}
                                                     limitTags={4}
                                                     onOpen={() => {
-                                                        setOpen(true);
+                                                        setopen1(true);
                                                     }}
                                                     onClose={() => {
-                                                        setOpen(false);
+                                                        setopen1(false);
                                                     }}
                                                     getOptionSelected={(option, value) => {try{option === value.name}catch (err) {option.name ===value.name}}}
                                                     getOptionLabel={(option) => option.name || option}
@@ -401,6 +435,10 @@ export default function Profile(){
                                 </Grid>
                             </div>
                         )}
+                    </div>
+                ) : (
+                    <NotFound/>
+                )}
                 </div>
             ) : (
                 <Loading/>
