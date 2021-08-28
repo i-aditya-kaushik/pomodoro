@@ -11,6 +11,8 @@ router.post("/forgotpass", userController.forgotpass);
 router.post("/updatepass",userController.updatepass)
 router.patch("/house",auth, userController.sethouse);
 router.put('/userupdate',auth, userController.userupdate);
+router.post("/changepass", auth, userController.changepass);
+
 // router.patch("/addtasks", auth, userController.addtasks);
 
 module.exports = router;

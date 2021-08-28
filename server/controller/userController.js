@@ -122,6 +122,29 @@ const userController = {
     }
   },
 
+  changepass: async (req, res) => {
+    try {
+      const {
+        password,
+        newpassword
+      } = req.body;
+      const user = await Users.findById(req.user.id);
+      if (!user) return res.status(400).json({ msg: "User does not exist." });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ msg: "The Password is incorrect. Try again or Click on Forgot password." });
+      const passwordHash = await bcrypt.hash(newpassword, 14);
+      await Users.findOneAndUpdate(
+        { _id: user._id },
+        {
+          password: passwordHash,
+        }
+      );
+      res.json("Password changed Successfully!");
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
   updatepass: async (req, res) => {
     try {
       const {
