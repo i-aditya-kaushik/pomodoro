@@ -90,7 +90,7 @@ const TimerComp = props =>{
     const [worktime, setworktime] = state.userAPI.worktime 
     const [shortbreak, setshortbreak] = state.userAPI.shortbreak
     const [longbreak, setlongbreak] = state.userAPI.longbreak
-    var minwi = "600px"
+    var minwi = "500px"
     if(matches) minwi = "250px"
     var vari = "h6"
     if(matches) vari = "body1"
@@ -143,6 +143,23 @@ const TimerComp = props =>{
     </div>)
 }
 
+const TimerPassComp = props =>{
+    const {title , col, altcol, fontcol , def ,matches} = props;
+    const classes = useStyles();
+    const state = useContext(GlobalState);
+    var minwi = "500px"
+    if(matches) minwi = "250px"
+    var vari = "h6"
+    if(matches) vari = "body1"
+    return(
+    <div>
+        <Typography component="h1" variant={vari} className={[classes.paddingt]} style={{color: fontcol, paddingTop:"2vh"}}>
+            {title.toUpperCase()}
+        </Typography>
+    </div>
+    )
+}
+
 export default function Profile(){
     const classes = useStyles();
     const state = useContext(GlobalState);
@@ -150,6 +167,15 @@ export default function Profile(){
     const [options, setOptions] = React.useState([]);
     const [usertag,setusertag] = state.userAPI.usertag
     const [worktime, setworktime] = state.userAPI.worktime 
+    const [changepass, setchangepass] = useState({
+        password: "",
+        newpassword: "",
+        newpassword2: ""
+      });
+    const onChangeInput = e => {
+        const { name, value } = e.target;
+        setchangepass({ ...changepass, [name]: value });
+    };
     const [shortbreak, setshortbreak] = state.userAPI.shortbreak
     const [longbreak, setlongbreak] = state.userAPI.longbreak
     const loading = open1 && options.length === 0;
@@ -247,7 +273,7 @@ export default function Profile(){
                     <Navbar/>
                         {matches ? (
                             <div>
-                                <Grid container component="main" className={classes.root}>
+                                <Grid container component="main" className={classes.root} style={{backgroundColor: "#f9f7f5"}}>
                                     <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                                         <Alert onClose={handleClose} severity="info">
                                             {error}
@@ -336,6 +362,46 @@ export default function Profile(){
                                             <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token} matches={matches}/>
                                             <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token} matches={matches}/>
                                         </Grid>
+                                        <Grid container style={{backgroundColor: "#f9f7f5",minHeight:"50vh",padding: "20px"}}>
+                                            <Grid container>
+                                                <Typography component="h4" variant="h4" className={[classes.harryfont]} style={{color: altcol,paddingTop:"9vh"}}>
+                                                    Change Your Password
+                                                </Typography>
+                                            </Grid>
+                                            <Grid container>
+                                                <Box flexGrow={1}>
+                                                    <form noValidate>
+                                                        <TimerPassComp title = {"Current Password:"} col = {col} fontcol = {fontcol} altcol = {altcol} matches={matches}/>
+                                                        <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="password" name="password" type="password" label="Your Current Password" variant="outlined"/>
+                                                        <TimerPassComp title = {"New Password:"} col = {col} fontcol = {fontcol} altcol = {altcol} matches={matches}/>
+                                                        <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="newpassword" name="newpassword" type="password" label="New Password" variant="outlined"/>
+                                                        <TimerPassComp title = {"Re-enter new Password:"} col = {col} fontcol = {fontcol} altcol = {altcol} matches={matches}/>
+                                                        <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="newpassword2" name="newpassword2" type="password" label="Re-Enter New Password" variant="outlined"/>
+                                                    </form>
+                                                </Box>
+                                            </Grid>
+                                            <Grid container style={{paddingTop:"1vh"}}>
+                                                <Button onClick={async() => {
+                                                    if(changepass.newpassword!=changepass.newpassword2){
+                                                        erroroccur("New Passwords do not match.")
+                                                    }
+                                                    else if(changepass.newpassword.length<8){
+                                                        erroroccur("Passwords have to be atleast 8 characters long.")
+                                                    }
+                                                    else{
+                                                        try{
+                                                            console.log(changepass)
+                                                            await axios.post("/user/changepass",
+                                                            {...changepass},
+                                                            {headers: { 'Authorization': token }})
+                                                            erroroccur("Password Changed Successfully")
+                                                        } catch(err){
+                                                            erroroccur("Your current password is not correct")
+                                                        }
+                                                    }
+                                                }} className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}}>Change Password</Button>
+                                            </Grid>
+                                        </Grid>
                                 </Grid>
                             </div>
                         ) : (
@@ -398,37 +464,78 @@ export default function Profile(){
                                                     />
                                                     )}
                                                 />
-                                            <Grid style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"1vh"}}>
-                                                <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
-                                                if(newval){
-                                                    try{
-                                                        setisloading(true)
-                                                        setusertag(newval)
-                                                        await axios.delete("/user/deletetags", {
-                                                            headers: { 'Authorization': token },
-                                                        }).then(async ()=>{
-                                                            try{
-                                                                await axios.post("/user/addmultipletags",
-                                                                {newValue: newval},
-                                                                {headers: { 'Authorization': token }})
-                                                                
-                                                                } catch(err){
-                                                                    console.log(err.response)
-                                                                }
-                                                        })
-                                                        setisloading(false)
-                                                    } catch(err){
-                                                        console.log(err.response)
+                                            <Grid container>
+                                                <Box flexGrow={1}>
+                                                <Grid item style={{backgroundColor: "#f9f7f5",minHeight:"65vh",paddingTop:"1vh",marginRight:"10vh"}}>
+                                                    <Button className={classes.loginButton,classes.buttonPc,classes.harryfont} style={{color:fontcol,backgroundColor:col}} onClick={async ()=>{
+                                                    if(newval){
+                                                        try{
+                                                            setisloading(true)
+                                                            setusertag(newval)
+                                                            await axios.delete("/user/deletetags", {
+                                                                headers: { 'Authorization': token },
+                                                            }).then(async ()=>{
+                                                                try{
+                                                                    await axios.post("/user/addmultipletags",
+                                                                    {newValue: newval},
+                                                                    {headers: { 'Authorization': token }})
+                                                                    
+                                                                    } catch(err){
+                                                                        console.log(err.response)
+                                                                    }
+                                                            })
+                                                            setisloading(false)
+                                                        } catch(err){
+                                                            console.log(err.response)
+                                                        }
                                                     }
-                                                }
-                                            }}>Update Tags</Button>
-                                                <Typography component="h1" variant="h3" className={[classes.harryfont]} style={{color: altcol,paddingTop:"4vh"}}>
-                                                    Your Settings
-                                                </Typography>
-                                                <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
-                                                <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token}/>
-                                                <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token}/>
+                                                }}>Update Tags</Button>
+                                                    <Typography component="h1" variant="h3" className={[classes.harryfont]} style={{color: altcol,paddingTop:"4vh"}}>
+                                                        Your Settings
+                                                    </Typography>
+                                                    <TimerComp title = {"Work Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={worktime} token={token}/>
+                                                    <TimerComp title = {"Short Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={shortbreak} token={token}/>
+                                                    <TimerComp title = {"Long Break Duration:"} col = {col} fontcol = {fontcol} altcol = {altcol} def={longbreak} token={token}/>
+                                                </Grid>
+                                                </Box>
+                                                <Box flexGrow={1}>
+                                                    <Grid item style={{backgroundColor: "#f9f7f5",minHeight:"65vh"}}>
+                                                        <Typography component="h1" variant="h3" className={[classes.harryfont]} style={{color: altcol,paddingTop:"9vh"}}>
+                                                            Change Your Password
+                                                        </Typography>
+                                                        <form noValidate>
+                                                            <TimerPassComp title = {"Current Password:"} col = {col} fontcol = {fontcol} altcol = {altcol}/>
+                                                            <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="password" name="password" type="password" label="Your Current Password" variant="outlined"/>
+                                                            <TimerPassComp title = {"New Password:"} col = {col} fontcol = {fontcol} altcol = {altcol}/>
+                                                            <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="newpassword" name="newpassword" type="password" label="New Password" variant="outlined"/>
+                                                            <TimerPassComp title = {"Re-enter new Password:"} col = {col} fontcol = {fontcol} altcol = {altcol}/>
+                                                            <TextField fullWidth onChange={onChangeInput} autoComplete='off' required id="newpassword2" name="newpassword2" type="password" label="Re-Enter New Password" variant="outlined"/>
+                                                        </form>
+                                                        <Grid style={{paddingTop:"1vh"}}>
+                                                        <Button onClick={async() => {
+                                                            if(changepass.newpassword!=changepass.newpassword2){
+                                                                erroroccur("New Passwords do not match.")
+                                                            }
+                                                            else if(changepass.newpassword.length<8){
+                                                                erroroccur("Passwords have to be atleast 8 characters long.")
+                                                            }
+                                                            else{
+                                                                try{
+                                                                    console.log(changepass)
+                                                                    await axios.post("/user/changepass",
+                                                                    {...changepass},
+                                                                    {headers: { 'Authorization': token }})
+                                                                    erroroccur("Password Changed Successfully")
+                                                                } catch(err){
+                                                                    erroroccur("Your current password is not correct")
+                                                                }
+                                                            }
+                                                        }} className={classes.loginButton,classes.harryfont} style={{color:fontcol,backgroundColor:col}}>Change Password</Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Box>
                                             </Grid>
+                                            
                                         </Grid>
                                     </Grid>
                                     <Grid item component={Paper} xs={2} sm={2} md={1} lg={1} xl={1} className={classes.image} style={{backgroundImage:'url('+ img +')', backgroundColor:col}}></Grid>
